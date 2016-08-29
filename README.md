@@ -4,7 +4,7 @@
 ```
 #!c#
 
-//create Cereal DataTableModel
+            //create Cereal DataTableModel
             var data = new List<object>();
             foreach (var item in cereal)
             {
