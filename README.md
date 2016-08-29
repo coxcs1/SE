@@ -1,29 +1,29 @@
-# README #
+# Data Table Model Helper #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+var cerealDataTableModel = new DataTableModel();
+            cerealDataTableModel.
+                setTitle("Cereal").
+                setData(data).
+                setSearchSort(true).
+                setHeaders(new List<object>()
+                {
+                    new {
+                        Name = "Name",
+                        Field = "name"
+                    },
+                    new {
+                        Name = "Price",
+                        Field = "price"
+                    },
+                    new {
+                        Name = "Amount In Stock",
+                        Field = "amountInStock"
+                    },
+                }).
+                setActions(new List<object>()
+                {
+                    new {
+                        text = "Buy",
+                        url = "/shoppingcart/buy/{{id}}"
+                    }
+                });
