@@ -134,6 +134,7 @@ namespace SoftwareEngineering1Project.Controllers
             }
         }
 
+        /*
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -171,6 +172,7 @@ namespace SoftwareEngineering1Project.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        */
 
         //
         // GET: /Account/ConfirmEmail
