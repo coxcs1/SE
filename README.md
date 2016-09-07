@@ -43,3 +43,32 @@ cerealDataTableModel.
 		}
 	});
 ```
+
+# Boostrap Panel Table Helper #
+
+```
+#!c#
+public ActionResult Index()
+{
+	//create a url helper for creating hyperlinks
+	UrlHelper helper = new UrlHelper(this.ControllerContext.RequestContext);
+	
+	PanelTable table = new PanelTable();//initialize the table
+	table.
+		setTitle("Test Table").//set the title
+		setItemsPerRow(4).//set the number of items to display per row
+		setData(new Dictionary<string, string>()//the data that will be displayed in the table
+		{
+			{ "First Name", "Dana" },
+			{ "Middle Name", "Jarred" },
+			{ "Last Name", "Light" },
+			{ "", "" }
+		}).
+		setTableButtons(new Dictionary<string, string>()//the buttons that will be displayed in the table
+		{
+			{ helper.Action("Login", "Account", null), "Go to login" }
+		});
+	ViewBag.Table = table;//pass table to view
+	return View();
+}
+```
