@@ -7,66 +7,66 @@ namespace SoftwareEngineering1Project.Helpers
 {
     public class DataTableModel
     {
-        public string title { get; set; }
-        public List<object> headers { get; set; }
-        public bool searchSort { get; set; }
-        public List<object> data { get; set; }
-        public List<object> actions { get; set; }
-        public List<object> tableButtons { get; set; }
+        public string Title { get; set; }
+        public List<object> Headers { get; set; }
+        public bool SearchSort { get; set; }
+        public List<object> Data { get; set; }
+        public List<object> Actions { get; set; }
+        public List<object> TableButtons { get; set; }
 
         public DataTableModel()
         {
-            title = "Data Table";
-            searchSort = false;
-            headers = new List<object>();
-            data = new List<object>();
-            actions = new List<object>();
-            tableButtons = new List<object>();
+            Title = "Data Table";
+            SearchSort = false;
+            Headers = new List<object>();
+            Data = new List<object>();
+            Actions = new List<object>();
+            TableButtons = new List<object>();
         }
 
         public DataTableModel(string title, bool searchSort, List<object> headers, List<object> data, List<object> actions, List<object> tableButtons)
         {
-            this.title = title;
-            this.searchSort = searchSort;
-            this.headers = headers;
-            this.data = data;
-            this.actions = actions;
-            this.tableButtons = tableButtons;
+            this.Title = title;
+            this.SearchSort = searchSort;
+            this.Headers = headers;
+            this.Data = data;
+            this.Actions = actions;
+            this.TableButtons = tableButtons;
         }
 
         public DataTableModel setTitle(string title)
         {
-            this.title = title;
+            this.Title = title;
             return this;
         }
 
         public DataTableModel setSearchSort(bool searchSort)
         {
-            this.searchSort = searchSort;
+            this.SearchSort = searchSort;
             return this;
         }
 
         public DataTableModel setHeaders(List<object> headers)
         {
-            this.headers = headers;
+            this.Headers = headers;
             return this;
         }
 
         public DataTableModel setData(List<object> data)
         {
-            this.data = data;
+            this.Data = data;
             return this;
         }
 
         public DataTableModel setActions(List<object> actions)
         {
-            this.actions = actions;
+            this.Actions = actions;
             return this;
         }
 
         public DataTableModel setTableButtons(List<object> tableButtons)
         {
-            this.tableButtons = tableButtons;
+            this.TableButtons = tableButtons;
             return this;
         }
 
@@ -74,17 +74,17 @@ namespace SoftwareEngineering1Project.Helpers
         /// Renders this instance.
         /// </summary>
         /// <returns></returns>
-        public HtmlString render()
+        public HtmlString Render()
         {
             string tableID = randomValue();
             string table = "<div class='panel panel-default dt-panel'>";
-            table += "<div class='panel-heading'>" + this.title + "</div>";
+            table += "<div class='panel-heading'>" + this.Title + "</div>";
             table += "<table class='table table-striped table-bordered table' id='" + tableID + "'>";
 
             //create table headers
             table += "<thead>";
             table += "<tr>";
-            foreach (var header in headers)
+            foreach (var header in Headers)
             {
                 table += "<th>" + header.GetType().GetProperty("Name").GetValue(header).ToString() + "</th>";
             }
@@ -96,16 +96,16 @@ namespace SoftwareEngineering1Project.Helpers
             //open the table body for data display
             table += "<tbody>";
 
-            foreach (var item in this.data)
+            foreach (var item in this.Data)
             {
                 table += "<tr>";
-                foreach (var header in headers)
+                foreach (var header in Headers)
                 {
                     string property = header.GetType().GetProperty("Field").GetValue(header).ToString();
                     table += "<td>" + item.GetType().GetProperty(property).GetValue(item) + "</td>";
                 }
                 table += "<td>";
-                foreach (var action in actions)
+                foreach (var action in Actions)
                 {
                     string id = item.GetType().GetProperty("id").GetValue(item).ToString();
                     string text = action.GetType().GetProperty("text").GetValue(action).ToString();
@@ -120,10 +120,10 @@ namespace SoftwareEngineering1Project.Helpers
             table += "</tbody>";
 
             //create a table button if there is one
-            if (tableButtons.Count != 0)
+            if (TableButtons.Count != 0)
             {
-                table += "<tfoot><tr><td colspan='" + (headers.Count + 1) + "' class='text-center dt-no-border'>";
-                foreach (var button in tableButtons)
+                table += "<tfoot><tr><td colspan='" + (Headers.Count + 1) + "' class='text-center dt-no-border'>";
+                foreach (var button in TableButtons)
                 {
                     string text = button.GetType().GetProperty("text").GetValue(button).ToString();
                     string url = button.GetType().GetProperty("url").GetValue(button).ToString();
@@ -137,7 +137,7 @@ namespace SoftwareEngineering1Project.Helpers
             table += "</table>";
 
             //check to see if the user wants to use the jQuery DataTable API
-            if (this.searchSort)
+            if (this.SearchSort)
             {
                 table += "<script type='text/javascript'>";
 
