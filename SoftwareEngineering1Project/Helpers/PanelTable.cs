@@ -82,7 +82,7 @@ namespace SoftwareEngineering1Project.Helpers
                 //add each button to the table
                 foreach (KeyValuePair<string, string> entry in this.TableButtons)
                 {
-                    html += "<a class='btn btn-primary btn-sm' href='" + entry.Key + "'>" + entry.Value + "</a>";
+                    html += "<a class='btn btn-primary btn-sm' href='" + entry.Key + "'>" + entry.Value + "</a>  ";
                 }
 
                 html += "</td>";
