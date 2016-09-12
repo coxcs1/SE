@@ -10,6 +10,9 @@ using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Security;
+using System.Data.Entity;
+using Microsoft.Owin.Security.DataProtection;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -30,29 +33,92 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Profile
         public ActionResult Index()
         {
-            List<UserProfile> allUserProfiles = new List<UserProfile>();        
+            List<object> allUserProfiles = new List<object>();  
+                  
             var allProfiles = _profileDb.Profiles.ToList();
 
-            //Roles.GetUsersInRole("roleName").Select(Membership.GetUser).ToList();
+            var roles = _userDb.Roles.ToList();
+            string tempRoleHolder = "";
+            foreach (var profile in allProfiles)
+            {                
+                foreach (var role in roles)
+                {
+                    var user = _userDb.Users.Single(u => u.Email == profile.UserEmail);
+                    foreach (var r in user.Roles)
+                    {
+                        if (role.Id == r.RoleId)
+                        {
+                            tempRoleHolder = role.Name;
+                            tempRoleHolder = tempRoleHolder.First().ToString().ToUpper() + String.Join("", role.Name.Skip(1));
+                            break;
+                        }
+                    }
+                }
+
+                allUserProfiles.Add(
+                    new
+                    {
+                        id = profile.Id,
+                        firstName = profile.FirstName,
+                        lastName = profile.LastName,
+                        email = profile.UserEmail,
+                        role = tempRoleHolder
+                    }
+                );
+            }
 
             DataTableModel profileTable = new DataTableModel();
             profileTable.Title = "Users";
             profileTable.Headers = new List<object>()
             {
-                "Email/Username",
-                "First Name",
-                "Last Name",
-                "Role"
+                new
+                {
+                    Name = "First Name",
+                    Field = "firstName"
+                },
+                new
+                {
+                    Name = "Last Name",
+                    Field = "lastName"
+                },
+                new
+                {
+                    Name = "Email",
+                    Field = "email"
+                },
+                new
+                {
+                    Name = "Role",
+                    Field = "role"
+                } 
             };
-            List<object> data = new List<object>();
-
-            for (int i = 0; i < allProfiles.Count; i++)
+            profileTable.Data = allUserProfiles;
+            profileTable.Actions = new List<object>()
             {
+                new
+                {
+                    text = "View",
+                    url = "/profile/view/{{id}}"
+                },
+                new
+                {
+                    text = "Edit",
+                    url = "/profile/edit/{{id}}"               
+                },
+                new
+                {
+                    text = "Delete",
+                    url = "/profile/delete/{{id}}"
+                },
+                new
+                {
+                    text = "Reset Password",
+                    url = "/profile/resetpassword/{{id}}"
+                }
+            };
+            profileTable.SearchSort = true;
 
-            }
-
-
-            return View();
+            return View(profileTable.Render());
         }
 
         public ActionResult Add()
@@ -86,7 +152,7 @@ namespace SoftwareEngineering1Project.Controllers
                     _profileDb.Profiles.Add(profile);
                     _profileDb.SaveChanges();
                     _userDb.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Profile");
                 }
                 else
                 {
@@ -162,6 +228,118 @@ namespace SoftwareEngineering1Project.Controllers
             }
 
             return View(profileEdit);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Profile profileEdit)
+        {
+            if (ModelState.IsValid)
+            {
+                _profileDb.Entry(profileEdit).State = EntityState.Modified;
+                _profileDb.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(profileEdit);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Profile profileDelete = _profileDb.Profiles.Find(id);
+            if (profileDelete == null)
+            {
+                return HttpNotFound();
+            }
+
+            ApplicationUser user = _userDb.Users.Single(u => u.Email == profileDelete.UserEmail);
+
+            var roles = _userDb.Roles.ToList();
+            foreach (var role in roles)
+            {
+                foreach (var r in user.Roles)
+                {
+                    if (role.Id == r.RoleId)
+                    {
+                        ViewBag.RoleName = role.Name.First().ToString().ToUpper() + String.Join("", role.Name.Skip(1));
+                        break;
+                    }
+                }
+            }
+
+            return View(profileDelete);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            Profile profileDelete = _profileDb.Profiles.Find(id);
+            _profileDb.Profiles.Remove(profileDelete);
+            _profileDb.SaveChanges();
+
+            UserStore<ApplicationUser> userStore = new UserStore<ApplicationUser>(_userDb);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(userStore);
+
+            ApplicationUser user = _userDb.Users.Single(u => u.Email == profileDelete.UserEmail);
+            
+            userManager.Delete(user);
+            _userDb.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult ResetPassword(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Profile profilePassword = _profileDb.Profiles.Find(id);
+            if (profilePassword == null)
+            {
+                return HttpNotFound();
+            }
+
+            ApplicationUser user = _userDb.Users.Single(u => u.Email == profilePassword.UserEmail);
+
+            ViewBag.UserFName = profilePassword.FirstName;
+            ViewBag.UserLName = profilePassword.LastName;
+
+            ResetPasswordViewModel reset = new ResetPasswordViewModel();
+            reset.Email = user.Email;
+
+            return View(reset);
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordViewModel reset)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reset);
+            }
+
+            ApplicationUser user = _userDb.Users.Single(u => u.Email == reset.Email);
+
+            UserStore<ApplicationUser> userStore = new UserStore<ApplicationUser>(_userDb);
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(userStore);
+
+            var provider = new DpapiDataProtectionProvider("Sample");
+
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(
+                provider.Create("ResetPassword"));
+
+
+            var resetToken = userManager.GeneratePasswordResetToken(user.Id);
+
+            userManager.ResetPassword(user.Id, resetToken, reset.Password);
+            _userDb.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

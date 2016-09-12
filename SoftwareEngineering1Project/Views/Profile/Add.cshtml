@@ -12,7 +12,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>UserProfile</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -60,7 +59,7 @@
             <div class="col-md-10">
                 @Html.RadioButtonFor(model => model.Role, "sysadmin") Sysadmin
                 <br />
-                @Html.RadioButtonFor(model => model.Role, "professor") Professor
+                @Html.RadioButtonFor(model => model.Role, "professor", htmlAttributes:new { @checked = "checked" }) Professor
                 @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
             </div>
         </div>
