@@ -11,6 +11,9 @@ namespace SoftwareEngineering1Project
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryDataTables").Include(
+            "~/Scripts/DataTables/jquery.dataTables.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -26,6 +29,9 @@ namespace SoftwareEngineering1Project
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/DataTables").Include(
+                      "~/Content/DataTables/css/jquery.dataTables.css"));
         }
     }
 }
