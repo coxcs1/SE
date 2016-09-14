@@ -28,7 +28,8 @@ namespace SoftwareEngineering1Project
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/font-awesome.css"));
 
             bundles.Add(new StyleBundle("~/Content/DataTables").Include(
                       "~/Content/DataTables/css/jquery.dataTables.css"));
