@@ -26,11 +26,21 @@
                 <ul class="nav navbar-nav">
                     @if(User.IsInRole("sysadmin"))
                     {
-                        <li>@Html.ActionLink("User Management", "Index", "Profile")</li>
+                        <li>
+                            <a href="/Profile">
+                                <i class="fa fa-user" aria-hidden="true"></i> User Management
+                            </a>
+                        </li>
                     }
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                    </li>
+                    <li>
+                        <a href="/Home/About"><i class="fa fa-info-circle"></i> About</a>
+                    </li>
+                    <li>
+                        <a href="/Home/Contact"><i class="fa fa-envelope"></i> Contact</a>
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -39,8 +49,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="text-center">
+            <p>&copy; @DateTime.Now.Year - Software Engineering 1 - Team Loon</p>
         </footer>
     </div>
 

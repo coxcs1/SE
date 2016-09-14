@@ -117,6 +117,14 @@ namespace SoftwareEngineering1Project.Controllers
                 }
             };
             profileTable.SearchSort = true;
+            profileTable.TableButtons = new List<object>()
+            {
+                new
+                {
+                    text = "Create User",
+                    url = "/profile/add"
+                }
+            };
 
             return View(profileTable.Render());
         }

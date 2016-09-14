@@ -180,6 +180,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201609111713163_Profile - Update 1.Designer.cs">
       <DependentUpon>201609111713163_Profile - Update 1.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.Designer.cs">
+      <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -193,9 +197,14 @@
     <Compile Include="Helpers\DataTableModel.cs" />
     <Compile Include="Helpers\PanelTable.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Course.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Test.cs" />
+    <Compile Include="Models\TestQuestion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\UserProfile.cs" />
@@ -348,7 +357,10 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -357,6 +369,11 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -505,6 +522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609111713163_Profile - Update 1.resx">
       <DependentUpon>201609111713163_Profile - Update 1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.resx">
+      <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
