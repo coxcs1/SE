@@ -46,7 +46,9 @@ namespace SoftwareEngineering1Project.Controllers
         public ActionResult Index()
         {
             //DataTable is built using lists of generic objects
-            List<object> allUserProfiles = new List<object>();  
+            List<object> allUserProfiles = new List<object>();
+
+            int sysadminID = 0;  
                   
             var allProfiles = _profileDb.Profiles.ToList();
 
@@ -69,6 +71,12 @@ namespace SoftwareEngineering1Project.Controllers
                     }
                 }
 
+                if(tempRoleHolder == "Sysadmin")
+                {
+                    ViewBag.SysadminId = profile.Id;
+                    sysadminID = profile.Id;
+                }
+                
                 //adds new object to list - setup like key-value pairs
                 allUserProfiles.Add(
                     new
@@ -140,6 +148,14 @@ namespace SoftwareEngineering1Project.Controllers
             //allows the table to be searched and sorted
             profileTable.SearchSort = true;
 
+            string originalTable = profileTable.Render().ToString();
+            Response.Write(originalTable);
+            
+            originalTable = originalTable.Replace("a href='/profile/resetpassword/" + sysadminID.ToString() + " class='btn btn-primary btn-xs'>", "this");
+            Response.Write(originalTable);
+            Response.End();
+            //< a href = "/profile/resetpassword/7" class="btn btn-primary btn-xs">Reset Password</a>
+            //+ " class='btn btn-primary btn-xs'>"
             //render function returns an HtmlString to the view
             return View(profileTable.Render());
         }
@@ -253,9 +269,13 @@ namespace SoftwareEngineering1Project.Controllers
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()
             {
-                {"/profile/edit/" + profileInfo.Id, "Edit" },
-                {"/profile/delete/" + profileInfo.Id, "Delete" }
+                {"/profile/edit/" + profileInfo.Id, "Edit" },               
             };
+            if(up.Role != "Sysadmin")
+            {
+                viewTable.TableButtons.Add("/profile/delete/" + profileInfo.Id, "Delete");
+                viewTable.TableButtons.Add("/profile/resetpassword/" + profileInfo.Id, "Reset Password");
+            }
 
             //render function returns an HtmlString to the view
             return View(viewTable.Render());
@@ -334,6 +354,11 @@ namespace SoftwareEngineering1Project.Controllers
                         break;
                     }
                 }
+            }
+
+            if(ViewBag.RoleName == "Sysadmin")
+            {
+                return RedirectToAction("Index");
             }
 
             return View(profileDelete);
