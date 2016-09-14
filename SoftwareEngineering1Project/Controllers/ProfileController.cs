@@ -139,6 +139,15 @@ namespace SoftwareEngineering1Project.Controllers
             };
             //allows the table to be searched and sorted
             profileTable.SearchSort = true;
+            //adds the table button for adding a user
+            profileTable.TableButtons = new List<object>()
+            {
+                new
+                {
+                    text = "Create User",
+                    url = "/profile/add"
+                }
+            };
 
             //render function returns an HtmlString to the view
             return View(profileTable.Render());
