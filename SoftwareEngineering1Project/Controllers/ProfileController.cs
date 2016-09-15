@@ -23,6 +23,7 @@ using System.Web.Security;
 using System.Data.Entity;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.AspNet.Identity.Owin;
+using System.Diagnostics;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -148,16 +149,14 @@ namespace SoftwareEngineering1Project.Controllers
             //allows the table to be searched and sorted
             profileTable.SearchSort = true;
 
-            string originalTable = profileTable.Render().ToString();
-            Response.Write(originalTable);
-            
-            originalTable = originalTable.Replace("a href='/profile/resetpassword/" + sysadminID.ToString() + " class='btn btn-primary btn-xs'>", "this");
-            Response.Write(originalTable);
-            Response.End();
-            //< a href = "/profile/resetpassword/7" class="btn btn-primary btn-xs">Reset Password</a>
-            //+ " class='btn btn-primary btn-xs'>"
+            string modifiedTable = profileTable.Render().ToString();
+
+            //removes the reset password and the delete button for the sysadmin
+            modifiedTable = modifiedTable.Replace("<a href='/profile/resetpassword/" + sysadminID.ToString()  + "' class='btn btn-primary btn-xs'>Reset Password</a>", "");
+            modifiedTable = modifiedTable.Replace("<a href='/profile/delete/" + sysadminID.ToString() + "' class='btn btn-primary btn-xs'>Delete</a>", "");
+
             //render function returns an HtmlString to the view
-            return View(profileTable.Render());
+            return View(new HtmlString(modifiedTable));
         }
 
         /// <summary>
@@ -408,6 +407,25 @@ namespace SoftwareEngineering1Project.Controllers
 
             ApplicationUser user = _userDb.Users.Single(u => u.Email == profilePassword.UserEmail);
 
+            var roles = _userDb.Roles.ToList();
+            string roleName = "";
+            foreach (var role in roles)
+            {
+                foreach (var r in user.Roles)
+                {
+                    if (role.Id == r.RoleId)
+                    {
+                        roleName = role.Name.First().ToString().ToUpper() + String.Join("", role.Name.Skip(1));
+                        break;
+                    }
+                }
+            }
+
+            if (roleName == "Sysadmin")
+            {
+                return RedirectToAction("Index");
+            }
+        
             //passes the user's first and last name to the viewbag to be displayed in the view
             ViewBag.UserFName = profilePassword.FirstName;
             ViewBag.UserLName = profilePassword.LastName;
