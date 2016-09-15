@@ -23,6 +23,7 @@ using System.Web.Security;
 using System.Data.Entity;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.AspNet.Identity.Owin;
+using System.Diagnostics;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -46,7 +47,9 @@ namespace SoftwareEngineering1Project.Controllers
         public ActionResult Index()
         {
             //DataTable is built using lists of generic objects
-            List<object> allUserProfiles = new List<object>();  
+            List<object> allUserProfiles = new List<object>();
+
+            int sysadminID = 0;  
                   
             var allProfiles = _profileDb.Profiles.ToList();
 
@@ -69,6 +72,12 @@ namespace SoftwareEngineering1Project.Controllers
                     }
                 }
 
+                if(tempRoleHolder == "Sysadmin")
+                {
+                    ViewBag.SysadminId = profile.Id;
+                    sysadminID = profile.Id;
+                }
+                
                 //adds new object to list - setup like key-value pairs
                 allUserProfiles.Add(
                     new
@@ -149,8 +158,14 @@ namespace SoftwareEngineering1Project.Controllers
                 }
             };
 
+            string modifiedTable = profileTable.Render().ToString();
+
+            //removes the reset password and the delete button for the sysadmin
+            modifiedTable = modifiedTable.Replace("<a href='/profile/resetpassword/" + sysadminID.ToString()  + "' class='btn btn-primary btn-xs'>Reset Password</a>", "");
+            modifiedTable = modifiedTable.Replace("<a href='/profile/delete/" + sysadminID.ToString() + "' class='btn btn-primary btn-xs'>Delete</a>", "");
+
             //render function returns an HtmlString to the view
-            return View(profileTable.Render());
+            return View(new HtmlString(modifiedTable));
         }
 
         /// <summary>
@@ -262,9 +277,13 @@ namespace SoftwareEngineering1Project.Controllers
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()
             {
-                {"/profile/edit/" + profileInfo.Id, "Edit" },
-                {"/profile/delete/" + profileInfo.Id, "Delete" }
+                {"/profile/edit/" + profileInfo.Id, "Edit" },               
             };
+            if(up.Role != "Sysadmin")
+            {
+                viewTable.TableButtons.Add("/profile/delete/" + profileInfo.Id, "Delete");
+                viewTable.TableButtons.Add("/profile/resetpassword/" + profileInfo.Id, "Reset Password");
+            }
 
             //render function returns an HtmlString to the view
             return View(viewTable.Render());
@@ -345,6 +364,11 @@ namespace SoftwareEngineering1Project.Controllers
                 }
             }
 
+            if(ViewBag.RoleName == "Sysadmin")
+            {
+                return RedirectToAction("Index");
+            }
+
             return View(profileDelete);
         }
 
@@ -392,6 +416,25 @@ namespace SoftwareEngineering1Project.Controllers
 
             ApplicationUser user = _userDb.Users.Single(u => u.Email == profilePassword.UserEmail);
 
+            var roles = _userDb.Roles.ToList();
+            string roleName = "";
+            foreach (var role in roles)
+            {
+                foreach (var r in user.Roles)
+                {
+                    if (role.Id == r.RoleId)
+                    {
+                        roleName = role.Name.First().ToString().ToUpper() + String.Join("", role.Name.Skip(1));
+                        break;
+                    }
+                }
+            }
+
+            if (roleName == "Sysadmin")
+            {
+                return RedirectToAction("Index");
+            }
+        
             //passes the user's first and last name to the viewbag to be displayed in the view
             ViewBag.UserFName = profilePassword.FirstName;
             ViewBag.UserLName = profilePassword.LastName;
