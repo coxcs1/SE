@@ -236,7 +236,9 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                //add successful toastr message before redirect
+                TempData["Message"] = new { Message = "Successfully changed password", Type = "success" };
+                return RedirectToAction("Index");
             }
             AddErrors(result);
             return View(model);

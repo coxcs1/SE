@@ -211,6 +211,8 @@ namespace SoftwareEngineering1Project.Controllers
                     _profileDb.Profiles.Add(profile);
                     _profileDb.SaveChanges();
                     _userDb.SaveChanges();
+                    //add flash message for successful creation
+                    TempData["Message"] = new { Message = "Successfully created user", Type = "success" };
                     return RedirectToAction("Index", "Profile");
                 }
                 else
@@ -324,6 +326,8 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 _profileDb.Entry(profileEdit).State = EntityState.Modified;
                 _profileDb.SaveChanges();
+                //add flash message for successful creation
+                TempData["Message"] = new { Message = "Successfully updated user", Type = "success" };
                 return RedirectToAction("Index");
             }
             return View(profileEdit);
@@ -393,6 +397,8 @@ namespace SoftwareEngineering1Project.Controllers
             userManager.Delete(user);
             _userDb.SaveChanges();
 
+            //add flash message for successful creation
+            TempData["Message"] = new { Message = "Successfully deleted user", Type = "success" };
             return RedirectToAction("Index");
         }
 

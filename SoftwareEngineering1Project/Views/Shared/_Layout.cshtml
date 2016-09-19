@@ -9,6 +9,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryDataTables")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/bootstrap")
 
 </head>
 <body>
@@ -24,7 +26,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if(User.IsInRole("sysadmin"))
+                    @if (User.IsInRole("sysadmin"))
                     {
                         <li>
                             <a href="/Profile">
@@ -47,6 +49,10 @@
         </div>
     </div>
     <div class="container body-content">
+        <div id="messages">
+            @Html.Partial("_FlashMessengerPartial")
+        </div>
+
         @RenderBody()
         <hr />
         <footer class="text-center">
