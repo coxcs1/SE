@@ -171,6 +171,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="DataContexts\ApplicationDb.cs" />
     <Compile Include="DataContexts\ApplicationMigrations\201609110134325_Profile - Initial Create.cs" />
     <Compile Include="DataContexts\ApplicationMigrations\201609110134325_Profile - Initial Create.Designer.cs">
@@ -513,6 +514,11 @@
     <Content Include="Views\Profile\Delete.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Shared\_FlashMessengerPartial.cshtml" />
+    <Content Include="Views\Questions\Create.cshtml" />
+    <Content Include="Views\Questions\Delete.cshtml" />
+    <Content Include="Views\Questions\Details.cshtml" />
+    <Content Include="Views\Questions\Edit.cshtml" />
+    <Content Include="Views\Questions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
