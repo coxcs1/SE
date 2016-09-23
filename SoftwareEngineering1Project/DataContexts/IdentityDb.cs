@@ -10,8 +10,8 @@ namespace SoftwareEngineering1Project.DataContexts
     public class IdentityDb : IdentityDbContext<ApplicationUser>
     {
         public IdentityDb()          
-            //: base("DefaultConnection", throwIfV1Schema: false)
-            : base("AzureConnection", throwIfV1Schema: false) //for live site
+            : base("DefaultConnection", throwIfV1Schema: false)
+            //: base("AzureConnection", throwIfV1Schema: false) 
         {
         }
 
