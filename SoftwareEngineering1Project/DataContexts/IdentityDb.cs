@@ -11,7 +11,7 @@ namespace SoftwareEngineering1Project.DataContexts
     {
         public IdentityDb()          
             : base("DefaultConnection", throwIfV1Schema: false)
-            //: base("AzureConnection", throwIfV1Schema: false) 
+            //: base("AzureConnection", throwIfV1Schema: false) - Do Not Uncomment
         {
         }
 
