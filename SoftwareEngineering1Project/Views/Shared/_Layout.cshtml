@@ -3,9 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Dept. of Computing - Oral Exit Exam</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/DataTables")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryDataTables")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/bootstrap")
 
 </head>
 <body>
@@ -16,24 +21,52 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Team Loon", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </button>            
+                @Html.ActionLink("Dept. of Computing - Oral Exit Exam", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                <ul class="nav navbar-nav">                    
+                    <li>
+                        <a href="/"><i class="fa fa-home"></i>Home</a>
+                    </li>
+                    <li>
+                        <a href="/Home/Contact"><i class="fa fa-envelope"></i> Contact</a>
+                    </li>
+                    @if (User.IsInRole("sysadmin"))
+                    {
+                        <li>
+                            <a href="/Profile">
+                                <i class="fa fa-user" aria-hidden="true"></i> User Management
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("professor"))
+                    {
+                        <li>
+                            <a href="/Student">
+                                <i class="fa fa-user" aria-hidden="true"></i> Student Management
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Questions">
+                                <i class="fa fa-user" aria-hidden="true"></i> Question Management
+                            </a>
+                        </li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
     <div class="container body-content">
+        <div id="messages">
+            @Html.Partial("_FlashMessengerPartial")
+        </div>
+
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="text-center">
+            <p>&copy; @DateTime.Now.Year - Software Engineering 1 - Team Loon</p>
         </footer>
     </div>
 
