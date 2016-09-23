@@ -11,8 +11,8 @@ namespace SoftwareEngineering1Project.DataContexts
     public class ApplicationDb : DbContext
     {
         public ApplicationDb()          
-            : base("DefaultConnection")
-            //: base("AzureConnection") - Do Not Uncomment
+            //: base("DefaultConnection")
+            : base("AzureConnection")
         {
         }
 
