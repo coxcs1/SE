@@ -42,7 +42,7 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         /// The questions on the test.
         /// </value>
-        public virtual List<Question> Questions { get; set; }
+        public virtual List<TestQuestion> TestQuestions { get; set; }
         /// <summary>
         /// Gets or sets the student.
         /// </summary>
