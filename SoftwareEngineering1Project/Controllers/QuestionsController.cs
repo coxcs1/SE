@@ -12,11 +12,10 @@ using SoftwareEngineering1Project.Helpers;
 
 namespace SoftwareEngineering1Project.Controllers
 {
+    [Authorize(Roles = "professor")]
     public class QuestionsController : Controller
     {
-        private ApplicationDb questionDb = new ApplicationDb();
-
-        
+        private ApplicationDb questionDb = new ApplicationDb();       
 
         // GET: Questions
         public ActionResult Index()
