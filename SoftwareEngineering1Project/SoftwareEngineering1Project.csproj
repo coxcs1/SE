@@ -186,6 +186,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.Designer.cs">
       <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.Designer.cs">
+      <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -485,10 +489,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -544,6 +546,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.resx">
       <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.resx">
+      <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
