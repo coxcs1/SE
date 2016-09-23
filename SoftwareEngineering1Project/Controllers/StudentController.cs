@@ -27,7 +27,7 @@ using System.Diagnostics;
 
 namespace SoftwareEngineering1Project.Controllers
 {
-    [Authorize(Roles = "sysadmin")]
+    [Authorize(Roles = "professor")]
     public class StudentController : Controller
     {
         private ApplicationDb _studentDb = new ApplicationDb();
@@ -197,12 +197,45 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 return HttpNotFound();
             }
-            else
+
+            //Creates the PanelTable and sets its title and the number of 
+            //items displayed in a row (includes headers)
+            PanelTable viewTable = new PanelTable();
+            viewTable.Title = "Student Information";
+            viewTable.ItemsPerRow = 4;
+
+            //the key is the the label and the value is the specific user's information
+            viewTable.Data = new Dictionary<string, string>()
             {
-                return View(studentInfo);
-            }
-            
+                {"First Name",  studentInfo.FirstName},
+                {"Last Name" , studentInfo.LastName},
+                {"Concentration", studentInfo.Concentration},
+                {"Notes", studentInfo.Notes },
+                {"Enter Date" , studentInfo.EnterDate.Date.ToString() },
+                {"", "" }
+            };
+            //key is the url link and the value is what is displayed to the user
+            viewTable.TableButtons = new Dictionary<string, string>()
+            {
+                {"/student/edit/" + studentInfo.ID, "Edit" },
+                {"/student/delete/" + studentInfo.ID, "Delete" },
+            };
+
+            //render function returns an HtmlString to the view
+            return View(viewTable.Render());
+
+        }
+        
+        public ActionResult Edit(int? id)
+        {
+            return View();
+
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            return View();
         }
             
-        }
     }
+}

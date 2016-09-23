@@ -21,11 +21,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
+                </button>            
                 @Html.ActionLink("Dept. of Computing - Oral Exit Exam", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav">                    
+                    <li>
+                        <a href="/"><i class="fa fa-home"></i>Home</a>
+                    </li>
+                    <li>
+                        <a href="/Home/Contact"><i class="fa fa-envelope"></i> Contact</a>
+                    </li>
                     @if (User.IsInRole("sysadmin"))
                     {
                         <li>
@@ -34,17 +40,19 @@
                             </a>
                         </li>
                     }
-                    <li>
-                        <a href="/Student">
-                            <i class="fa fa-user" aria-hidden="true"></i> Student Management
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/"><i class="fa fa-home"></i> Home</a>
-                    </li>
-                    <li>
-                        <a href="/Home/Contact"><i class="fa fa-envelope"></i> Contact</a>
-                    </li>
+                    @if (User.IsInRole("professor"))
+                    {
+                        <li>
+                            <a href="/Student">
+                                <i class="fa fa-user" aria-hidden="true"></i> Student Management
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Questions">
+                                <i class="fa fa-user" aria-hidden="true"></i> Question Management
+                            </a>
+                        </li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
