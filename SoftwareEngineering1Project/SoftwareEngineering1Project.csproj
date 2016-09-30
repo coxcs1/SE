@@ -190,6 +190,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.Designer.cs">
       <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.Designer.cs">
+      <DependentUpon>201609302259228_Student Model Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -551,6 +555,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.resx">
       <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.resx">
+      <DependentUpon>201609302259228_Student Model Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
