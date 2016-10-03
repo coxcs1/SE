@@ -11,7 +11,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Course.CourseName)
+            Course:
         </dt>
 
         <dd>
@@ -19,7 +19,14 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Profile.UserEmail)
+            Teacher for Course
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Teacher.FullName)
+        </dd>
+
+        <dt>
+            Modified By
         </dt>
 
         <dd>
