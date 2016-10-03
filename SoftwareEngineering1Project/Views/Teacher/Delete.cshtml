@@ -1,0 +1,24 @@
+﻿@model SoftwareEngineering1Project.Models.Teacher
+
+@{
+    ViewBag.Title = "Delete " + Model.GetFullName();
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<div>
+    @ViewBag.Table.Render()
+    <hr />
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <div class="col-md-offset-2 col-md-10">
+                <h3>Are you sure you want to delete @Model.GetFullName()?</h3>
+                <button type="submit" value="Create" class="btn btn-default">
+                    Delete <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    }
+</div>
