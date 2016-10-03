@@ -28,7 +28,6 @@ namespace SoftwareEngineering1Project.Controllers
             var allProfiles = questionDb.Profiles.ToList();
             string course_Name = "";
             string profile_First_Name = "";
-            string profile_Last_Name = "";
 
             foreach (var question in allQuestions)
             {
@@ -138,13 +137,14 @@ namespace SoftwareEngineering1Project.Controllers
         {
             ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName");
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail");
+            ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName");
             return View();
         }
 
         // POST: Questions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,ProfileID,Text,Answer")] Question question)
+        public ActionResult Create([Bind(Include = "CourseID,TeacherID,ProfileID,Text,Answer")] Question question)
         {
             try
             {
@@ -162,9 +162,10 @@ namespace SoftwareEngineering1Project.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
-                ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
-                ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
-                return View(question);
+            ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
+            ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
+            ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
+            return View(question);
         }
 
         // GET: Questions/Edit/5
@@ -181,13 +182,14 @@ namespace SoftwareEngineering1Project.Controllers
             }
             ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
+            ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
             return View(question);
         }
 
         // POST: Questions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CourseID,ProfileID,Text,Answer")] Question question)
+        public ActionResult Edit([Bind(Include = "ID,CourseID,TeacherID,ProfileID,Text,Answer")] Question question)
         {
             if (ModelState.IsValid)
             {
@@ -197,6 +199,7 @@ namespace SoftwareEngineering1Project.Controllers
             }
             ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
+            ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
             return View(question);
         }
 

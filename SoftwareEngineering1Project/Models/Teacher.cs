@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -24,6 +25,7 @@ namespace SoftwareEngineering1Project.Models
         /// The name.
         /// </value>
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
         /// <summary>
         /// Gets or sets the last name.
@@ -32,6 +34,7 @@ namespace SoftwareEngineering1Project.Models
         /// The last name.
         /// </value>
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
         /// <summary>
         /// Gets or sets the e number.
@@ -40,6 +43,7 @@ namespace SoftwareEngineering1Project.Models
         /// The e number.
         /// </value>
         [Required]
+        [Display(Name = "E-Number")]
         [RegularExpression(@"^E\d{8}$", ErrorMessage = "Must enter a valid ENumber Eg. (E01234567)")]
         public string ENumber { get; set; }
         /// <summary>
@@ -72,6 +76,15 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [Required]
         public string Status { get; set; }
+
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
 
         /// <summary>
         /// Gets the full name.
