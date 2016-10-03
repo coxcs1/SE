@@ -550,6 +550,9 @@
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Update.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
+	<Content Include="Views\Course\Add.cshtml" />
+	<Content Include="Views\Course\Index.cshtml" />
+	<Content Include="Views\Course\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
