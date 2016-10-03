@@ -38,6 +38,8 @@ namespace SoftwareEngineering1Project
 
             bundles.Add(new StyleBundle("~/Content/DataTables").Include(
                       "~/Content/DataTables/css/jquery.dataTables.css"));
+                      
+           BundleTable.EnableOptimizations = true;
         }
     }
 }
