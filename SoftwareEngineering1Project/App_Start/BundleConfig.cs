@@ -34,9 +34,7 @@ namespace SoftwareEngineering1Project
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/font-awesome.css",
-                      "~/Content/toastr.css"));
-
-            bundles.Add(new StyleBundle("~/Content/DataTables").Include(
+                      "~/Content/toastr.css",
                       "~/Content/DataTables/css/jquery.dataTables.css"));
         }
     }
