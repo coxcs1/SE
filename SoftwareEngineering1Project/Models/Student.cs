@@ -54,7 +54,6 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         /// The notes.
         /// </value>
-        [Required]
         public string Notes { get; set; }
 
         /// <summary>

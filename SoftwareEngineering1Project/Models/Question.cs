@@ -34,6 +34,14 @@ namespace SoftwareEngineering1Project.Models
         [ForeignKey("Profile")]
         public int ProfileID { get; set; }
         /// <summary>
+        /// Gets or sets the teacher identifier.
+        /// </summary>
+        /// <value>
+        /// The teacher identifier.
+        /// </value>
+        [ForeignKey("Teacher")]
+        public int TeacherID { get; set; }
+        /// <summary>
         /// Gets or sets the text.
         /// </summary>
         /// <value>
@@ -63,5 +71,12 @@ namespace SoftwareEngineering1Project.Models
         /// The professor who created the question.
         /// </value>
         public virtual Profile Profile { get; set; }
+        /// <summary>
+        /// Gets or sets the teacher.
+        /// </summary>
+        /// <value>
+        /// The teacher who submitted the question.
+        /// </value>
+        public virtual Teacher Teacher { get; set; }
     }
 }

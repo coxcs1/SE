@@ -25,6 +25,7 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [Required]
         [StringLength(50)]
+        [Display(Name ="Course Name")]
         public string CourseName { get; set; }
         /// <summary>
         /// Gets or sets the course CRN.
@@ -33,7 +34,8 @@ namespace SoftwareEngineering1Project.Models
         /// The course CRN.
         /// </value>
         [Required]
-        [RegularExpression(@"^\d{5}$", ErrorMessage = "Must enter a 4 digit CRN, Eg.(12345)")]
+        [RegularExpression(@"^\d{5}$", ErrorMessage = "Must enter a 5 digit CRN, Eg.(12345)")]
+        [Display(Name ="CRN")]
         public int CourseCRN { get; set; }
         /// <summary>
         /// Gets or sets the course attribute number.
@@ -43,6 +45,7 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [Required]
         [RegularExpression(@"^\d{4}$", ErrorMessage = "Must enter a 4 digit course number Eg.(1100)")]
+        [Display(Name ="Attribute Number")]
         public int CourseAttributeNumber { get; set; }
 
         /// <summary>
