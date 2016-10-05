@@ -544,15 +544,15 @@
     <Content Include="Views\Questions\Edit.cshtml" />
     <Content Include="Views\Questions\Index.cshtml" />
     <Content Include="Views\Shared\_FlashMessengerPartial.cshtml" />
-    <Content Include="Views\Student\Edit.cshtml" />
-    <Content Include="Views\Student\Delete.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Update.cshtml" />
     <Content Include="Views\Teacher\Delete.cshtml" />
-	<Content Include="Views\Course\Add.cshtml" />
-	<Content Include="Views\Course\Index.cshtml" />
-	<Content Include="Views\Course\View.cshtml" />
+    <Content Include="Views\Course\Add.cshtml" />
+    <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Course\View.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Student\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
