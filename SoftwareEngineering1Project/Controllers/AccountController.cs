@@ -97,9 +97,6 @@ namespace SoftwareEngineering1Project.Controllers
                     }
                     if(strRole == "Sysadmin")
                         return RedirectToAction("Index", "Profile");
-                    
-                    if (User.IsInRole("sysadmin"))
-                        return RedirectToAction("Index", "Profile");
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
