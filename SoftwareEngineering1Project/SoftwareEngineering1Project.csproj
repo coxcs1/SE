@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -168,10 +168,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CourseController.cs" />
+	<Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\QuestionsController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="DataContexts\ApplicationDb.cs" />
     <Compile Include="DataContexts\ApplicationMigrations\201609110134325_Profile - Initial Create.cs" />
     <Compile Include="DataContexts\ApplicationMigrations\201609110134325_Profile - Initial Create.Designer.cs">
@@ -184,6 +187,26 @@
     <Compile Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.cs" />
     <Compile Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.Designer.cs">
       <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.Designer.cs">
+      <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.Designer.cs">
+      <DependentUpon>201609302259228_Student Model Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201610011655097_Create Teacher Model.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201610011655097_Create Teacher Model.Designer.cs">
+      <DependentUpon>201610011655097_Create Teacher Model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201610011712086_Update Teacher Model.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201610011712086_Update Teacher Model.Designer.cs">
+      <DependentUpon>201610011712086_Update Teacher Model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201610011757232_Update Teacher Model 2.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201610011757232_Update Teacher Model 2.Designer.cs">
+      <DependentUpon>201610011757232_Update Teacher Model 2.cs</DependentUpon>
     </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
@@ -204,6 +227,7 @@
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TestQuestion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -360,11 +384,14 @@
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\DataTables\css\semanticui.scss" />
@@ -375,6 +402,8 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -465,6 +494,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -477,10 +508,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -506,14 +535,30 @@
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\Delete.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
-    <Content Include="Views\Course\Add.cshtml" />
-    <Content Include="Views\Course\Index.cshtml" />
-    <Content Include="Views\Course\View.cshtml" />
-    <Content Include="Views\Course\Edit.cshtml" />
-    <Content Include="Views\Course\Delete.cshtml" />
+    <Content Include="Views\Student\Add.cshtml" />
+    <Content Include="Views\Student\View.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\Questions\Create.cshtml" />
+    <Content Include="Views\Questions\Delete.cshtml" />
+    <Content Include="Views\Questions\View.cshtml" />
+    <Content Include="Views\Questions\Edit.cshtml" />
+    <Content Include="Views\Questions\Index.cshtml" />
+    <Content Include="Views\Shared\_FlashMessengerPartial.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Student\Delete.cshtml" />
+    <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
+    <Content Include="Views\Teacher\Update.cshtml" />
+    <Content Include="Views\Teacher\Delete.cshtml" />
+	<Content Include="Views\Course\Add.cshtml" />
+	<Content Include="Views\Course\Index.cshtml" />
+	<Content Include="Views\Course\View.cshtml" />
+	<Content Include="Views\Course\Edit.cshtml" />
+	<Content Include="Views\Course\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -531,6 +576,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609140134157_Data Model Implementation.resx">
       <DependentUpon>201609140134157_Data Model Implementation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609230050230_Test Model Update.resx">
+      <DependentUpon>201609230050230_Test Model Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201609302259228_Student Model Update.resx">
+      <DependentUpon>201609302259228_Student Model Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610011655097_Create Teacher Model.resx">
+      <DependentUpon>201610011655097_Create Teacher Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610011712086_Update Teacher Model.resx">
+      <DependentUpon>201610011712086_Update Teacher Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610011757232_Update Teacher Model 2.resx">
+      <DependentUpon>201610011757232_Update Teacher Model 2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
