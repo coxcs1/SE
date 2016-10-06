@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SoftwareEngineering1Project.Models;
+using SoftwareEngineering1Project.DataContexts;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -17,6 +18,7 @@ namespace SoftwareEngineering1Project.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IdentityDb _identity = new IdentityDb();
 
         public AccountController()
         {
@@ -79,6 +81,22 @@ namespace SoftwareEngineering1Project.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var user = _identity.Users.Single(u => u.UserName == model.Email);
+                    var roles = _identity.Roles.ToList();
+                    string strRole = "";
+                    foreach (var role in roles)
+                    {
+                        foreach(var r in user.Roles)
+                        {
+                            if (role.Id == r.RoleId)
+                            {
+                                strRole = role.Name.First().ToString().ToUpper() + String.Join("", role.Name.Skip(1));
+                                break;
+                            }
+                        }
+                    }
+                    if(strRole == "Sysadmin")
+                        return RedirectToAction("Index", "Profile");
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
