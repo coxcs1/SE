@@ -174,10 +174,10 @@ namespace SoftwareEngineering1Project.Controllers
                 //saves both the profile and the user to the database                    
                 _studentDb.Students.Add(student);
                 _studentDb.SaveChanges();
+                //add flash message for successful adding
+                TempData["Message"] = new { Message = "Successfully added a student", Type = "success" };
                 return RedirectToAction("Index", "Student");
-            }
-            //add flash message for successful adding
-            TempData["Message"] = new { Message = "Successfully added a student", Type = "success" };
+            }           
             return View(newStudent);
         }
 

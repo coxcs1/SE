@@ -35,7 +35,9 @@ namespace SoftwareEngineering1Project
                       "~/Content/site.css",
                       "~/Content/font-awesome.css",
                       "~/Content/toastr.css",
-                      "~/Content/DataTables/css/jquery.dataTables.css"));
+                      "~/Content/DataTables/css/jquery.dataTables.css",
+                      "~/Content/DataTables/images/*.png"));
+                      
         }
     }
 }
