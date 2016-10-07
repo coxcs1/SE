@@ -46,7 +46,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     if(course.ID == question.CourseID)
                     {
-                        course_Name = course.CourseName + " - CSCI " + course.CourseAttributeNumber;
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
                     }
                 }
 
@@ -201,7 +201,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     if (course.ID == question.CourseID)
                     {
-                        course_Name = course.CourseName + " - CSCI " + course.CourseAttributeNumber;
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
                     }
                 }
 
@@ -231,7 +231,8 @@ namespace SoftwareEngineering1Project.Controllers
                 {"Professor:", teacher_Name},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer }
+                {"Answer:", question.Answer },
+                {"", "" }
             };
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()
@@ -356,7 +357,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     if (course.ID == question.CourseID)
                     {
-                        course_Name = course.CourseName + " - CSCI " + course.CourseAttributeNumber;
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
                     }
                 }
 
@@ -386,7 +387,8 @@ namespace SoftwareEngineering1Project.Controllers
                 {"Professor:", teacher_Name},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer }
+                {"Answer:", question.Answer },
+                {"","" }
             };
 
             //render function returns an HtmlString to the view

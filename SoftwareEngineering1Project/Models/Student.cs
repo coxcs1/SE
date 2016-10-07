@@ -23,6 +23,7 @@ namespace SoftwareEngineering1Project.Models
         /// The first name.
         /// </value>
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
         /// <summary>
         /// Gets or sets the last name.
@@ -31,6 +32,7 @@ namespace SoftwareEngineering1Project.Models
         /// The last name.
         /// </value>
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
         /// <summary>
         /// Gets or sets the enter date.
@@ -39,6 +41,7 @@ namespace SoftwareEngineering1Project.Models
         /// The enter date.
         /// </value>
         [Required]
+        [Display(Name = "Enter Date")]
         public DateTime EnterDate { get; set; }
         /// <summary>
         /// Gets or sets the concentration.

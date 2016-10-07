@@ -483,6 +483,8 @@ namespace SoftwareEngineering1Project.Controllers
             userManager.ResetPassword(user.Id, resetToken, reset.Password);
             _userDb.SaveChanges();
 
+            //add flash message for successful creation
+            TempData["Message"] = new { Message = "Successfully Reset Password", Type = "success" };
             return RedirectToAction("Index");
         }
     }

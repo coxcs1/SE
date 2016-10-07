@@ -27,7 +27,7 @@ using System.Diagnostics;
 
 namespace SoftwareEngineering1Project.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "professor")]
     public class CourseController : Controller
     {
         private ApplicationDb _courseDb = new ApplicationDb();
@@ -161,6 +161,8 @@ namespace SoftwareEngineering1Project.Controllers
                     //saves the course to the database                    
                     _courseDb.Courses.Add(course);
                     _courseDb.SaveChanges();
+                    //add flash message for successful creation
+                    TempData["Message"] = new { Message = "Successfully created course", Type = "success" };
                     return RedirectToAction("Index", "Course");
                 }
                 else
@@ -209,6 +211,7 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.TableButtons = new Dictionary<string, string>()
             {
                 {"/course/edit/" + course.ID, "Edit" },
+                {"/course/delete/" + course.ID, "Delete" },
             };
 
             //render function returns an HtmlString to the view
@@ -250,6 +253,7 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 _courseDb.Entry(courseEdit).State = EntityState.Modified;
                 _courseDb.SaveChanges();
+                TempData["Message"] = new { Message = "Successfully edited course", Type = "success" };
                 return RedirectToAction("Index");
             }
             return View(courseEdit);
@@ -289,7 +293,8 @@ namespace SoftwareEngineering1Project.Controllers
             Course courseDelete = _courseDb.Courses.Find(id);
             _courseDb.Courses.Remove(courseDelete);
             _courseDb.SaveChanges();
-
+            //add flash message for successful creation
+            TempData["Message"] = new { Message = "Successfully deleted coruse", Type = "success" };
             return RedirectToAction("Index");
         }
     }
