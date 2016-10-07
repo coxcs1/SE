@@ -27,7 +27,7 @@ using System.Diagnostics;
 
 namespace SoftwareEngineering1Project.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "professor")]
     public class CourseController : Controller
     {
         private ApplicationDb _courseDb = new ApplicationDb();
@@ -161,6 +161,8 @@ namespace SoftwareEngineering1Project.Controllers
                     //saves the course to the database                    
                     _courseDb.Courses.Add(course);
                     _courseDb.SaveChanges();
+                    //add flash message for successful creation
+                    TempData["Message"] = new { Message = "Successfully created course", Type = "success" };
                     return RedirectToAction("Index", "Course");
                 }
                 else
@@ -209,10 +211,91 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.TableButtons = new Dictionary<string, string>()
             {
                 {"/course/edit/" + course.ID, "Edit" },
+                {"/course/delete/" + course.ID, "Delete" },
             };
 
             //render function returns an HtmlString to the view
             return View(viewTable.Render());
+        }
+
+        /// <summary>
+        /// Get Edit Action - makes sure there is a course to edit before returning
+        /// it to the view
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Course courseEdit = _courseDb.Courses.Find(id);
+            if (courseEdit == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(courseEdit);
+        }
+
+        /// <summary>
+        /// Post Edit Action - marks the course as having changed and then
+        /// saves the changes
+        /// </summary>
+        /// <param name="courseEdit"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Edit(Course courseEdit)
+        {
+            if (ModelState.IsValid)
+            {
+                _courseDb.Entry(courseEdit).State = EntityState.Modified;
+                _courseDb.SaveChanges();
+                TempData["Message"] = new { Message = "Successfully edited course", Type = "success" };
+                return RedirectToAction("Index");
+            }
+            return View(courseEdit);
+        }
+
+        /// <summary>
+        /// Get Delete Action - makes sure there is a course to delete before returning
+        /// to the view
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Course courseDelete = _courseDb.Courses.Find(id);
+            if (courseDelete == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(courseDelete);
+        }
+
+        /// <summary>
+        /// Post Delete Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            //finds the course and removes it from the database
+            Course courseDelete = _courseDb.Courses.Find(id);
+            _courseDb.Courses.Remove(courseDelete);
+            _courseDb.SaveChanges();
+            //add flash message for successful creation
+            TempData["Message"] = new { Message = "Successfully deleted coruse", Type = "success" };
+            return RedirectToAction("Index");
         }
     }
 }

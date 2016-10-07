@@ -1,4 +1,13 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         QuestionsController.cs
+//	Description:       This class contains action methods associated with the questionsController. 
+//
+//	Author:            Seth Howerton, howertons@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -26,8 +35,10 @@ namespace SoftwareEngineering1Project.Controllers
             var allQuestions = questionDb.Questions.ToList();
             var allCourses = questionDb.Courses.ToList();
             var allProfiles = questionDb.Profiles.ToList();
+            var allTeachers = questionDb.Teachers.ToList();
             string course_Name = "";
-            string profile_First_Name = "";
+            string profile_Name = "";
+            string teacher_Name = "";
 
             foreach (var question in allQuestions)
             {
@@ -35,7 +46,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     if(course.ID == question.CourseID)
                     {
-                        course_Name = course.CourseName;
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
                     }
                 }
 
@@ -43,8 +54,17 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     if (profile.Id == question.ProfileID)
                     {
-                        profile_First_Name = profile.LastName + ", "+ profile.FirstName ;
+                        profile_Name = profile.LastName + ", "+ profile.FirstName ;
                         
+                    }
+                }
+
+                foreach (var teacher in allTeachers)
+                {
+                    if (teacher.ID == question.TeacherID)
+                    {
+                        teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
                     }
                 }
 
@@ -54,7 +74,8 @@ namespace SoftwareEngineering1Project.Controllers
                     {
                         id = question.ID,
                         courseId = course_Name,
-                        profileId = profile_First_Name,
+                        teacherId = teacher_Name,
+                        profileId = profile_Name,
                         text = question.Text,
                         answer = question.Answer
 
@@ -76,6 +97,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     Name = "Course",
                     Field = "courseId"
+                },
+                new
+                {
+                    Name = "Professor",
+                    Field = "teacherId"
                 },
                 new
                 {
@@ -102,7 +128,13 @@ namespace SoftwareEngineering1Project.Controllers
             //id matches to the key seen earlier
             questionTable.Actions = new List<object>()
             {
-                
+
+                new
+                {
+                    text = "View",
+                    url = "/questions/view/{{id}}"
+                },
+
                 new
                 {
                     text = "Edit",
@@ -132,6 +164,88 @@ namespace SoftwareEngineering1Project.Controllers
             return View(new HtmlString(Table));
         }
 
+        // GET: Questions/View/5
+        public ActionResult View(int? id)
+        {
+            List<object> allUserQuestions = new List<object>();
+
+            var allQuestions = questionDb.Questions.ToList();
+            var allCourses = questionDb.Courses.ToList();
+            var allProfiles = questionDb.Profiles.ToList();
+            var allTeachers = questionDb.Teachers.ToList();
+            string course_Name = "";
+            string profile_Name = "";
+            string teacher_Name = "";
+
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Question question = questionDb.Questions.Find(id);
+
+            if (question == null)
+            {
+                return HttpNotFound();
+            }
+
+            //Creates the PanelTable and sets its title and the number of 
+            //items displayed in a row (includes headers)
+            PanelTable viewTable = new PanelTable();
+            viewTable.Title = "Question Information";
+            viewTable.ItemsPerRow = 5;
+
+            foreach (var questions in allQuestions)
+            {
+                foreach (var course in allCourses)
+                {
+                    if (course.ID == question.CourseID)
+                    {
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                    }
+                }
+
+                foreach (var profile in allProfiles)
+                {
+                    if (profile.Id == question.ProfileID)
+                    {
+                        profile_Name = profile.LastName + ", " + profile.FirstName;
+
+                    }
+                }
+
+                foreach (var teacher in allTeachers)
+                {
+                    if (teacher.ID == question.TeacherID)
+                    {
+                        teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
+                    }
+                }
+            }
+
+                //the key is the the label and the value is the specific course's information
+                viewTable.Data = new Dictionary<string, string>()
+            {
+                {"Course Name:" , course_Name},
+                {"Professor:", teacher_Name},
+                {"Created By:", profile_Name},
+                {"Question:", question.Text},
+                {"Answer:", question.Answer },
+                {"", "" }
+            };
+            //key is the url link and the value is what is displayed to the user
+            viewTable.TableButtons = new Dictionary<string, string>()
+            {
+                {"/questions/edit/" + question.ID, "Edit" },
+                {"/questions/delete/" + question.ID, "Delete" }
+            };
+
+            //render function returns an HtmlString to the view
+            return View(viewTable.Render());
+        }
+
+
         // GET: Questions/Create
         public ActionResult Create()
         {
@@ -152,7 +266,9 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     questionDb.Questions.Add(question);
                     questionDb.SaveChanges();
-                    return RedirectToAction("Index");
+                    //add flash message for successful creation
+                    TempData["Message"] = new { Message = "Successfully Created Question", Type = "success" };
+                    return RedirectToAction("Index", "Questions");
                 }
 
             }
@@ -195,6 +311,7 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 questionDb.Entry(question).State = EntityState.Modified;
                 questionDb.SaveChanges();
+                TempData["Message"] = new { Message = "Successfully Updated Question", Type = "success" };
                 return RedirectToAction("Index");
             }
             ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
@@ -206,16 +323,76 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Questions/Delete/5
         public ActionResult Delete(int? id)
         {
+            List<object> allUserQuestions = new List<object>();
+
+            var allQuestions = questionDb.Questions.ToList();
+            var allCourses = questionDb.Courses.ToList();
+            var allProfiles = questionDb.Profiles.ToList();
+            var allTeachers = questionDb.Teachers.ToList();
+            string course_Name = "";
+            string profile_Name = "";
+            string teacher_Name = "";
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Redirect("Index");
             }
+
             Question question = questionDb.Questions.Find(id);
+
             if (question == null)
             {
                 return HttpNotFound();
             }
-            return View(question);
+
+            //Creates the PanelTable and sets its title and the number of 
+            //items displayed in a row (includes headers)
+            PanelTable viewTable = new PanelTable();
+            viewTable.Title = "Question Information";
+            viewTable.ItemsPerRow = 5;
+
+            foreach (var questions in allQuestions)
+            {
+                foreach (var course in allCourses)
+                {
+                    if (course.ID == question.CourseID)
+                    {
+                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                    }
+                }
+
+                foreach (var profile in allProfiles)
+                {
+                    if (profile.Id == question.ProfileID)
+                    {
+                        profile_Name = profile.LastName + ", " + profile.FirstName;
+
+                    }
+                }
+
+                foreach (var teacher in allTeachers)
+                {
+                    if (teacher.ID == question.TeacherID)
+                    {
+                        teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
+                    }
+                }
+            }
+
+            //the key is the the label and the value is the specific course's information
+            viewTable.Data = new Dictionary<string, string>()
+            {
+                {"Course Name:" , course_Name},
+                {"Professor:", teacher_Name},
+                {"Created By:", profile_Name},
+                {"Question:", question.Text},
+                {"Answer:", question.Answer },
+                {"","" }
+            };
+
+            //render function returns an HtmlString to the view
+            return View(viewTable.Render());
         }
 
         // POST: Questions/Delete/5
@@ -226,6 +403,7 @@ namespace SoftwareEngineering1Project.Controllers
             Question question = questionDb.Questions.Find(id);
             questionDb.Questions.Remove(question);
             questionDb.SaveChanges();
+            TempData["Message"] = new { Message = "Successfully Deleted Question", Type = "success" };
             return RedirectToAction("Index");
         }
 
