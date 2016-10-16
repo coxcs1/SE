@@ -1,4 +1,12 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         Course.cs
+//	Description:       This class represents a Question given on a test.
+//
+//	Author:            Dana Jarred Light, lightdj@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

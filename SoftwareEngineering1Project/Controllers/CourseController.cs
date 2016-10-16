@@ -66,12 +66,6 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 new
                 {
-                    Name = "Course ID",
-                    Field = "id"
-                },
-
-                new
-                {
                     Name = "Course Name",
                     Field = "name"
                 },
@@ -109,6 +103,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Delete",
                     url = "/course/delete/{{id}}"
+                },
+                new
+                {
+                    text = "Sections",
+                    url = "/sections/index/{{id}}"
                 }
             };
 

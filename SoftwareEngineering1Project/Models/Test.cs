@@ -1,4 +1,12 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         Test.cs
+//	Description:       This class represents a Test given to a Graduate Student.
+//
+//	Author:            Dana Jarred Light, lightdj@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
