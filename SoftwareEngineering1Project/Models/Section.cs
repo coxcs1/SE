@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//	File Name:         Student.cs
-//	Description:       This class represents a Student taking the Graduate Oral Exit Exam.
+//	File Name:         Section.cs
+//	Description:       This class represents a Section beloning to a course being taught by a teacher.
 //
 //	Author:            Dana Jarred Light, lightdj@etsu.edu
 //
@@ -9,12 +9,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace SoftwareEngineering1Project.Models
 {
-    public class Student
+    public class Section
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -24,55 +25,61 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [Key]
         public int ID { get; set; }
-        /// <summary>
-        /// Gets or sets the first name.
-        /// </summary>
-        /// <value>
-        /// The first name.
-        /// </value>
-        [Required]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-        /// <summary>
-        /// Gets or sets the last name.
-        /// </summary>
-        /// <value>
-        /// The last name.
-        /// </value>
-        [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-        /// <summary>
-        /// Gets or sets the enter date.
-        /// </summary>
-        /// <value>
-        /// The enter date.
-        /// </value>
-        [Required]
-        [Display(Name = "Enter Date")]
-        public DateTime EnterDate { get; set; }
-        /// <summary>
-        /// Gets or sets the concentration.
-        /// </summary>
-        /// <value>
-        /// The concentration.
-        /// </value>
-        [Required]
-        public string Concentration { get; set; }
-        /// <summary>
-        /// Gets or sets the notes.
-        /// </summary>
-        /// <value>
-        /// The notes.
-        /// </value>
-        public string Notes { get; set; }
+
+        public enum Semesters
+        {
+            Fall,
+            Spring,
+            Summer
+        }
 
         /// <summary>
-        /// Gets or sets the tests.
+        /// Gets or sets the semester.
         /// </summary>
         /// <value>
-        /// The tests they take. (Hopefully only one for their sake)
+        /// The semester.
         /// </value>
-        public virtual ICollection<Test> Tests { get; set; }
+        public Semesters Semester { get; set; }
+
+        /// <summary>
+        /// Gets or sets the academic year.
+        /// </summary>
+        /// <value>
+        /// The academic year.
+        /// </value>
+        public int AcademicYear { get; set; }
+        /// <summary>
+        /// Gets or sets the course identifier.
+        /// </summary>
+        /// <value>
+        /// The course identifier.
+        /// </value>
+        [ForeignKey("Course")]
+        public int CourseID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the teacher identifier.
+        /// </summary>
+        /// <value>
+        /// The teacher identifier.
+        /// </value>
+        [ForeignKey("Teacher")]
+        public int TeacherID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the teacher.
+        /// </summary>
+        /// <value>
+        /// The teacher.
+        /// </value>
+        public virtual Teacher Teacher { get; set; }
+
+        /// <summary>
+        /// Gets or sets the course.
+        /// </summary>
+        /// <value>
+        /// The course.
+        /// </value>
+        public virtual Course Course { get; set; }
     }
 }

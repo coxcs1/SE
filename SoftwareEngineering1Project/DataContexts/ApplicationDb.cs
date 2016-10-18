@@ -28,5 +28,6 @@ namespace SoftwareEngineering1Project.DataContexts
         public DbSet<TestQuestion> TestQuestions { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Section> Sections { get; set; }
     }
 }

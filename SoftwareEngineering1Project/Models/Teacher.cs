@@ -1,4 +1,12 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         Course.cs
+//	Description:       This class represents a Teacher teaching a section of a course.
+//
+//	Author:            Dana Jarred Light, lightdj@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -94,5 +102,13 @@ namespace SoftwareEngineering1Project.Models
         {
             return FirstName + " " + LastName;
         }
+
+        /// <summary>
+        /// Gets or sets the sections taught.
+        /// </summary>
+        /// <value>
+        /// The sections taught.
+        /// </value>
+        public virtual ICollection<Section> Sections { get; set; }
     }
 }

@@ -1,0 +1,14 @@
+﻿@model SoftwareEngineering1Project.Models.Course
+
+@{
+    ViewBag.Title = "Sections for " + Model.CourseName;
+}
+
+<h2>
+    @ViewBag.Title
+    <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Courses List
+    </a>
+</h2>
+<hr />
+@ViewBag.Table
