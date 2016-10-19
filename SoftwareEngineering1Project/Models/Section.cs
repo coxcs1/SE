@@ -81,5 +81,13 @@ namespace SoftwareEngineering1Project.Models
         /// The course.
         /// </value>
         public virtual Course Course { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questions.
+        /// </summary>
+        /// <value>
+        /// The questions added to this course.
+        /// </value>
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

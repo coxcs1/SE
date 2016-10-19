@@ -33,7 +33,7 @@ namespace SoftwareEngineering1Project.Controllers
             List<object> allUserQuestions = new List<object>();
 
             var allQuestions = questionDb.Questions.ToList();
-            var allCourses = questionDb.Courses.ToList();
+            var allSections = questionDb.Sections.ToList();
             var allProfiles = questionDb.Profiles.ToList();
             var allTeachers = questionDb.Teachers.ToList();
             string course_Name = "";
@@ -42,11 +42,12 @@ namespace SoftwareEngineering1Project.Controllers
 
             foreach (var question in allQuestions)
             {
-                foreach (var course in allCourses)
+                foreach (var section in allSections)
                 {
-                    if(course.ID == question.CourseID)
+                    if(section.ID == question.SectionID)
                     {
-                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        course_Name = "CSCI " + section.Course.CourseAttributeNumber +
+                            " - " + section.Course.CourseName + section.Semester.ToString() +  " (" + section.AcademicYear + ")";
                     }
                 }
 
@@ -170,7 +171,7 @@ namespace SoftwareEngineering1Project.Controllers
             List<object> allUserQuestions = new List<object>();
 
             var allQuestions = questionDb.Questions.ToList();
-            var allCourses = questionDb.Courses.ToList();
+            var allSections = questionDb.Sections.ToList();
             var allProfiles = questionDb.Profiles.ToList();
             var allTeachers = questionDb.Teachers.ToList();
             string course_Name = "";
@@ -197,11 +198,12 @@ namespace SoftwareEngineering1Project.Controllers
 
             foreach (var questions in allQuestions)
             {
-                foreach (var course in allCourses)
+                foreach (var section in allSections)
                 {
-                    if (course.ID == question.CourseID)
+                    if (section.ID == question.SectionID)
                     {
-                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        course_Name = "CSCI " + section.Course.CourseAttributeNumber +
+                            " - " + section.Course.CourseName + section.Semester.ToString() + " (" + section.AcademicYear + ")";
                     }
                 }
 
@@ -249,7 +251,7 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Questions/Create
         public ActionResult Create()
         {
-            ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName");
+            ViewBag.SectionID = getSectionsList("Create");
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail");
             ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName");
             return View();
@@ -278,7 +280,7 @@ namespace SoftwareEngineering1Project.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
-            ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
+            ViewBag.SectionID = new SelectList(questionDb.Sections, "ID", "Course.CourseName", question.SectionID);
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
             ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
             return View(question);
@@ -296,7 +298,7 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
+            ViewBag.SectionID = new SelectList(questionDb.Sections, "ID", "Course.CourseName", question.SectionID);
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
             ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
             return View(question);
@@ -314,7 +316,7 @@ namespace SoftwareEngineering1Project.Controllers
                 TempData["Message"] = new { Message = "Successfully Updated Question", Type = "success" };
                 return RedirectToAction("Index");
             }
-            ViewBag.CourseID = new SelectList(questionDb.Courses, "ID", "CourseName", question.CourseID);
+            ViewBag.SectionID = new SelectList(questionDb.Sections, "ID", "Course.CourseName", question.SectionID);
             ViewBag.ProfileID = new SelectList(questionDb.Profiles, "Id", "UserEmail", question.ProfileID);
             ViewBag.TeacherID = new SelectList(questionDb.Teachers, "ID", "FullName", question.TeacherID);
             return View(question);
@@ -326,7 +328,7 @@ namespace SoftwareEngineering1Project.Controllers
             List<object> allUserQuestions = new List<object>();
 
             var allQuestions = questionDb.Questions.ToList();
-            var allCourses = questionDb.Courses.ToList();
+            var allSections = questionDb.Sections.ToList();
             var allProfiles = questionDb.Profiles.ToList();
             var allTeachers = questionDb.Teachers.ToList();
             string course_Name = "";
@@ -353,11 +355,12 @@ namespace SoftwareEngineering1Project.Controllers
 
             foreach (var questions in allQuestions)
             {
-                foreach (var course in allCourses)
+                foreach (var section in allSections)
                 {
-                    if (course.ID == question.CourseID)
+                    if (section.ID == question.SectionID)
                     {
-                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        course_Name = "CSCI " + section.Course.CourseAttributeNumber +
+                            " - " + section.Course.CourseName + section.Semester.ToString() + " (" + section.AcademicYear + ")";
                     }
                 }
 
@@ -414,6 +417,26 @@ namespace SoftwareEngineering1Project.Controllers
                 questionDb.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public IEnumerable<SelectListItem> getSectionsList(string type)
+        {
+            var sections = questionDb.Sections;
+
+            switch (type)
+            {
+                case "Create":
+                    IEnumerable<SelectListItem> selectList =
+                        from section in sections
+                        select new SelectListItem
+                        {
+                            Text = section.Course.CourseName + " " + section.Semester.ToString() + " (" + section.AcademicYear + ")",
+                            Value = section.ID.ToString()
+                        };
+                    return selectList;
+                default:
+                    throw new Exception("Invalid Type Passed.");
+            }
         }
     }
 }

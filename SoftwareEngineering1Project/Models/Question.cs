@@ -26,13 +26,13 @@ namespace SoftwareEngineering1Project.Models
         [Key]
         public int ID { get; set; }
         /// <summary>
-        /// Gets or sets the course identifier.
+        /// Gets or sets the section identifier.
         /// </summary>
         /// <value>
-        /// The course identifier.
+        /// The section identifier.
         /// </value>
-        [ForeignKey("Course")]
-        public int CourseID { get; set; }
+        [ForeignKey("Section")]
+        public int SectionID { get; set; }
         /// <summary>
         /// Gets or sets the profile identifier.
         /// </summary>
@@ -71,7 +71,7 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         /// The course the question belongs to.
         /// </value>
-        public virtual Course Course { get; set; }
+        public virtual Section Section { get; set; }
         /// <summary>
         /// Gets or sets the profile.
         /// </summary>
