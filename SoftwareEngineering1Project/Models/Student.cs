@@ -1,4 +1,12 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         Student.cs
+//	Description:       This class represents a Student taking the Graduate Oral Exit Exam.
+//
+//	Author:            Dana Jarred Light, lightdj@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

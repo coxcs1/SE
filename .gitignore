@@ -75,3 +75,5 @@ _[Ss]cripts
 *.dot[Cc]over
 .vs/config
 SoftwareEngineering1Project/Web.config
+/SoftwareEngineering1Project/App_Data/aspnet-SoftwareEngineering1Project-20160828074452.mdf
+/SoftwareEngineering1Project/App_Data/aspnet-SoftwareEngineering1Project-20160828074452_log.ldf

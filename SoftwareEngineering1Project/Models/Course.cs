@@ -1,4 +1,12 @@
-﻿using System;
+﻿///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	File Name:         Course.cs
+//	Description:       This class represents a Course.
+//
+//	Author:            Dana Jarred Light, lightdj@etsu.edu
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -57,12 +65,11 @@ namespace SoftwareEngineering1Project.Models
         public virtual ICollection<Profile> Profiles { get; set; }
 
         /// <summary>
-        /// Gets or sets the questions.
+        /// Gets or sets the sections of this course.
         /// </summary>
         /// <value>
-        /// The questions added to this course.
+        /// The sections of this course.
         /// </value>
-        public virtual ICollection<Question> Questions { get; set; }
-
+        public virtual ICollection<Section> Sections { get; set; }
     }
 }
