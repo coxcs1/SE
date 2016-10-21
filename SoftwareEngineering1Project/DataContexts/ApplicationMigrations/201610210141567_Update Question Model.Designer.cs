@@ -13,7 +13,7 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610210017531_Update Question Model"; }
+            get { return "201610210141567_Update Question Model"; }
         }
         
         string IMigrationMetadata.Source
