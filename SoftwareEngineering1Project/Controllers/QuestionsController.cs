@@ -42,46 +42,49 @@ namespace SoftwareEngineering1Project.Controllers
 
             foreach (var question in allQuestions)
             {
-                foreach (var course in allCourses)
+                if (question.Archived == false)
                 {
-                    if(course.ID == question.CourseID)
+                    foreach (var course in allCourses)
                     {
-                        course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        if (course.ID == question.CourseID)
+                        {
+                            course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        }
                     }
+
+                    foreach (var profile in allProfiles)
+                    {
+                        if (profile.Id == question.ProfileID)
+                        {
+                            profile_Name = profile.LastName + ", " + profile.FirstName;
+
+                        }
+                    }
+
+                    foreach (var teacher in allTeachers)
+                    {
+                        if (teacher.ID == question.TeacherID)
+                        {
+                            teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
+                        }
+                    }
+
+                    //adds new object to list - setup like key-value pairs
+                    allUserQuestions.Add(
+                        new
+                        {
+                            id = question.ID,
+                            courseId = course_Name,
+                            teacherId = teacher_Name,
+                            profileId = profile_Name,
+                            text = question.Text,
+                            answer = question.Answer
+
+                        }
+                    );
+                  }
                 }
-
-                foreach (var profile in allProfiles)
-                {
-                    if (profile.Id == question.ProfileID)
-                    {
-                        profile_Name = profile.LastName + ", "+ profile.FirstName ;
-                        
-                    }
-                }
-
-                foreach (var teacher in allTeachers)
-                {
-                    if (teacher.ID == question.TeacherID)
-                    {
-                        teacher_Name = teacher.LastName + ", " + teacher.FirstName;
-
-                    }
-                }
-
-                //adds new object to list - setup like key-value pairs
-                allUserQuestions.Add(
-                    new
-                    {
-                        id = question.ID,
-                        courseId = course_Name,
-                        teacherId = teacher_Name,
-                        profileId = profile_Name,
-                        text = question.Text,
-                        answer = question.Answer
-
-                    }
-                );
-            }
 
 
             DataTableModel questionTable = new DataTableModel();
@@ -142,8 +145,8 @@ namespace SoftwareEngineering1Project.Controllers
                 },
                 new
                 {
-                    text = "Delete",
-                    url = "/questions/delete/{{id}}"
+                    text = "Archive",
+                    url = "/questions/archive/{{id}}"
                 }
             };
             
@@ -234,12 +237,17 @@ namespace SoftwareEngineering1Project.Controllers
                 {"Answer:", question.Answer },
                 {"", "" }
             };
-            //key is the url link and the value is what is displayed to the user
-            viewTable.TableButtons = new Dictionary<string, string>()
+            if (question.Archived == false)
             {
-                {"/questions/edit/" + question.ID, "Edit" },
-                {"/questions/delete/" + question.ID, "Delete" }
-            };
+                //key is the url link and the value is what is displayed to the user
+                viewTable.TableButtons = new Dictionary<string, string>()
+                {
+
+                    {"/questions/edit/" + question.ID, "Edit" },
+
+                    { "/questions/archive/" + question.ID, "Archive" }
+                };
+            }
 
             //render function returns an HtmlString to the view
             return View(viewTable.Render());
@@ -407,13 +415,220 @@ namespace SoftwareEngineering1Project.Controllers
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        
+
+    // GET: Questions/Archive/5
+    public ActionResult Archive(int? id)
+    {
+        List<object> allUserQuestions = new List<object>();
+
+        var allQuestions = questionDb.Questions.ToList();
+        var allCourses = questionDb.Courses.ToList();
+        var allProfiles = questionDb.Profiles.ToList();
+        var allTeachers = questionDb.Teachers.ToList();
+        string course_Name = "";
+        string profile_Name = "";
+        string teacher_Name = "";
+
+        if (id == null)
         {
-            if (disposing)
-            {
-                questionDb.Dispose();
-            }
-            base.Dispose(disposing);
+            return Redirect("Index");
         }
+
+        Question question = questionDb.Questions.Find(id);
+
+        if (question == null)
+        {
+            return HttpNotFound();
+        }
+
+        //Creates the PanelTable and sets its title and the number of 
+        //items displayed in a row (includes headers)
+        PanelTable viewTable = new PanelTable();
+        viewTable.Title = "Question Information";
+        viewTable.ItemsPerRow = 5;
+
+        foreach (var questions in allQuestions)
+        {
+            foreach (var course in allCourses)
+            {
+                if (course.ID == question.CourseID)
+                {
+                    course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                }
+            }
+
+            foreach (var profile in allProfiles)
+            {
+                if (profile.Id == question.ProfileID)
+                {
+                    profile_Name = profile.LastName + ", " + profile.FirstName;
+
+                }
+            }
+
+            foreach (var teacher in allTeachers)
+            {
+                if (teacher.ID == question.TeacherID)
+                {
+                    teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
+                }
+            }
+        }
+
+        //the key is the the label and the value is the specific course's information
+        viewTable.Data = new Dictionary<string, string>()
+            {
+                {"Course Name:" , course_Name},
+                {"Professor:", teacher_Name},
+                {"Created By:", profile_Name},
+                {"Question:", question.Text},
+                {"Answer:", question.Answer },
+                {"","" }
+            };
+
+        //render function returns an HtmlString to the view
+        return View(viewTable.Render());
     }
+
+    // POST: Questions/Archive/5
+    [HttpPost, ActionName("Archive")]
+    [ValidateAntiForgeryToken]
+    public ActionResult ArchiveConfirmed(int id)
+    {
+        Question question = questionDb.Questions.Find(id);
+        question.Archived = true;
+        questionDb.SaveChanges();
+        TempData["Message"] = new { Message = "Successfully Archived Question", Type = "success" };
+        return RedirectToAction("Index");
+    }
+
+        public ActionResult ViewArchive(int? id)
+        {
+            //DataTable is built using lists of generic objects
+            List<object> allUserQuestions = new List<object>();
+
+            var allQuestions = questionDb.Questions.ToList();
+            var allCourses = questionDb.Courses.ToList();
+            var allProfiles = questionDb.Profiles.ToList();
+            var allTeachers = questionDb.Teachers.ToList();
+            string course_Name = "";
+            string profile_Name = "";
+            string teacher_Name = "";
+
+            foreach (var question in allQuestions)
+            {
+                if (question.Archived == true)
+                {
+                    foreach (var course in allCourses)
+                    {
+                        if (course.ID == question.CourseID)
+                        {
+                            course_Name = "CSCI " + course.CourseAttributeNumber + " - " + course.CourseName;
+                        }
+                    }
+
+                    foreach (var profile in allProfiles)
+                    {
+                        if (profile.Id == question.ProfileID)
+                        {
+                            profile_Name = profile.LastName + ", " + profile.FirstName;
+
+                        }
+                    }
+
+                    foreach (var teacher in allTeachers)
+                    {
+                        if (teacher.ID == question.TeacherID)
+                        {
+                            teacher_Name = teacher.LastName + ", " + teacher.FirstName;
+
+                        }
+                    }
+
+                    //adds new object to list - setup like key-value pairs
+                    allUserQuestions.Add(
+                        new
+                        {
+                            id = question.ID,
+                            courseId = course_Name,
+                            teacherId = teacher_Name,
+                            profileId = profile_Name,
+                            text = question.Text,
+                            answer = question.Answer
+
+                        }
+                    );
+                }
+            }
+
+
+            DataTableModel questionTable = new DataTableModel();
+            questionTable.
+            setTitle("Questions").
+            setData(allUserQuestions).
+            //allows the table to be searched and sorted
+            setSearchSort(true).
+            //sets the table headers, the Field attribute must match the key value from the allUserProfiles list
+            setHeaders(new List<object>()
+            {
+                new
+                {
+                    Name = "Course",
+                    Field = "courseId"
+                },
+                new
+                {
+                    Name = "Professor",
+                    Field = "teacherId"
+                },
+                new
+                {
+                    Name = "Created By",
+                    Field = "profileId"
+                },
+                new
+                {
+                    Name = "Question",
+                    Field = "text"
+                },
+                new
+                {
+                    Name = "Answer",
+                    Field = "answer"
+                }
+
+
+
+            });
+
+            //sets the actions that will display for every entry in the table
+            //uses a str replace to replace the {{id}} values with the actual id
+            //id matches to the key seen earlier
+            questionTable.Actions = new List<object>()
+            {
+
+                new
+                {
+                    text = "View",
+                    url = "/questions/view/{{id}}"
+                }
+            };
+
+            string Table = questionTable.Render().ToString();
+
+            //render function returns an HtmlString to the view
+            return View(new HtmlString(Table));
+        }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            questionDb.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+  }
 }

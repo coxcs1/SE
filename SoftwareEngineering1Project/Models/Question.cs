@@ -66,6 +66,14 @@ namespace SoftwareEngineering1Project.Models
         [Required]
         public string Answer { get; set; }
         /// <summary>
+        /// Gets or sets the archived variable.
+        /// </summary>
+        /// <value>
+        /// Tells whether a question is archived or not.
+        /// </value>
+        [Required]
+        public bool Archived { get; set; }
+        /// <summary>
         /// Gets or sets the course.
         /// </summary>
         /// <value>
