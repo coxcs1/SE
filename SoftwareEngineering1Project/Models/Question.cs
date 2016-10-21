@@ -26,13 +26,13 @@ namespace SoftwareEngineering1Project.Models
         [Key]
         public int ID { get; set; }
         /// <summary>
-        /// Gets or sets the course identifier.
+        /// Gets or sets the section identifier.
         /// </summary>
         /// <value>
-        /// The course identifier.
+        /// The section identifier.
         /// </value>
-        [ForeignKey("Course")]
-        public int CourseID { get; set; }
+        [ForeignKey("Section")]
+        public int SectionID { get; set; }
         /// <summary>
         /// Gets or sets the profile identifier.
         /// </summary>
@@ -41,14 +41,6 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [ForeignKey("Profile")]
         public int ProfileID { get; set; }
-        /// <summary>
-        /// Gets or sets the teacher identifier.
-        /// </summary>
-        /// <value>
-        /// The teacher identifier.
-        /// </value>
-        [ForeignKey("Teacher")]
-        public int TeacherID { get; set; }
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
@@ -71,7 +63,7 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         /// The course the question belongs to.
         /// </value>
-        public virtual Course Course { get; set; }
+        public virtual Section Section { get; set; }
         /// <summary>
         /// Gets or sets the profile.
         /// </summary>
@@ -79,12 +71,5 @@ namespace SoftwareEngineering1Project.Models
         /// The professor who created the question.
         /// </value>
         public virtual Profile Profile { get; set; }
-        /// <summary>
-        /// Gets or sets the teacher.
-        /// </summary>
-        /// <value>
-        /// The teacher who submitted the question.
-        /// </value>
-        public virtual Teacher Teacher { get; set; }
     }
 }

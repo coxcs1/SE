@@ -213,6 +213,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201610160201401_Create Section Model.Designer.cs">
       <DependentUpon>201610160201401_Create Section Model.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201610210141567_Update Question Model.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201610210141567_Update Question Model.Designer.cs">
+      <DependentUpon>201610210141567_Update Question Model.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -607,6 +611,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610160201401_Create Section Model.resx">
       <DependentUpon>201610160201401_Create Section Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610210141567_Update Question Model.resx">
+      <DependentUpon>201610210141567_Update Question Model.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>

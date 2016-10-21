@@ -65,20 +65,11 @@ namespace SoftwareEngineering1Project.Models
         public virtual ICollection<Profile> Profiles { get; set; }
 
         /// <summary>
-        /// Gets or sets the questions.
-        /// </summary>
-        /// <value>
-        /// The questions added to this course.
-        /// </value>
-        public virtual ICollection<Question> Questions { get; set; }
-
-        /// <summary>
         /// Gets or sets the sections of this course.
         /// </summary>
         /// <value>
         /// The sections of this course.
         /// </value>
         public virtual ICollection<Section> Sections { get; set; }
-
     }
 }
