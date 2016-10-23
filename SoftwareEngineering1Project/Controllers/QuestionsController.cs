@@ -18,7 +18,11 @@ using System.Web.Mvc;
 using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using SoftwareEngineering1Project.Helpers;
+using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.IO;
+using Microsoft.Office.Interop.Word;
+
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -371,6 +375,122 @@ namespace SoftwareEngineering1Project.Controllers
             questionDb.SaveChanges();
             TempData["Message"] = new { Message = "Successfully Deleted Question", Type = "success" };
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult UploadQuestions(int? id)
+        {
+            if(id == null)
+            {
+
+            }
+            else
+            {
+                int sectionId = (int)id;
+            }
+
+            string selectList = "<select id='sectionID' name='sectionID' class='form-control'>";
+            string option = "<option value='#val#'>#label#</option>";
+            string temp = "";
+
+            List<Models.Section> sections = questionDb.Sections.ToList();
+
+            foreach(Models.Section s in sections)
+            {
+                temp = option.Replace("#val#", s.ID.ToString());
+                temp = temp.Replace("#label#", s.Course.CourseName + ", " + s.AcademicYear + ", " + s.Teacher.LastName);
+
+                selectList += temp;
+
+            }
+
+            selectList += "</select>";
+
+            ViewBag.SectionSelectList = selectList;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UploadQuestions(HttpPostedFileBase file, int sectionId)
+        {
+            string path = "";
+            
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                //saves the file in the app_data folder and then opens it
+                path = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(file.FileName));            
+                file.SaveAs(path);
+
+                Application app = new Application();
+                Document doc = app.Documents.Open(path);
+
+                List<string> questions = new List<string>();
+                List<string> answers = new List<string>();
+
+                string currentAnswer = "";
+
+                for (int i = 1; i <= doc.Paragraphs.Count; i++)
+                {
+                    //grabs the first nine characters and checks to see if it specifies a question to follow  
+                    string checkForQuestion = new string(doc.Paragraphs[i].Range.Text.Trim().Take(9).ToArray());
+
+                    if (checkForQuestion == "Question:")
+                    {
+                        //if it is a question it skips the first nine characters and adds it to the questions list
+                        string temp  = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(9).ToArray());
+                        questions.Add("<p>" + temp + "</p>");
+
+                        //if there was a previous question, adds the previous's question to the answer list
+                        if (currentAnswer != "")
+                        {
+                            answers.Add(currentAnswer);
+                            currentAnswer = "";
+                        }
+
+                    }
+                    //blank line in the document - skip
+                    else if (doc.Paragraphs[i].Range.Text.Trim() == "")
+                    {
+                        continue;
+                    }
+                    //concatenates the answer if it appears in multiple paragraphs into a single string
+                    else
+                    {
+                        currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p><br />";
+                    }
+                }
+                //adds the last answer from the end of the document
+                answers.Add(currentAnswer);
+
+                //closes the document and app and then deletes the file from the server
+                doc.Close();
+                app.Quit();            
+                System.IO.File.Delete(path);
+                
+                Models.Section selectedSection = questionDb.Sections.Find(sectionId);
+
+                //if the document was formatted correcctly - adds the questions to the database
+                if (questions.Count == answers.Count)
+                {
+                    for (int i = 0; i < questions.Count; i++)
+                    {
+                        Question newQ = new Question();
+                        newQ.Profile = questionDb.Profiles.Single(u => u.UserEmail == User.Identity.Name);
+                        newQ.Answer = answers[i];
+                        newQ.Section = selectedSection;
+                        newQ.Text = questions[i];
+                        questionDb.Questions.Add(newQ);
+                        questionDb.SaveChanges();
+                    }
+                    TempData["Message"] = new { Message = "Successfully Uploaded Questions", Type = "success" };
+                    return RedirectToAction("Index");
+                }                            
+            }
+            return RedirectToAction("UploadQuestinos", new  { id = sectionId });
+
+
         }
 
         protected override void Dispose(bool disposing)
