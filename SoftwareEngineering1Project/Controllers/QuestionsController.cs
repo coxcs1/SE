@@ -233,6 +233,7 @@ namespace SoftwareEngineering1Project.Controllers
 
         // POST: Questions/Create
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SectionID,ProfileID,Text,Answer")] Question question)
         {
@@ -277,6 +278,7 @@ namespace SoftwareEngineering1Project.Controllers
 
         // POST: Questions/Edit/5
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,SectionID,ProfileID,Text,Answer")] Question question)
         {

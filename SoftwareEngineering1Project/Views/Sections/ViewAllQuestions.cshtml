@@ -1,0 +1,22 @@
+﻿@model HtmlString
+
+@{
+    ViewBag.Title = "View All Questions";
+}
+<style>
+    .panel-title{
+        font-weight:bold
+    }    
+</style>
+
+<h3>@ViewBag.SectionCourse - Questions
+    <a href="@ViewBag.SectionReturn" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Sections List
+    </a>
+</h3>
+
+<hr />
+<div>
+    @Html.Raw(Model)
+</div>
+
