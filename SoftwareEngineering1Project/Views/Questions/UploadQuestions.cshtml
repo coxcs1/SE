@@ -1,8 +1,15 @@
-﻿@{
+﻿@model HtmlString
+
+@{
     ViewBag.Title = "Upload Questions";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>
+    @ViewBag.Title
+    <a href="@ViewBag.ReturnButton" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> @ViewBag.ReturnDesc
+    </a>
+</h2>
 
 @using (Html.BeginForm("UploadQuestions", "Questions", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -14,7 +21,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Section</label>
             <div class="col-md-10">
-                @Html.Raw(@ViewBag.SectionSelectList)    
+                @Html.Raw(Model)    
             </div>
         </div>
 

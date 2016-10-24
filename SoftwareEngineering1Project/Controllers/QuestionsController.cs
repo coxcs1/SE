@@ -71,8 +71,9 @@ namespace SoftwareEngineering1Project.Controllers
                         id = question.ID,
                         courseId = course_Name,
                         profileId = profile_Name,
+                        teacherId = question.Section.Teacher.GetFullName(),
                         text = question.Text,
-                        answer = question.Answer
+                        //answer = question.Answer
 
                     }
                 );
@@ -95,6 +96,11 @@ namespace SoftwareEngineering1Project.Controllers
                 },
                 new
                 {
+                    Name = "Teacher",
+                    Field = "teacherId"
+                },
+                new
+                {
                     Name = "Created By",
                     Field = "profileId"
                 },
@@ -103,12 +109,13 @@ namespace SoftwareEngineering1Project.Controllers
                     Name = "Question",
                     Field = "text"
                 },
+                /*
                 new
                 {
                     Name = "Answer",
                     Field = "answer"
                 }
-
+                */
 
 
             });
@@ -145,6 +152,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Create Question",
                     url = "/Questions/Create"
+                },
+                new
+                {
+                    text = "Upload Questions",
+                    url = "/Questions/UploadQuestions"
                 }
             };
 
@@ -183,7 +195,7 @@ namespace SoftwareEngineering1Project.Controllers
             //items displayed in a row (includes headers)
             PanelTable viewTable = new PanelTable();
             viewTable.Title = "Question Information";
-            viewTable.ItemsPerRow = 5;
+            viewTable.ItemsPerRow = 2;
 
             foreach (var questions in allQuestions)
             {
@@ -210,11 +222,10 @@ namespace SoftwareEngineering1Project.Controllers
                 viewTable.Data = new Dictionary<string, string>()
             {
                 {"Course Name:" , course_Name},
-                {"Professor:", teacher_Name},
+                {"Professor:", question.Section.Teacher.GetFullName()},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer },
-                {"", "" }
+                {"Answer:", question.Answer }
             };
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()
@@ -327,7 +338,7 @@ namespace SoftwareEngineering1Project.Controllers
             //items displayed in a row (includes headers)
             PanelTable viewTable = new PanelTable();
             viewTable.Title = "Question Information";
-            viewTable.ItemsPerRow = 5;
+            viewTable.ItemsPerRow = 2;
 
             foreach (var questions in allQuestions)
             {
@@ -354,11 +365,10 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.Data = new Dictionary<string, string>()
             {
                 {"Course Name:" , course_Name},
-                {"Professor:", teacher_Name},
+                {"Professor:", question.Section.Teacher.GetFullName()},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer },
-                {"","" }
+                {"Answer:", question.Answer }
             };
 
             //render function returns an HtmlString to the view
@@ -380,35 +390,51 @@ namespace SoftwareEngineering1Project.Controllers
 
         public ActionResult UploadQuestions(int? id)
         {
-            if(id == null)
-            {
+            string sectionSelect = "";
 
+            if (id == null)
+            {
+                string selectList = "<select id='sectionID' name='sectionID' class='form-control'>";
+                string option = "<option value='#val#'>#label#</option>";
+                string temp = "";
+
+                List<Models.Section> sections = questionDb.Sections.ToList();
+
+                foreach (Models.Section s in sections)
+                {
+                    temp = option.Replace("#val#", s.ID.ToString());
+                    temp = temp.Replace("#label#", s.Course.CourseName + ", " + s.Semester + " " + s.AcademicYear + ", " + s.Teacher.LastName);
+
+                    selectList += temp;
+
+                }
+
+                selectList += "</select>";
+
+                sectionSelect = selectList;
+                ViewBag.ReturnButton = "/questions";
+                ViewBag.ReturnDesc = "Back to Question List";
             }
             else
             {
-                int sectionId = (int)id;
+                Models.Section sectionSelected = questionDb.Sections.Find(id);
+                if (sectionSelected == null)
+                {
+                    return HttpNotFound();
+                }
+
+                string input = "<input type='hidden' name='sectionID' id='sectionID>" +
+                                     "<label class='control-label col-md-2'>"
+                                     + sectionSelected.Course.CourseName + ", " + 
+                                     sectionSelected.Semester + " " + sectionSelected.AcademicYear + ", " + 
+                                     sectionSelected.Teacher.LastName + "</label>";
+                sectionSelect = input;
+                ViewBag.ReturnButton = "/sections/index/" + sectionSelected.CourseID;
+                ViewBag.ReturnDesc = "Back to Sections List";
+
             }
-
-            string selectList = "<select id='sectionID' name='sectionID' class='form-control'>";
-            string option = "<option value='#val#'>#label#</option>";
-            string temp = "";
-
-            List<Models.Section> sections = questionDb.Sections.ToList();
-
-            foreach(Models.Section s in sections)
-            {
-                temp = option.Replace("#val#", s.ID.ToString());
-                temp = temp.Replace("#label#", s.Course.CourseName + ", " + s.AcademicYear + ", " + s.Teacher.LastName);
-
-                selectList += temp;
-
-            }
-
-            selectList += "</select>";
-
-            ViewBag.SectionSelectList = selectList;
-
-            return View();
+           
+            return View(new HtmlString(sectionSelect));
         }
 
         [HttpPost]
@@ -458,7 +484,7 @@ namespace SoftwareEngineering1Project.Controllers
                     //concatenates the answer if it appears in multiple paragraphs into a single string
                     else
                     {
-                        currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p><br />";
+                        currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
                     }
                 }
                 //adds the last answer from the end of the document
@@ -488,7 +514,7 @@ namespace SoftwareEngineering1Project.Controllers
                     return RedirectToAction("Index");
                 }                            
             }
-            return RedirectToAction("UploadQuestinos", new  { id = sectionId });
+            return RedirectToAction("UploadQuestinos");
 
 
         }

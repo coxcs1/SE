@@ -82,6 +82,11 @@ namespace SoftwareEngineering1Project.Controllers
                     },
                     new
                     {
+                        text = "Upload Questions",
+                        url = "/questions/uploadquestions/{{id}}"
+                    },
+                    new
+                    {
                         text = "Edit",
                         url = "/sections/edit/{{id}}"
                     },

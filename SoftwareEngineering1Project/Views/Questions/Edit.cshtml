@@ -4,7 +4,13 @@
     ViewBag.Title = "Edit Question";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>
+    @ViewBag.Title
+    
+    <a action="action" class="btn btn-primary btn-sm" style="float: right;" value="Back" onclick="history.go(-1);">
+        <i class="fa fa-arrow-left"></i> Go Back
+    </a>
+</h2>
 
 
 @using (Html.BeginForm())
