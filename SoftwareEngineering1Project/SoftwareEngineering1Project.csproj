@@ -241,10 +241,6 @@
     <Compile Include="ViewModels\UserProfile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\aspnet-SoftwareEngineering1Project-20160828074452.mdf" />
-    <Content Include="App_Data\aspnet-SoftwareEngineering1Project-20160828074452_log.ldf">
-      <DependentUpon>aspnet-SoftwareEngineering1Project-20160828074452.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
@@ -571,6 +567,7 @@
     <Content Include="Views\Sections\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
