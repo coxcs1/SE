@@ -455,18 +455,20 @@ namespace SoftwareEngineering1Project.Controllers
                 List<string> questions = new List<string>();
                 List<string> answers = new List<string>();
 
+                string currentQuestion = "";
                 string currentAnswer = "";
 
                 for (int i = 1; i <= doc.Paragraphs.Count; i++)
                 {
                     //grabs the first nine characters and checks to see if it specifies a question to follow  
                     string checkForQuestion = new string(doc.Paragraphs[i].Range.Text.Trim().Take(9).ToArray());
+                    string checkForAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Take(7).ToArray());
 
-                    if (checkForQuestion == "Question:")
+                    if (checkForQuestion == "Question:" || checkForQuestion == "question:")
                     {
                         //if it is a question it skips the first nine characters and adds it to the questions list
-                        string temp  = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(9).ToArray());
-                        questions.Add("<p>" + temp + "</p>");
+                        currentQuestion  = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(9).ToArray());
+                        currentQuestion = "<p>" + currentQuestion + "</p>";
 
                         //if there was a previous question, adds the previous's question to the answer list
                         if (currentAnswer != "")
@@ -476,6 +478,14 @@ namespace SoftwareEngineering1Project.Controllers
                         }
 
                     }
+                    else if(checkForAnswer == "Answer:" || checkForAnswer == "answer:")
+                    {
+                        questions.Add(currentQuestion);
+                        currentQuestion = "";
+
+                        currentAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(7).ToArray());
+                        currentAnswer = "<p>" + currentAnswer + "</p>";
+                    }
                     //blank line in the document - skip
                     else if (doc.Paragraphs[i].Range.Text.Trim() == "")
                     {
@@ -484,7 +494,14 @@ namespace SoftwareEngineering1Project.Controllers
                     //concatenates the answer if it appears in multiple paragraphs into a single string
                     else
                     {
-                        currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
+                        if(currentAnswer == "")
+                        {
+                            currentQuestion += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
+                        }
+                        else
+                        {
+                            currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
+                        }
                     }
                 }
                 //adds the last answer from the end of the document
