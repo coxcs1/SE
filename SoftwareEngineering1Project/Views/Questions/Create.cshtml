@@ -4,7 +4,12 @@
     ViewBag.Title = "Add New Question";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>
+    @ViewBag.Title
+    <a href="/questions" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Return to List
+    </a>
+</h2>
 
 
 @using (Html.BeginForm()) 
@@ -27,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Text, new { @id = "questionEditor" })
                 @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -35,7 +40,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Answer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Answer, new {  @id="answerEditor" })
                 @Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,11 +52,11 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+<script>
+    CKEDITOR.replace('questionEditor');
+    CKEDITOR.replace('answerEditor');
+</script>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")    
 }

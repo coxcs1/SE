@@ -128,7 +128,7 @@ namespace SoftwareEngineering1Project.Helpers
                     string text = button.GetType().GetProperty("text").GetValue(button).ToString();
                     string url = button.GetType().GetProperty("url").GetValue(button).ToString();
 
-                    table += "<a href='" + url + "' class='btn btn-primary btn-xs'>" + text + "</a>";
+                    table += "<a href='" + url + "' class='btn btn-primary btn-xs'>" + text + "</a>  ";
                 }
                 table += "</td></tr></tfoot>";
             }

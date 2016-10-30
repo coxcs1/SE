@@ -18,7 +18,11 @@ using System.Web.Mvc;
 using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using SoftwareEngineering1Project.Helpers;
+using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.IO;
+using Microsoft.Office.Interop.Word;
+
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -67,8 +71,9 @@ namespace SoftwareEngineering1Project.Controllers
                         id = question.ID,
                         courseId = course_Name,
                         profileId = profile_Name,
+                        teacherId = question.Section.Teacher.GetFullName(),
                         text = question.Text,
-                        answer = question.Answer
+                        //answer = question.Answer
 
                     }
                 );
@@ -91,6 +96,11 @@ namespace SoftwareEngineering1Project.Controllers
                 },
                 new
                 {
+                    Name = "Teacher",
+                    Field = "teacherId"
+                },
+                new
+                {
                     Name = "Created By",
                     Field = "profileId"
                 },
@@ -99,12 +109,13 @@ namespace SoftwareEngineering1Project.Controllers
                     Name = "Question",
                     Field = "text"
                 },
+                /*
                 new
                 {
                     Name = "Answer",
                     Field = "answer"
                 }
-
+                */
 
 
             });
@@ -141,6 +152,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Create Question",
                     url = "/Questions/Create"
+                },
+                new
+                {
+                    text = "Upload Questions",
+                    url = "/Questions/UploadQuestions"
                 }
             };
 
@@ -179,7 +195,7 @@ namespace SoftwareEngineering1Project.Controllers
             //items displayed in a row (includes headers)
             PanelTable viewTable = new PanelTable();
             viewTable.Title = "Question Information";
-            viewTable.ItemsPerRow = 5;
+            viewTable.ItemsPerRow = 2;
 
             foreach (var questions in allQuestions)
             {
@@ -206,11 +222,10 @@ namespace SoftwareEngineering1Project.Controllers
                 viewTable.Data = new Dictionary<string, string>()
             {
                 {"Course Name:" , course_Name},
-                {"Professor:", teacher_Name},
+                {"Professor:", question.Section.Teacher.GetFullName()},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer },
-                {"", "" }
+                {"Answer:", question.Answer }
             };
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()
@@ -233,6 +248,7 @@ namespace SoftwareEngineering1Project.Controllers
 
         // POST: Questions/Create
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SectionID,ProfileID,Text,Answer")] Question question)
         {
@@ -277,6 +293,7 @@ namespace SoftwareEngineering1Project.Controllers
 
         // POST: Questions/Edit/5
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,SectionID,ProfileID,Text,Answer")] Question question)
         {
@@ -321,7 +338,7 @@ namespace SoftwareEngineering1Project.Controllers
             //items displayed in a row (includes headers)
             PanelTable viewTable = new PanelTable();
             viewTable.Title = "Question Information";
-            viewTable.ItemsPerRow = 5;
+            viewTable.ItemsPerRow = 2;
 
             foreach (var questions in allQuestions)
             {
@@ -348,11 +365,10 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.Data = new Dictionary<string, string>()
             {
                 {"Course Name:" , course_Name},
-                {"Professor:", teacher_Name},
+                {"Professor:", question.Section.Teacher.GetFullName()},
                 {"Created By:", profile_Name},
                 {"Question:", question.Text},
-                {"Answer:", question.Answer },
-                {"","" }
+                {"Answer:", question.Answer }
             };
 
             //render function returns an HtmlString to the view
@@ -369,6 +385,155 @@ namespace SoftwareEngineering1Project.Controllers
             questionDb.SaveChanges();
             TempData["Message"] = new { Message = "Successfully Deleted Question", Type = "success" };
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult UploadQuestions(int? id)
+        {
+            string sectionSelect = "";
+
+            if (id == null)
+            {
+                string selectList = "<select id='sectionID' name='sectionID' class='form-control'>";
+                string option = "<option value='#val#'>#label#</option>";
+                string temp = "";
+
+                List<Models.Section> sections = questionDb.Sections.ToList();
+
+                foreach (Models.Section s in sections)
+                {
+                    temp = option.Replace("#val#", s.ID.ToString());
+                    temp = temp.Replace("#label#", s.Course.CourseName + ", " + s.Semester + " " + s.AcademicYear + ", " + s.Teacher.LastName);
+
+                    selectList += temp;
+
+                }
+
+                selectList += "</select>";
+
+                sectionSelect = selectList;
+                ViewBag.ReturnButton = "/questions";
+                ViewBag.ReturnDesc = "Back to Question List";
+            }
+            else
+            {
+                Models.Section sectionSelected = questionDb.Sections.Find(id);
+                if (sectionSelected == null)
+                {
+                    return HttpNotFound();
+                }
+
+                string input = "<input type='hidden' name='sectionID' id='sectionID>" +
+                                     "<label class='control-label col-md-2'>"
+                                     + sectionSelected.Course.CourseName + ", " + 
+                                     sectionSelected.Semester + " " + sectionSelected.AcademicYear + ", " + 
+                                     sectionSelected.Teacher.LastName + "</label>";
+                sectionSelect = input;
+                ViewBag.ReturnButton = "/sections/index/" + sectionSelected.CourseID;
+                ViewBag.ReturnDesc = "Back to Sections List";
+
+            }
+           
+            return View(new HtmlString(sectionSelect));
+        }
+
+        [HttpPost]
+        public ActionResult UploadQuestions(HttpPostedFileBase file, int sectionId)
+        {
+            string path = "";
+            
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                //saves the file in the app_data folder and then opens it
+                path = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(file.FileName));            
+                file.SaveAs(path);
+
+                Application app = new Application();
+                Document doc = app.Documents.Open(path);
+
+                List<string> questions = new List<string>();
+                List<string> answers = new List<string>();
+
+                string currentQuestion = "";
+                string currentAnswer = "";
+
+                for (int i = 1; i <= doc.Paragraphs.Count; i++)
+                {
+                    //grabs the first nine characters and checks to see if it specifies a question to follow  
+                    string checkForQuestion = new string(doc.Paragraphs[i].Range.Text.Trim().Take(9).ToArray());
+                    string checkForAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Take(7).ToArray());
+
+                    if (checkForQuestion == "Question:" || checkForQuestion == "question:")
+                    {
+                        //if it is a question it skips the first nine characters and adds it to the questions list
+                        currentQuestion  = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(9).ToArray());
+                        currentQuestion = "<p>" + currentQuestion + "</p>";
+
+                        //if there was a previous question, adds the previous's question to the answer list
+                        if (currentAnswer != "")
+                        {
+                            answers.Add(currentAnswer);
+                            currentAnswer = "";
+                        }
+
+                    }
+                    else if(checkForAnswer == "Answer:" || checkForAnswer == "answer:")
+                    {
+                        questions.Add(currentQuestion);
+                        currentQuestion = "";
+
+                        currentAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(7).ToArray());
+                        currentAnswer = "<p>" + currentAnswer + "</p>";
+                    }
+                    //blank line in the document - skip
+                    else if (doc.Paragraphs[i].Range.Text.Trim() == "")
+                    {
+                        continue;
+                    }
+                    //concatenates the answer if it appears in multiple paragraphs into a single string
+                    else
+                    {
+                        if(currentAnswer == "")
+                        {
+                            currentQuestion += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
+                        }
+                        else
+                        {
+                            currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
+                        }
+                    }
+                }
+                //adds the last answer from the end of the document
+                answers.Add(currentAnswer);
+
+                //closes the document and app and then deletes the file from the server
+                doc.Close();
+                app.Quit();            
+                System.IO.File.Delete(path);
+                
+                Models.Section selectedSection = questionDb.Sections.Find(sectionId);
+
+                //if the document was formatted correcctly - adds the questions to the database
+                if (questions.Count == answers.Count)
+                {
+                    for (int i = 0; i < questions.Count; i++)
+                    {
+                        Question newQ = new Question();
+                        newQ.Profile = questionDb.Profiles.Single(u => u.UserEmail == User.Identity.Name);
+                        newQ.Answer = answers[i];
+                        newQ.Section = selectedSection;
+                        newQ.Text = questions[i];
+                        questionDb.Questions.Add(newQ);
+                        questionDb.SaveChanges();
+                    }
+                    TempData["Message"] = new { Message = "Successfully Uploaded Questions", Type = "success" };
+                    return RedirectToAction("Index");
+                }                            
+            }
+            return RedirectToAction("UploadQuestinos");
+
+
         }
 
         protected override void Dispose(bool disposing)

@@ -2,7 +2,13 @@
 @{
     ViewBag.Title = "View Question Information";
 }
-<h2>@ViewBag.Title</h2>
+<h2>
+    @ViewBag.Title
+    <a href="/questions" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Return to List
+    </a>
+</h2>
+<br />
 <div>
     @Html.Raw(Model)
 </div>
