@@ -212,7 +212,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {"Last Name" , studentInfo.LastName},
                 {"Concentration", studentInfo.Concentration},
                 {"Notes", studentInfo.Notes },
-                {"Enter Date" , studentInfo.EnterDate.Date.ToString() },
+                {"Enter Date" , studentInfo.EnterDate.Date.ToString("MMMM dd, yyyy")  },
                 {"", "" }
             };
             //key is the url link and the value is what is displayed to the user
