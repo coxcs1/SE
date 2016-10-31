@@ -1,0 +1,77 @@
+﻿@model SoftwareEngineering1Project.Models.Test
+
+@{
+    ViewBag.Title = "Create New Test";
+}
+
+<h2>
+    @ViewBag.Title
+    <a href="/tests" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Test List
+    </a>
+</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentID, "Student", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StudentID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StudentID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateTaken, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateTaken, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.DateTaken, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Passed, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButtonFor(model => model.Passed, true) Yes
+                <br />
+                @Html.RadioButtonFor(model => model.Passed, false) No
+                @Html.ValidationMessageFor(model => model.Passed, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="questions">
+            <div data-bind="foreach: questionFieldList">
+                <div class="form-group">
+                    <label data-bind="text: label" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <select data-bind="options: questionOptions, optionsText: 'text', optionsValue: 'id', attr: { name: fieldName }" class="form-control"></select>
+                        <button class="btn btn-primary btn-sm" data-bind="click: removeQuestion" style="float: right; margin-right: 50px; margin-top: -32px;">
+                            <i class="fa fa-minus" aria-hidden="true"></i> Question
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button data-bind="click: addQuestion" class="btn btn-primary btn-sm" style="float: right;">
+                <i class="fa fa-plus" aria-hidden="true"></i> Question
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Tests/TestBuilder.js")
+    @Scripts.Render("~/Scripts/Tests/create.js")
+}

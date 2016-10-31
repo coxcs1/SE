@@ -17,3 +17,11 @@ toastr.options = {
     "showMethod": "slideDown",
     "hideMethod": "fadeOut"
 };
+
+//initialize assets
+$(document).ready(function () {
+    $('.datepicker').datepicker({
+        dateFormat: 'mm/dd/yy',
+        showAnim: 'slideDown'
+    });
+});

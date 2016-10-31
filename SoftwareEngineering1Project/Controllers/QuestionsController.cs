@@ -22,7 +22,7 @@ using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.Office.Interop.Word;
-
+using System.Text.RegularExpressions;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -585,6 +585,28 @@ namespace SoftwareEngineering1Project.Controllers
                 default:
                     throw new Exception("Invalid Type Passed.");
             }
+        }
+
+        /// <summary>
+        /// Gets all questions and returns them in a nice JSON format.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetAllQuestions()
+        {
+            var jsonObjectList = new List<object>();//create a generate object list
+            var questions = questionDb.Questions.ToList();//fetch all of the questions
+            foreach (var question in questionDb.Questions.ToList())//build list of generic objects
+            {
+                jsonObjectList.Add(
+                    new {
+                        ID = question.ID,
+                        Text = Regex.Replace(
+                            question.Section.Course.CourseName + " (" + question.Section.Semester + " " + question.Section.AcademicYear +  ") - " + question.Text, "<.*?>", String.Empty
+                            ),
+                        Answer = question.Answer
+                });
+            }
+            return Json(jsonObjectList, JsonRequestBehavior.AllowGet);//return a JSON string to the view for JavaScript processing
         }
     }
 }
