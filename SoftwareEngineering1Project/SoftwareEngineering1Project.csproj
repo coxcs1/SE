@@ -227,6 +227,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201610261712380_Update Course Model.Designer.cs">
       <DependentUpon>201610261712380_Update Course Model.cs</DependentUpon>
     </Compile>
+	<Compile Include="DataContexts\ApplicationMigrations\201610210332501_Update Questions Model.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201610210332501_Update Questions Model.Designer.cs">
+      <DependentUpon>201610210332501_Update Questions Model.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -908,7 +912,7 @@
     <Content Include="Views\Student\View.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Questions\Create.cshtml" />
-    <Content Include="Views\Questions\Delete.cshtml" />
+    <Content Include="Views\Questions\Archive.cshtml" />
     <Content Include="Views\Questions\View.cshtml" />
     <Content Include="Views\Questions\Edit.cshtml" />
     <Content Include="Views\Questions\Index.cshtml" />
@@ -929,6 +933,7 @@
     <Content Include="Views\Sections\Edit.cshtml" />
     <Content Include="Views\Sections\Index.cshtml" />
     <Content Include="Views\Sections\ViewAllQuestions.cshtml" />
+	<Content Include="Views\Questions\ViewArchive.cshtml" />
     <Content Include="Views\Questions\UploadQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -975,6 +980,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201610261712380_Update Course Model.resx">
       <DependentUpon>201610261712380_Update Course Model.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="DataContexts\ApplicationMigrations\201610210332501_Update Questions Model.resx">
+      <DependentUpon>201610210332501_Update Questions Model.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
