@@ -45,21 +45,55 @@
         </div>
 
         <div id="questions">
-            <div data-bind="foreach: questionFieldList">
-                <div class="form-group">
-                    <label data-bind="text: label" class="control-label col-md-2"></label>
-                    <div class="col-md-10">
-                        <select data-bind="options: questionOptions, optionsText: 'text', optionsValue: 'id', attr: { name: fieldName }" class="form-control"></select>
-                        <button class="btn btn-primary btn-sm" data-bind="click: removeQuestion" style="float: right; margin-right: 50px; margin-top: -32px;">
-                            <i class="fa fa-minus" aria-hidden="true"></i> Question
-                        </button>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>Test for Jarred Light</h3></div>
+                <!--Test Builder will go here-->
+                <div class="panel-body">
+                    <!--Loop through each step in the testing process-->
+                    <div data-bind="foreach: steps">
+                        <h4 data-bind="text: name, visible: hidden">Section names go here</h4>
+                        <div class="form-horizontal">
+                            <!--Loop through each question-->
+                            <div data-bind="foreach: questions, visible: hidden">
+                                <div data-bind="visible: hidden" class="form-group">
+                                    <label data-bind="text: label" class="control-label col-md-2">Question labels go here</label>
+                                    <div class="col-md-10">
+                                        <div class="panel panel-primary">
+                                            <div data-bind="text: text" class="panel-heading">Questions go here</div>
+                                            <div class="panel-body">
+                                                <div data-bind="text: answer, attr: { for: fieldName }" class="answer row text-center">Answers go here</div>
+                                                <br>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1">Score</label>
+                                                    <div class="col-md-10">
+                                                        <input data-bind="value: score, attr: { name : fieldName }, event: { blur: saveScore }" type="text" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-footer">
+                                                <button data-bind="click: $parent.generateNewQuestion" class="btn btn-default btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i> New Question</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-bind="visible: hidden" class="text-right">
+                            <button data-bind="click: nextQuestion" class="btn btn-primary">Next Question <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <button data-bind="click: addQuestion" class="btn btn-primary btn-sm" style="float: right;">
-                <i class="fa fa-plus" aria-hidden="true"></i> Question
-                </button>
+                <div class="panel-footer clearfix">
+                    <div data-bind="if: previousVisible" style="float: left;">
+                        <button data-bind="click: previousSection" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Section</button>
+                    </div>
+                    <div data-bind="if: submitVisible" style="float: right;">
+                        <button data-bind="click: finalSubmission" class="btn btn-primary">Final Submission <i class="fa fa-gavel" aria-hidden="true"></i></button>
+                    </div>
+                    <div data-bind="if: nextVisible" style="float: right;">
+                        <button data-bind="click: nextSection" class="btn btn-primary">Next Section <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
 
