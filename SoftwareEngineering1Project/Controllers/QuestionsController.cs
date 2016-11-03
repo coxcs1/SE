@@ -401,6 +401,7 @@ namespace SoftwareEngineering1Project.Controllers
 			var allCourses = questionDb.Courses.ToList();
 			var allProfiles = questionDb.Profiles.ToList();
 			var allTeachers = questionDb.Teachers.ToList();
+            var allSections = questionDb.Sections.ToList();
 			string course_Name = "";
 			string profile_Name = "";
 			string teacher_Name = "";
@@ -441,22 +442,14 @@ namespace SoftwareEngineering1Project.Controllers
 						profile_Name = profile.LastName + ", " + profile.FirstName;
 
 					}
-				}
-
-				foreach (var teacher in allTeachers)
-				{
-					if (teacher.ID == question.TeacherID)
-					{
-						teacher_Name = teacher.LastName + ", " + teacher.FirstName;
-					}
-				}
+				}                
 			}
 
 			//the key is the the label and the value is the specific course's information
 			viewTable.Data = new Dictionary<string, string>()
 				{
 					{"Course Name:" , course_Name},
-					{"Professor:", teacher_Name},
+					{"Professor:", question.Section.Teacher.GetFullName()},
 					{"Created By:", profile_Name},
 					{"Question:", question.Text},
 					{"Answer:", question.Answer },
@@ -488,6 +481,7 @@ namespace SoftwareEngineering1Project.Controllers
 			var allCourses = questionDb.Courses.ToList();
 			var allProfiles = questionDb.Profiles.ToList();
 			var allTeachers = questionDb.Teachers.ToList();
+            var allSections = questionDb.Sections.ToList();
 			string course_Name = "";
 			string profile_Name = "";
 			string teacher_Name = "";
@@ -513,21 +507,13 @@ namespace SoftwareEngineering1Project.Controllers
 						}
 					}
 
-					foreach (var teacher in allTeachers)
-					{
-						if (teacher.ID == question.TeacherID)
-						{
-							teacher_Name = teacher.LastName + ", " + teacher.FirstName;
-						}
-					}
-
 					//adds new object to list - setup like key-value pairs
 					allUserQuestions.Add(
 						new
 						{
 							id = question.ID,
 							courseId = course_Name,
-							teacherId = teacher_Name,
+							teacherId = question.Section.Teacher.GetFullName(),
 							profileId = profile_Name,
 							text = question.Text,
 							answer = question.Answer
