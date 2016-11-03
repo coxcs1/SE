@@ -66,13 +66,7 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 };
                 context.Courses.Add(c3);
 
-                Course c4 = new Course
-                {
-                    CourseName = "Research Methods",
-                    CourseAttributeNumber = 5520,
-                    DeptAbbreviation = "CSCI"
-                };
-                context.Courses.Add(c4);
+                //removed research methods course from core
                 #endregion
 
                 #region Applied CS Courses
