@@ -3,7 +3,7 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class UpdateQuestionsModel : DbMigration
+    public partial class ArchiveQuestion : DbMigration
     {
         public override void Up()
         {

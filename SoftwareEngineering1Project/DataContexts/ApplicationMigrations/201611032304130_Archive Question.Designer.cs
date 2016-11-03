@@ -7,13 +7,13 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UpdateQuestionsModel : IMigrationMetadata
+    public sealed partial class ArchiveQuestion : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateQuestionsModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ArchiveQuestion));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610210332501_Update Questions Model"; }
+            get { return "201611032304130_Archive Question"; }
         }
         
         string IMigrationMetadata.Source
