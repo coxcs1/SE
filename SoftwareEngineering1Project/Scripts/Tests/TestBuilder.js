@@ -41,11 +41,15 @@ function Step(id, name, template, questions, hidden) {
      * @throws TestBuilderException
      */
     self.nextQuestion = function () {
-        if (self.questionCount < self.questions().length) {
-            self.questions()[self.questionCount].hidden(true);
-            self.questionCount++;
-        } else {
-            throw new TestBuilderException('Question limit reached');
+        try{
+            if (self.questionCount < self.questions().length) {
+                self.questions()[self.questionCount].hidden(true);
+                self.questionCount++;
+            } else {
+                throw new TestBuilderException('Question limit reached');
+            }
+        } catch (exception) {
+            toastr.error(exception.message);
         }
     };
 
@@ -71,9 +75,10 @@ function Step(id, name, template, questions, hidden) {
  * @param hidden
  * @constructor
  */
-function Question(label, fieldName, text, answer, score, hidden) {
+function Question(id, label, fieldName, text, answer, score, hidden) {
     var self = this;
 
+    self.id = id;
     self.label = ko.observable(label);
     self.fieldName = ko.observable(fieldName);
     self.text = ko.observable(text);
@@ -89,6 +94,7 @@ function Question(label, fieldName, text, answer, score, hidden) {
         var score = question.score();
         console.log(score);
         //TODO: Create an AJAX post request to save the score in the database
+        return true;
     };
 }
 
@@ -100,7 +106,7 @@ function getQuestions(questions) {
     var questionsArray = ko.observableArray([]);
     var count = 0;
     $.each(questions, function () {
-        questionsArray.push(new Question(this.Label, this.FieldName, this.Text, this.Answer, this.Score, (count == 0)));
+        questionsArray.push(new Question(this.ID, this.Label, this.FieldName, this.Text, this.Answer, this.Score, (count == 0)));
         count++;
     });
     return questionsArray;
@@ -142,20 +148,29 @@ function TestBuilderViewModel(model) {
     self.nextSection = function () {
         var currentStep = self.steps()[self.currentStep];//set the current step
         //check to see if any questions haven't been administered
-        $.each(currentStep.questions(), function () {
-            if (!this.hidden()) {
-                throw new TestBuilderException('Not all questions have been administered');
+        try{
+            $.each(currentStep.questions(), function () {
+                if (!this.hidden()) {
+                    throw new TestBuilderException(this.label() + ' has not been administered');
+                }
+                if (this.score() < 1) {
+                    throw new TestBuilderException(this.label() + ' has not been scored')
+                }
+            });
+
+            currentStep.hidden(false);//hide the current step
+            self.currentStep++;//increment the step counter
+            self.steps()[self.currentStep].hidden(true);//show the next step
+            self.previousVisible(true);//show the previous button when on a slide other then the first
+            //if it's the last slide then show the final submit
+            if (self.currentStep == self.steps().length - 1) {
+                self.nextVisible(false);
+                self.submitVisible(true);
             }
-        });
-        currentStep.hidden(false);//hide the current step
-        self.currentStep++;//increment the step counter
-        self.steps()[self.currentStep].hidden(true);//show the next step
-        self.previousVisible(true);//show the previous button when on a slide other then the first
-        //if it's the last slide then show the final submit
-        if (self.currentStep == self.steps().length - 1) {
-            self.nextVisible(false);
-            self.submitVisible(true);
+        } catch (exception) {
+            toastr.error(exception.message);
         }
+        
     };
 
     /**
@@ -177,11 +192,18 @@ function TestBuilderViewModel(model) {
     self.finalSubmission = function () {
         var currentStep = self.steps()[self.currentStep];//set the current step
         //check to see if any questions haven't been administered
-        $.each(currentStep.questions(), function () {
-            if (!this.hidden()) {
-                throw new TestBuilderException('Not all questions have been administered');
-            }
-        });
+        try {
+            $.each(currentStep.questions(), function () {
+                if (!this.hidden()) {
+                    throw new TestBuilderException(this.label() + ' has not been administered');
+                }
+                if (this.score() < 1) {
+                    throw new TestBuilderException(this.label() + ' has not been scored')
+                }
+            });
+        } catch (exception) {
+            toastr.error(exception.message);
+        }
         console.log(ko.toJSON(this));
         //TODO: Send this data to the back end for processing
     };

@@ -1,16 +1,5 @@
 ﻿@model SoftwareEngineering1Project.Models.Test
 
-@{
-    ViewBag.Title = "Create New Test";
-}
-
-<h2>
-    @ViewBag.Title
-    <a href="/tests" class="btn btn-primary btn-sm" style="float: right;">
-        <i class="fa fa-arrow-left"></i> Back to Test List
-    </a>
-</h2>
-
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
@@ -43,69 +32,11 @@
                 @Html.ValidationMessageFor(model => model.Passed, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div id="questions">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h3>Test for Jarred Light</h3></div>
-                <!--Test Builder will go here-->
-                <div class="panel-body">
-                    <!--Loop through each step in the testing process-->
-                    <div data-bind="foreach: steps">
-                        <h4 data-bind="text: name, visible: hidden">Section names go here</h4>
-                        <div class="form-horizontal">
-                            <!--Loop through each question-->
-                            <div data-bind="foreach: questions, visible: hidden">
-                                <div data-bind="visible: hidden" class="form-group">
-                                    <label data-bind="text: label" class="control-label col-md-2">Question labels go here</label>
-                                    <div class="col-md-10">
-                                        <div class="panel panel-primary">
-                                            <div data-bind="text: text" class="panel-heading">Questions go here</div>
-                                            <div class="panel-body">
-                                                <div data-bind="text: answer, attr: { for: fieldName }" class="answer row text-center">Answers go here</div>
-                                                <br>
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-1">Score</label>
-                                                    <div class="col-md-10">
-                                                        <input data-bind="value: score, attr: { name : fieldName }, event: { blur: saveScore }" type="text" class="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="panel-footer">
-                                                <button data-bind="click: $parent.generateNewQuestion" class="btn btn-default btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i> New Question</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-bind="visible: hidden" class="text-right">
-                            <button data-bind="click: nextQuestion" class="btn btn-primary">Next Question <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer clearfix">
-                    <div data-bind="if: previousVisible" style="float: left;">
-                        <button data-bind="click: previousSection" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Section</button>
-                    </div>
-                    <div data-bind="if: submitVisible" style="float: right;">
-                        <button data-bind="click: finalSubmission" class="btn btn-primary">Final Submission <i class="fa fa-gavel" aria-hidden="true"></i></button>
-                    </div>
-                    <div data-bind="if: nextVisible" style="float: right;">
-                        <button data-bind="click: nextSection" class="btn btn-primary">Next Section <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/Scripts/Tests/TestBuilder.js")
-    @Scripts.Render("~/Scripts/Tests/create.js")
 }

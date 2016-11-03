@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using System.Text.RegularExpressions;
+using SoftwareEngineering1Project.Helpers;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -20,7 +21,76 @@ namespace SoftwareEngineering1Project.Controllers
         public ActionResult Index()
         {
             var tests = db.Tests.Include(t => t.Student);
-            return View(tests.ToList());
+            //build a list of tests for the data table
+            var testsList = new List<object>();
+            foreach (var test in tests)
+            {
+                //adds new object to list - setup like key-value pairs
+                testsList.Add(
+                    new
+                    {
+                        id = test.ID,
+                        dateTaken = test.DateTaken.ToShortDateString(),
+                        student = test.Student.FirstName + " " + test.Student.LastName,
+                        passed  = (test.Passed) ? "Yes" : "No"
+                    }
+                );
+            }
+
+            //create the data table for the index page
+            //I used the method chaining that I build into the DataTableModel
+            DataTableModel testsDataTableModel = new DataTableModel();
+            testsDataTableModel.
+                setTitle("Tests").//set the title
+                setData(testsList).//pass in the teacher list
+                setSearchSort(true).//initializes the jQuery data table library
+                setHeaders(new List<object>()//add the headers and map them to the teachersList data
+                {
+                    new
+                    {
+                        Name = "Student",
+                        Field = "student"
+                    },
+                    new
+                    {
+                        Name = "Date Taken",
+                        Field = "dateTaken"
+                    },
+                    new
+                    {
+                        Name = "Passed",
+                        Field = "passed"
+                    }
+                }).
+                setActions(new List<object>()//define any links to modify teachers
+                {
+                    new
+                    {
+                        text = "Administer",
+                        url = "/tests/administertest/{{id}}"
+                    },
+                    new
+                    {
+                        text = "Edit",
+                        url = "/tests/edit/{{id}}"
+                    },
+                    new
+                    {
+                        text = "Delete",
+                        url = "/tests/delete/{{id}}"
+                    }
+                }).
+                setTableButtons(new List<object>()//add a link to create a teacher
+                {
+                    new
+                    {
+                        text = "Create Test",
+                        url = "/tests/create"
+                    }
+                });
+
+
+            return View(testsDataTableModel.Render());
         }
 
         // GET: Tests/Details/5
@@ -50,23 +120,13 @@ namespace SoftwareEngineering1Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,StudentID,Passed,DateTaken,question*")] Test test, FormCollection formData)
+        public ActionResult Create([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
         {
             if (ModelState.IsValid)
             {
                 //add the test to the database
                 db.Tests.Add(test);
                 db.SaveChanges();
-                //add each test question
-                foreach (String element in formData)
-                {
-                    if (element.Contains("question"))
-                    {
-                        var testQuestion = new TestQuestion(test.ID, Int32.Parse(formData[element]), 100);
-                        db.TestQuestions.Add(testQuestion);//add test question to list
-                    }
-                }
-                db.SaveChanges();//save after adding all the test questions
 
                 TempData["Message"] = new { Message = "Successfully Created Test", Type = "success" };
                 return RedirectToAction("Index");
@@ -97,7 +157,7 @@ namespace SoftwareEngineering1Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test, FormCollection formData)
+        public ActionResult Edit([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
         {
             if (ModelState.IsValid)
             {
@@ -109,17 +169,6 @@ namespace SoftwareEngineering1Project.Controllers
                 //save the test
                 db.Entry(test).State = EntityState.Modified;
                 db.SaveChanges();
-
-                //add new test questions selected
-                foreach (String element in formData)
-                {
-                    if (element.Contains("question"))
-                    {
-                        var testQuestion = new TestQuestion(test.ID, Int32.Parse(formData[element]), 100);
-                        db.TestQuestions.Add(testQuestion);//add test question to list
-                    }
-                }
-                db.SaveChanges();//save after adding all the test questions
 
                 return RedirectToAction("Index");
             }
@@ -151,6 +200,11 @@ namespace SoftwareEngineering1Project.Controllers
             db.Tests.Remove(test);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AdministerTest()
+        {
+            return View();
         }
 
         /// <summary>
