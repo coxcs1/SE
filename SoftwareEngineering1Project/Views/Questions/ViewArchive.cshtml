@@ -1,0 +1,12 @@
+@model HtmlString
+@{
+    ViewBag.Title = "Archived Questions";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+@Html.Raw(Model)
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
