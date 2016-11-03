@@ -66,6 +66,7 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 };
                 context.Courses.Add(c3);
 
+                /*
                 Course c4 = new Course
                 {
                     CourseName = "Research Methods",
@@ -73,6 +74,7 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                     DeptAbbreviation = "CSCI"
                 };
                 context.Courses.Add(c4);
+                */
                 #endregion
 
                 #region Applied CS Courses
