@@ -33,7 +33,6 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         ///   <c>true</c> if passed; otherwise, <c>false</c>.
         /// </value>
-        [Required]
         public bool Passed { get; set; }
         /// <summary>
         /// Gets or sets the date taken.

@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Dept. of Computing - Oral Exit Exam</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/DataTables")
+    @Styles.Render("~/Content/jqueryui")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryDataTables")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/toastr")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/ckeditor")
+    @Scripts.Render("~/bundles/knockout")
 
 </head>
 <body>
@@ -65,6 +66,11 @@
                                 <i class="fa fa-question" aria-hidden="true"></i> Questions
                             </a>
                         </li>
+                        <li>
+                            <a href="/tests">
+                                <i class="fa fa-university" aria-hidden="true"></i> Tests
+                            </a>
+                        </li>
                     }
                 </ul>
             </div>
@@ -85,6 +91,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
     @RenderSection("scripts", required: false)
 </body>
 </html>

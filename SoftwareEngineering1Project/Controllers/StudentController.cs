@@ -157,6 +157,7 @@ namespace SoftwareEngineering1Project.Controllers
         /// <param name="newUser"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Add(Student newStudent)
         {
             //checks to make sure everything was filled out appropriately in accordance
@@ -251,6 +252,7 @@ namespace SoftwareEngineering1Project.Controllers
         /// <param name="student"></param>
         /// <returns>Mixed</returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(Student student)
         {
             if (ModelState.IsValid)
