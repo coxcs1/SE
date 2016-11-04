@@ -77,6 +77,16 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     new
                     {
+                        text = "View All Questions",
+                        url = "/sections/viewallquestions/{{id}}"
+                    },
+                    new
+                    {
+                        text = "Upload Questions",
+                        url = "/questions/uploadquestions/{{id}}"
+                    },
+                    new
+                    {
                         text = "Edit",
                         url = "/sections/edit/{{id}}"
                     },
@@ -235,6 +245,51 @@ namespace SoftwareEngineering1Project.Controllers
             //add flash message for successful deletion
             TempData["Message"] = new { Message = "Successfully deleted section", Type = "success" };
             return RedirectToAction("Index", new { id = section.CourseID });
+        }
+
+        public ActionResult ViewAllQuestions(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Section section = db.Sections.Find(id);
+            if (section == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<Question> questionsForSection = section.Questions.ToList();
+
+            string questionsAndAnswers = "";
+
+            string html = "<div class='panel panel-default'>" +
+                            "<div class='panel-heading'>" +
+                                "<h3 class='panel-title'>#question#</h3>" +
+                            "</div>" +
+                            "<div class='panel-body'>#answer#</div>" +
+                            "<div class='panel-footer'>#button#</div>" +
+                          "</div>";
+
+            string htmlButton = "<a class='btn btn-primary btn-sm' href='/questions/edit/#id#'>Edit</a>";
+
+            string tempString = "";
+            string buttonString = "";
+            foreach (Question q in questionsForSection)
+            {
+                tempString = html.Replace("#question#", q.Text);
+                tempString = tempString.Replace("#answer#", q.Answer);            
+                buttonString = htmlButton.Replace("#id#", q.ID.ToString());
+                tempString = tempString.Replace("#button#", buttonString);
+                questionsAndAnswers += tempString;
+                questionsAndAnswers += "<br />";
+            }
+
+            ViewBag.SectionCourse = section.Course.CourseName + ", " + section.Semester + " " + section.AcademicYear + ", " + section.Teacher.LastName;
+            ViewBag.SectionReturn = "/sections/index/" + section.CourseID.ToString();
+
+            return View(new HtmlString(questionsAndAnswers));
+
         }
 
         /// <summary>

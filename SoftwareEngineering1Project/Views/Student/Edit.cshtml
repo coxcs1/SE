@@ -34,7 +34,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EnterDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EnterDate, new { htmlAttributes = new { @class = "form-control" } })
+                <input type="datetime" name="EnterDate" id="EnterDate" class="form-control datepicker" value="@Model.EnterDate.ToShortDateString()" />
                 @Html.ValidationMessageFor(model => model.EnterDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -50,7 +50,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+                <textarea name="Notes" id="Notes" class="form-control ckeditor" value="">
+                    @Model.Notes
+                </textarea>
                 @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
             </div>
         </div>

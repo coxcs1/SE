@@ -157,6 +157,7 @@ namespace SoftwareEngineering1Project.Controllers
         /// <param name="newUser"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Add(Student newStudent)
         {
             //checks to make sure everything was filled out appropriately in accordance
@@ -212,7 +213,7 @@ namespace SoftwareEngineering1Project.Controllers
                 {"Last Name" , studentInfo.LastName},
                 {"Concentration", studentInfo.Concentration},
                 {"Notes", studentInfo.Notes },
-                {"Enter Date" , studentInfo.EnterDate.Date.ToString() },
+                {"Enter Date" , studentInfo.EnterDate.Date.ToString("MMMM dd, yyyy")  },
                 {"", "" }
             };
             //key is the url link and the value is what is displayed to the user
@@ -251,6 +252,7 @@ namespace SoftwareEngineering1Project.Controllers
         /// <param name="student"></param>
         /// <returns>Mixed</returns>
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(Student student)
         {
             if (ModelState.IsValid)

@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Administer Test";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3>Test for Jarred Light</h3></div>
+    <!--Test Builder will go here-->
+    <div class="panel-body">
+        <!--Loop through each step in the testing process-->
+        <div data-bind="foreach: steps">
+            <h4 data-bind="text: name, visible: hidden">Section names go here</h4>
+            <div class="form-horizontal">
+                <!--Loop through each question-->
+                <div data-bind="foreach: questions, visible: hidden">
+                    <div data-bind="visible: hidden" class="form-group">
+                        <label data-bind="text: label" class="control-label col-md-2">Question labels go here</label>
+                        <div class="col-md-10">
+                            <div class="panel panel-primary">
+                                <div data-bind="text: text" class="panel-heading">Questions go here</div>
+                                <div class="panel-body">
+                                    <div data-bind="text: answer, attr: { for: fieldName }" class="answer row text-center">Answers go here</div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="col-sm-1 control-label required">Score</label>
+                                        <div class="col-sm-3" data-bind="click: saveScore">
+                                            <div><input type="radio" value="1" data-bind="checked: score, attr: { name: id }" /> 1</div>
+                                            <div><input type="radio" value="2" data-bind="checked: score, attr: { name: id }" /> 2</div>
+                                            <div><input type="radio" value="3" data-bind="checked: score, attr: { name: id }" /> 3</div>
+                                            <div><input type="radio" value="4" data-bind="checked: score, attr: { name: id }" /> 4</div>
+                                            <div><input type="radio" value="5" data-bind="checked: score, attr: { name: id }" /> 5</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <button data-bind="click: $parent.generateNewQuestion" class="btn btn-default btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i> New Question</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-bind="visible: hidden" class="text-right">
+                <button data-bind="click: nextQuestion" class="btn btn-primary">Next Question <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer clearfix">
+        <div data-bind="if: previousVisible" style="float: left;">
+            <button data-bind="click: previousSection" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Section</button>
+        </div>
+        <div data-bind="if: submitVisible" style="float: right;">
+            <button data-bind="click: finalSubmission" class="btn btn-primary">Final Submission <i class="fa fa-gavel" aria-hidden="true"></i></button>
+        </div>
+        <div data-bind="if: nextVisible" style="float: right;">
+            <button data-bind="click: nextSection" class="btn btn-primary">Next Section <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/Scripts/Tests/TestBuilder.js")
+    @Scripts.Render("~/Scripts/Tests/administer-test.js")
+}

@@ -20,6 +20,13 @@ namespace SoftwareEngineering1Project
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor").Include(
+            "~/Scripts/ckeditor/ckeditor.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+            "~/Scripts/knockout-3.4.0.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -27,8 +34,11 @@ namespace SoftwareEngineering1Project
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js", 
+                      "~/Scripts/respond.js",
                       "~/Scripts/app.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+            "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -37,7 +47,9 @@ namespace SoftwareEngineering1Project
                       "~/Content/toastr.css",
                       "~/Content/DataTables/css/jquery.dataTables.css",
                       "~/Content/DataTables/images/*.png"));
-                      
+
+            bundles.Add(new StyleBundle("~/Content/jqueryui").Include(
+              "~/Content/themes/base/all.css"));
         }
     }
 }

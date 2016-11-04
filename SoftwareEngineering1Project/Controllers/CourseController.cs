@@ -54,7 +54,7 @@ namespace SoftwareEngineering1Project.Controllers
                     {
                         id = course.ID,
                         name = course.CourseName,
-                        crn = course.CourseCRN,
+                        abbr = course.DeptAbbreviation,
                         attributeNum = course.CourseAttributeNumber
                     });
             }
@@ -72,13 +72,13 @@ namespace SoftwareEngineering1Project.Controllers
 
                 new
                 {
-                    Name = "CRN",
-                    Field = "crn"
+                    Name = "Dept. Abbreviation",
+                    Field = "abbr"
                 },
 
                 new
                 {
-                    Name = "Attribute Number",
+                    Name = "Course Number",
                     Field = "attributeNum"
                 }
             };
@@ -154,7 +154,7 @@ namespace SoftwareEngineering1Project.Controllers
                     Course course = new Course();
                     course.ID = newCourse.ID;
                     course.CourseName = newCourse.CourseName;
-                    course.CourseCRN = newCourse.CourseCRN;
+                    course.DeptAbbreviation = newCourse.DeptAbbreviation;
                     course.CourseAttributeNumber = newCourse.CourseAttributeNumber;
 
                     //saves the course to the database                    
@@ -201,10 +201,10 @@ namespace SoftwareEngineering1Project.Controllers
             //the key is the the label and the value is the specific course's information
             viewTable.Data = new Dictionary<string, string>()
             {
-                {"Course ID",  course.ID.ToString()},
                 {"Course Name" , course.CourseName},
-                {"CRN", course.CourseCRN.ToString()},
-                {"Attribute Number", course.CourseAttributeNumber.ToString() }
+                {"Dept. Abbreviation", course.DeptAbbreviation},
+                {"Attribute Number", course.CourseAttributeNumber.ToString() },
+                {"","" }
             };
             //key is the url link and the value is what is displayed to the user
             viewTable.TableButtons = new Dictionary<string, string>()

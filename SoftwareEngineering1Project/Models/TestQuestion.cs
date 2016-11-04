@@ -17,6 +17,13 @@ namespace SoftwareEngineering1Project.Models
 {
     public class TestQuestion
     {
+        public TestQuestion() { }
+        public TestQuestion(int TestID, int QuestionID, int QuestionScore)
+        {
+            this.TestID = TestID;
+            this.QuestionID = QuestionID;
+            this.QuestionScore = QuestionScore;
+        }
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
