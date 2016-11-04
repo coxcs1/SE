@@ -18,7 +18,6 @@ using System.Web.Mvc;
 using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using SoftwareEngineering1Project.Helpers;
-using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.Office.Interop.Word;
