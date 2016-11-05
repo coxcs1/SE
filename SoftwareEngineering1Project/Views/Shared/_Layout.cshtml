@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Dept. of Computing - Oral Exit Exam</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryDataTables")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/toastr")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/ckeditor")
+    @Scripts.Render("~/bundles/bootstrap")    
     @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="@Url.Content("~/Scripts/ckeditor/ckeditor.js")"></script>
+    @RenderSection("scripts", required: false)
 
 </head>
 <body>
@@ -88,10 +90,5 @@
             <p>&copy; @DateTime.Now.Year - Software Engineering 1 - Team Loon</p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryui")
-    @RenderSection("scripts", required: false)
 </body>
 </html>
