@@ -46,7 +46,14 @@ namespace SoftwareEngineering1Project
                         "~/Content/font-awesome.css",
                         "~/Content/toastr.css",
                         "~/Content/DataTables/css/jquery.dataTables.css",
-                        "~/Content/DataTables/images/*.png"));
+                        "~/Content/DataTables/images/details_close.png",
+                        "~/Content/DataTables/images/details_open.png",
+                        "~/Content/DataTables/images/sort_asc.png",
+                        "~/Content/DataTables/images/sort_asc_disabled.png",
+                        "~/Content/DataTables/images/sort_both.png",
+                        "~/Content/DataTables/images/sort_desc.png",
+                        "~/Content/DataTables/images/sort_desc_disabled.png"
+                        ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
               "~/Content/themes/base/accordian.css",
