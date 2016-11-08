@@ -120,13 +120,15 @@ namespace SoftwareEngineering1Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
+        public ActionResult Create([Bind(Include = "ID,StudentID,DateTaken")] Test test)
         {
             if (ModelState.IsValid)
             {
                 //add the test to the database
                 db.Tests.Add(test);
                 db.SaveChanges();
+
+                CreateTestQuestions(test);
 
                 TempData["Message"] = new { Message = "Successfully Created Test", Type = "success" };
                 return RedirectToAction("Index");
@@ -249,6 +251,61 @@ namespace SoftwareEngineering1Project.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void CreateTestQuestions(Test t)
+        {
+            Test newT = db.Tests.Find(t.ID);
+            Student stu = db.Students.Find(t.StudentID);
+
+            foreach (Section sec in stu.Sections)
+            {
+                List<Question> unshuffledQuestions = sec.Questions.ToList();
+                List<Question> shuffledQuestions = ShuffleQuestions(unshuffledQuestions);
+
+                if (true)// course is a core course
+                {
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        TestQuestion tq = new TestQuestion();
+                        tq.Question = shuffledQuestions[i];
+                        tq.Test = newT;
+                        db.TestQuestions.Add(tq);
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        TestQuestion tq = new TestQuestion();
+                        tq.Question = shuffledQuestions[i];
+                        tq.Test = newT;
+                        db.TestQuestions.Add(tq);
+                        db.SaveChanges();
+                    }
+                }
+
+                
+            }
+        }
+
+        private List<Question> ShuffleQuestions(List<Question> qs)
+        {
+            Random r = new Random();
+
+            for(int i = 0; i < 5; i++)
+            {
+                int randomIndex1 = r.Next(0, qs.Count);
+                int randomIndex2 = r.Next(0, qs.Count);
+
+                Question temp = qs[randomIndex1];
+                qs[randomIndex1] = qs[randomIndex2];
+                qs[randomIndex2] = temp;                
+            }
+
+            return qs;
         }
     }
 }
