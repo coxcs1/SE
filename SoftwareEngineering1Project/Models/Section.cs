@@ -89,5 +89,9 @@ namespace SoftwareEngineering1Project.Models
         /// The questions added to this course.
         /// </value>
         public virtual ICollection<Question> Questions { get; set; }
+        /// <summary>
+        /// A collection of students enrolled in the course
+        /// </summary>
+        public virtual ICollection<Student> Students { get; set; }
     }
 }
