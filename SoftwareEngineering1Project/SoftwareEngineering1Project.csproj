@@ -231,6 +231,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201611032304130_Archive Question.Designer.cs">
       <DependentUpon>201611032304130_Archive Question.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.Designer.cs">
+      <DependentUpon>201611082100287_Archive Student.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -958,6 +962,8 @@
     <Content Include="Views\Tests\Edit.cshtml" />
     <Content Include="Views\Tests\Index.cshtml" />
     <Content Include="Views\Tests\AdministerTest.cshtml" />
+    <Content Include="Views\Student\Archive.cshtml" />
+    <Content Include="Views\Student\ViewArchived.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />
@@ -1005,6 +1011,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611032304130_Archive Question.resx">
       <DependentUpon>201611032304130_Archive Question.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.resx">
+      <DependentUpon>201611082100287_Archive Student.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>

@@ -57,23 +57,26 @@ namespace SoftwareEngineering1Project.Controllers
             string tempRoleHolder = "";
             foreach (var student in allStudents)
             {
-
-                if (tempRoleHolder == "Sysadmin")
+                if(student.Archived == false)
                 {
-                    ViewBag.SysadminId = student.ID;
-                    sysadminID = student.ID;
+                    if (tempRoleHolder == "Sysadmin")
+                    {
+                        ViewBag.SysadminId = student.ID;
+                        sysadminID = student.ID;
+                    }
+
+                    //adds new object to list - setup like key-value pairs
+                    allStudentProfiles.Add(
+                        new
+                        {
+                            id = student.ID,
+                            firstName = student.FirstName,
+                            lastName = student.LastName,
+                            concentration = student.Concentration
+                        }
+                    );
                 }
 
-                //adds new object to list - setup like key-value pairs
-                allStudentProfiles.Add(
-                    new
-                    {
-                        id = student.ID,
-                        firstName = student.FirstName,
-                        lastName = student.LastName,
-                        concentration = student.Concentration
-                    }
-                );
             }
 
             DataTableModel studentTable = new DataTableModel();
@@ -118,8 +121,8 @@ namespace SoftwareEngineering1Project.Controllers
                 },
                 new
                 {
-                    text = "Delete",
-                    url = "/student/delete/{{id}}"
+                    text = "Archive",
+                    url = "/student/archive/{{id}}"
                 }
             };
             //allows the table to be searched and sorted
@@ -131,6 +134,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Create Student",
                     url = "/student/add"
+                },
+                new
+                {
+                    text = "View Archived Students",
+                    url = "/student/viewarchived"
                 }
             };
 
@@ -270,7 +278,59 @@ namespace SoftwareEngineering1Project.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>ViewResult</returns>
-        public ActionResult Delete(int? id)
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //        return Redirect("Index");
+
+        //    var student = _studentDb.Students.Find(id);//find the student in the database
+        //    if (student == null)//if the student doesn't exist then throw a 404
+        //    {
+        //        return HttpNotFound();
+        //    }
+
+        //    //Creates the PanelTable and sets its title and the number of 
+        //    //items displayed in a row (includes headers)
+        //    PanelTable viewTable = new PanelTable();
+        //    viewTable.Title = "Student Information";
+        //    viewTable.ItemsPerRow = 4;
+
+        //    //the key is the the label and the value is the specific student's information
+        //    viewTable.Data = new Dictionary<string, string>()
+        //    {
+        //        { "First Name", student.FirstName},
+        //        {"Last Name",  student.LastName},
+        //        {"Enter Date" , student.EnterDate.ToString()},
+        //        {"Concentration", student.Concentration},
+        //        {"Notes",  student.Notes },
+        //        { "", "" }
+        //    };
+        //    //add the table to the view bag
+        //    ViewBag.Table = viewTable;
+
+        //    return View(student);
+        //}
+        ///// <summary>
+        ///// Deletes the specified teacher.
+        ///// </summary>
+        ///// <param name="student"></param>
+        ///// <returns>RedirectToActionResult</returns>
+        //[HttpPost, ActionName("Delete")]
+        //public ActionResult PersistDelete(int id)
+        //{
+        //    _studentDb.Students.Remove(_studentDb.Students.Find(id));//remove the student from the database
+        //    _studentDb.SaveChanges();//persist the changes
+        //    //add flash message for successful deletion
+        //    TempData["Message"] = new { Message = "Successfully deleted student", Type = "success" };
+        //    return RedirectToAction("Index");
+        //}
+
+        /// <summary>
+        /// Displays a form and information about the student that will be archived
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ViewResult</returns>
+        public ActionResult Archive(int? id)
         {
             if (id == null)
                 return Redirect("Index");
@@ -303,19 +363,125 @@ namespace SoftwareEngineering1Project.Controllers
             return View(student);
         }
         /// <summary>
-        /// Deletes the specified teacher.
+        /// Archives student
         /// </summary>
         /// <param name="student"></param>
         /// <returns>RedirectToActionResult</returns>
-        [HttpPost, ActionName("Delete")]
-        public ActionResult PersistDelete(int id)
+        [HttpPost, ActionName("Archive")]
+        public ActionResult ArchiveConfirmed(int id)
         {
-            _studentDb.Students.Remove(_studentDb.Students.Find(id));//remove the student from the database
+            Student student = _studentDb.Students.Find(id);
+            student.Archived = true;
             _studentDb.SaveChanges();//persist the changes
             //add flash message for successful deletion
-            TempData["Message"] = new { Message = "Successfully deleted student", Type = "success" };
+            TempData["Message"] = new { Message = "Successfully archived student", Type = "success" };
             return RedirectToAction("Index");
         }
+
+        /// <summary>
+        /// View archived students
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns>RedirectToActionResult</returns>
+        public ActionResult ViewArchived()
+        {
+            //DataTable is built using lists of generic objects
+            List<object> allStudentProfiles = new List<object>();
+
+            int sysadminID = 0;
+
+            var allStudents = _studentDb.Students.ToList();
+
+            var roles = _userDb.Roles.ToList();
+            string tempRoleHolder = "";
+            foreach (var student in allStudents)
+            {
+                if (student.Archived == true)
+                {
+                    if (tempRoleHolder == "Sysadmin")
+                    {
+                        ViewBag.SysadminId = student.ID;
+                        sysadminID = student.ID;
+                    }
+
+                    //adds new object to list - setup like key-value pairs
+                    allStudentProfiles.Add(
+                        new
+                        {
+                            id = student.ID,
+                            firstName = student.FirstName,
+                            lastName = student.LastName,
+                            concentration = student.Concentration
+                        }
+                    );
+                }
+
+            }
+
+            DataTableModel studentTable = new DataTableModel();
+            studentTable.Title = "Students";
+
+            //sets the table headers, the Field attribute must  match the key value from the allStudentProfiles list
+            studentTable.Headers = new List<object>()
+            {
+                new
+                {
+                    Name = "First Name",
+                    Field = "firstName"
+                },
+                new
+                {
+                    Name = "Last Name",
+                    Field = "lastName"
+                },
+                new
+                {
+                    Name = "Concentration",
+                    Field = "concentration"
+                },
+
+            };
+            studentTable.Data = allStudentProfiles;
+
+            //sets the actions that will display for every entry in the table
+            //uses a str replace to replace the {{id}} values with the actual id
+            //id matches to the key seen earlier
+            studentTable.Actions = new List<object>()
+            {
+                new
+                {
+                    text = "View",
+                    url = "/student/view/{{id}}"
+                },
+                new
+                {
+                    text = "Edit",
+                    url = "/student/edit/{{id}}"
+                },
+                new
+                {
+                    text = "Archive",
+                    url = "/student/archive/{{id}}"
+                }
+            };
+            //allows the table to be searched and sorted
+            studentTable.SearchSort = true;
+            //adds the table button for adding a student
+            studentTable.TableButtons = new List<object>()
+            {
+                new
+                {
+                    text = "Create Student",
+                    url = "/student/add"
+                }
+            };
+
+            string modifiedTable = studentTable.Render().ToString();
+
+            //render function returns an HtmlString to the view
+            return View(new HtmlString(modifiedTable));
+        }
+
 
     }
 }
