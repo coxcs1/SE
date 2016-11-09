@@ -636,7 +636,7 @@ namespace SoftwareEngineering1Project.Controllers
             if (file != null && file.ContentLength > 0)
             {                                              
                 //saves the file in the app_data folder and then opens it
-                path = Path.Combine(Server.MapPath("~/App_Data/"), Path.GetFileName(file.FileName));                                       
+                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                                       
                 file.SaveAs(path);
 
                 Application app = new Application();
