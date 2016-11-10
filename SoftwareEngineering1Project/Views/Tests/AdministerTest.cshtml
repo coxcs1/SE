@@ -59,6 +59,11 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var viewModelData = @Html.Raw(ViewBag.ViewModel);
+</script>
+
 @section Scripts {
     @Scripts.Render("~/Scripts/Tests/TestBuilder.js")
     @Scripts.Render("~/Scripts/Tests/administer-test.js")

@@ -10,6 +10,7 @@ using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using System.Text.RegularExpressions;
 using SoftwareEngineering1Project.Helpers;
+using System.Web.Script.Serialization;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -204,8 +205,43 @@ namespace SoftwareEngineering1Project.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult AdministerTest()
+        public ActionResult AdministerTest(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Test test = db.Tests.Find(id);
+            if (test == null)
+            {
+                return HttpNotFound();
+            }
+
+            var stepCounter = 1;//step counter
+            var administrationModelData = new List<object>();//json model data
+            foreach (var section in test.Student.Sections)//loop through each section building stages for the administration process
+            {
+                var questionCount = 1;//question counter
+                var step = new { Step = stepCounter, Section = section.Course.CourseName, Questions = new List<object>() };//set up step object
+                foreach (var question in test.TestQuestions)//loop through each test question and add question data
+                {
+                    step.Questions.Add(new {
+                        ID = question.ID,
+                        Label = "Question " + questionCount,
+                        FieldName = "question" + questionCount,
+                        Text = question.Question.Text,
+                        Answer = question.Question.Answer,
+                        Score = question.QuestionScore
+                    });
+                    questionCount++;//Question counter incrementation
+                }
+                administrationModelData.Add(step);//add the step to the overall data
+                stepCounter++;//increment the step
+            }
+
+            var json = Json(administrationModelData);
+            ViewBag.ViewModel = new JavaScriptSerializer().Serialize(json.Data);
+
             return View();
         }
 
