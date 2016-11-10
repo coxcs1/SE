@@ -211,6 +211,7 @@ function TestBuilderViewModel(model) {
             toastr.error(exception.message);
         }
         console.log(ko.toJSON(this));
-        //TODO: Send this data to the back end for processing
+        //TODO: Send this data to the back end for processing - maybe have a module for selecting if the 
+        //student has passed the exam or not 
     };
 }
