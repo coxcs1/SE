@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="panel panel-default">
-    <div class="panel-heading"><h3>Test for Jarred Light</h3></div>
+    <div class="panel-heading"><h3>Test for @ViewBag.StudentName</h3></div>
     <!--Test Builder will go here-->
     <div class="panel-body">
         <!--Loop through each step in the testing process-->
@@ -19,7 +19,7 @@
                         <label data-bind="text: label" class="control-label col-md-2">Question labels go here</label>
                         <div class="col-md-10">
                             <div class="panel panel-primary">
-                                <div data-bind="text: text" class="panel-heading">Questions go here</div>
+                                <div data-bind="text: text" class="panel-heading text-center">Questions go here</div>
                                 <div class="panel-body">
                                     <div data-bind="text: answer, attr: { for: fieldName }" class="answer row text-center">Answers go here</div>
                                     <br>
@@ -42,6 +42,7 @@
                     </div>
                 </div>
             </div>
+            <h4 data-bind="text: name, visible: hidden">Section names go here</h4>
             <div data-bind="visible: hidden" class="text-right">
                 <button data-bind="click: nextQuestion" class="btn btn-primary">Next Question <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
             </div>
