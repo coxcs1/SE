@@ -10,6 +10,7 @@ using SoftwareEngineering1Project.DataContexts;
 using SoftwareEngineering1Project.Models;
 using System.Text.RegularExpressions;
 using SoftwareEngineering1Project.Helpers;
+using System.Web.Script.Serialization;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -120,13 +121,15 @@ namespace SoftwareEngineering1Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
+        public ActionResult Create([Bind(Include = "ID,StudentID,DateTaken")] Test test)
         {
             if (ModelState.IsValid)
             {
                 //add the test to the database
                 db.Tests.Add(test);
                 db.SaveChanges();
+
+                CreateTestQuestions(test);
 
                 TempData["Message"] = new { Message = "Successfully Created Test", Type = "success" };
                 return RedirectToAction("Index");
@@ -202,44 +205,51 @@ namespace SoftwareEngineering1Project.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult AdministerTest()
+        public ActionResult AdministerTest(int? id)
         {
-            return View();
-        }
-
-        /// <summary>
-        /// Fetches all the questions for a test and returns them in JSON format.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public ActionResult GetTestQuestions(int? id)
-        {
-            if (id == null)//throw bad request of no id is passed
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Test test = db.Tests.Find(id);//find the test in the db
-            if (test == null)//if no test is found then throw a 404
+            Test test = db.Tests.Find(id);
+            if (test == null)
             {
                 return HttpNotFound();
             }
-            var testQuestions = new List<object>();//create a generic list of objects for JSON formatting
-            foreach (var testQuestion in test.TestQuestions)//build the generic list
+            
+            var stepCounter = 1;//step counter
+            var totalQuestionCounter = 1;//keeps track of total questions (used in field names)
+            var administrationModelData = new List<object>();//json model data
+            foreach (var section in test.Student.Sections)//loop through each section building stages for the administration process
             {
-                testQuestions.Add(
-                    new
+                var questionCount = 1;//question counter
+                var step = new { Step = stepCounter, Section = section.Course.CourseName, Questions = new List<object>() };//set up step object
+                foreach (var question in test.TestQuestions)//loop through each test question and add question data
+                {
+                    if (question.Question.Section.CourseID == section.CourseID)
                     {
-                        ID = testQuestion.Question.ID,
-                        Text = Regex.Replace(
-                            testQuestion.Question.Section.Course.CourseName + " (" +
-                            testQuestion.Question.Section.Semester + " " +
-                            testQuestion.Question.Section.AcademicYear + ") - " +
-                            testQuestion.Question.Text, "<.*?>", String.Empty
-                            ),
-                        Answer = testQuestion.Question.Answer
-                    });
+                        step.Questions.Add(new
+                        {
+                            ID = question.ID,
+                            Label = "Question " + questionCount,
+                            FieldName = "question" + totalQuestionCounter,
+                            Text = Regex.Replace(question.Question.Text, "<.*?>",String.Empty).Replace("&nbsp;", " "),
+                            Answer = Regex.Replace(question.Question.Answer, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+                            Score = question.QuestionScore
+                        });
+                        questionCount++;//Question counter incrementation
+                        totalQuestionCounter++;//increment total questions
+                    }
+                }
+                administrationModelData.Add(step);//add the step to the overall data
+                stepCounter++;//increment the step
             }
-            return Json(testQuestions, JsonRequestBehavior.AllowGet);//pass the JSON string to the view for JavaScript processing
+
+            var json = Json(administrationModelData);//build a JSONResult
+            ViewBag.ViewModel = new JavaScriptSerializer().Serialize(json.Data);//serialize the json data into a string
+            ViewBag.StudentName = test.Student.FirstName + " " + test.Student.LastName;//pass the student's name to the view
+
+            return View();
         }
 
         protected override void Dispose(bool disposing)
@@ -249,6 +259,61 @@ namespace SoftwareEngineering1Project.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void CreateTestQuestions(Test t)
+        {
+            Test newT = db.Tests.Find(t.ID);
+            Student stu = db.Students.Find(t.StudentID);
+
+            foreach (Section sec in stu.Sections)
+            {
+                List<Question> unshuffledQuestions = sec.Questions.ToList();
+                List<Question> shuffledQuestions = ShuffleQuestions(unshuffledQuestions);
+
+                if (true)// course is a core course
+                {
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        TestQuestion tq = new TestQuestion();
+                        tq.Question = shuffledQuestions[i];
+                        tq.Test = newT;
+                        db.TestQuestions.Add(tq);
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        TestQuestion tq = new TestQuestion();
+                        tq.Question = shuffledQuestions[i];
+                        tq.Test = newT;
+                        db.TestQuestions.Add(tq);
+                        db.SaveChanges();
+                    }
+                }
+
+                
+            }
+        }
+
+        private List<Question> ShuffleQuestions(List<Question> qs)
+        {
+            Random r = new Random();
+
+            for(int i = 0; i < 5; i++)
+            {
+                int randomIndex1 = r.Next(0, qs.Count);
+                int randomIndex2 = r.Next(0, qs.Count);
+
+                Question temp = qs[randomIndex1];
+                qs[randomIndex1] = qs[randomIndex2];
+                qs[randomIndex2] = temp;                
+            }
+
+            return qs;
         }
     }
 }
