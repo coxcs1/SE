@@ -611,11 +611,13 @@ namespace SoftwareEngineering1Project.Controllers
                     return HttpNotFound();
                 }
 
-                string input = "<input type='hidden' name='sectionID' id='sectionID>" +
+                string input = "<input type='hidden' name='sectionId' id='sectionId' value='#val#'>" +
                                      "<label class='control-label col-md-2'>"
                                      + sectionSelected.Course.CourseName + ", " + 
                                      sectionSelected.Semester + " " + sectionSelected.AcademicYear + ", " + 
                                      sectionSelected.Teacher.LastName + "</label>";
+
+                input = input.Replace("#val#", sectionSelected.ID.ToString());
                 sectionSelect = input;
                 ViewBag.ReturnButton = "/sections/index/" + sectionSelected.CourseID;
                 ViewBag.ReturnDesc = "Back to Sections List";
@@ -632,9 +634,9 @@ namespace SoftwareEngineering1Project.Controllers
             
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
-            {
+            {                                              
                 //saves the file in the app_data folder and then opens it
-                path = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(file.FileName));            
+                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                                       
                 file.SaveAs(path);
 
                 Application app = new Application();
