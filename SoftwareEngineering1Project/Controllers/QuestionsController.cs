@@ -21,8 +21,11 @@ using SoftwareEngineering1Project.Helpers;
 using SoftwareEngineering1Project.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using System.IO.Packaging;
 using Microsoft.Office.Interop.Word;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -635,32 +638,39 @@ namespace SoftwareEngineering1Project.Controllers
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {                                              
-                //saves the file in the app_data folder and then opens it
-                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                                       
-                file.SaveAs(path);
+                //saves the file in the temp_documents folder and then opens it
+                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                
+                file.SaveAs(path);    
 
-                Application app = new Application();
-                Document doc = app.Documents.Open(path);
+                //opens the word document
+                Package wordPackage = Package.Open(path, FileMode.Open, FileAccess.Read);
+                WordprocessingDocument doc = WordprocessingDocument.Open(wordPackage);
 
-                List<string> questions = new List<string>();
-                List<string> answers = new List<string>();
+
+                var body = doc.MainDocumentPart.Document.Body;
+                var paragraphs = body.ChildElements;
 
                 string currentQuestion = "";
                 string currentAnswer = "";
 
-                for (int i = 1; i <= doc.Paragraphs.Count; i++)
+                List<string> questions = new List<string>();
+                List<string> answers = new List<string>();
+
+                foreach (var paragraph in paragraphs)
                 {
-                    //grabs the first nine characters and checks to see if it specifies a question to follow  
-                    string checkForQuestion = new string(doc.Paragraphs[i].Range.Text.Trim().Take(9).ToArray());
-                    string checkForAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Take(7).ToArray());
+                    //grabs the text and check to see if the text belongs to a question or answer
+                    string text = paragraph.InnerText;
+
+                    string checkForQuestion = new string(text.Trim().Take(9).ToArray());
+                    string checkForAnswer = new string(text.Trim().Take(7).ToArray());
 
                     if (checkForQuestion == "Question:" || checkForQuestion == "question:")
                     {
                         //if it is a question it skips the first nine characters and adds it to the questions list
-                        currentQuestion  = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(9).ToArray());
+                        currentQuestion = new string(text.Trim().Skip(9).ToArray());
                         currentQuestion = "<p>" + currentQuestion + "</p>";
 
-                        //if there was a previous question, adds the previous's question to the answer list
+                        //if there was a previous answer, adds the previous's answer to the answer list
                         if (currentAnswer != "")
                         {
                             answers.Add(currentAnswer);
@@ -668,38 +678,30 @@ namespace SoftwareEngineering1Project.Controllers
                         }
 
                     }
-                    else if(checkForAnswer == "Answer:" || checkForAnswer == "answer:")
+                    else if (checkForAnswer == "Answer:" || checkForAnswer == "answer:")
                     {
                         questions.Add(currentQuestion);
                         currentQuestion = "";
 
-                        currentAnswer = new string(doc.Paragraphs[i].Range.Text.Trim().Skip(7).ToArray());
+                        currentAnswer = new string(text.Trim().Skip(7).ToArray());
                         currentAnswer = "<p>" + currentAnswer + "</p>";
                     }
                     //blank line in the document - skip
-                    else if (doc.Paragraphs[i].Range.Text.Trim() == "")
-                    {
+                    else if (text.Trim() == "")
                         continue;
-                    }
-                    //concatenates the answer if it appears in multiple paragraphs into a single string
+                    //concatenates the answer or question if it appears in multiple paragraphs into a single string
                     else
                     {
-                        if(currentAnswer == "")
-                        {
-                            currentQuestion += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
-                        }
-                        else
-                        {
-                            currentAnswer += "<p>" + doc.Paragraphs[i].Range.Text.Trim() + "</p>";
-                        }
+                        if (currentAnswer == "")
+                            currentQuestion += "<p>" + text.Trim() + "</p>";                        
+                        else                       
+                            currentAnswer += "<p>" + text.Trim() + "</p>";                        
                     }
                 }
-                //adds the last answer from the end of the document
                 answers.Add(currentAnswer);
 
-                //closes the document and app and then deletes the file from the server
                 doc.Close();
-                app.Quit();            
+                wordPackage.Close();               
                 System.IO.File.Delete(path);
                 
                 Models.Section selectedSection = questionDb.Sections.Find(sectionId);
@@ -719,11 +721,13 @@ namespace SoftwareEngineering1Project.Controllers
                     }
                     TempData["Message"] = new { Message = "Successfully Uploaded Questions", Type = "success" };
                     return RedirectToAction("Index");
-                }                            
+                }
+                else
+                {
+                    TempData["Message"] = new { Message = "Document is not in the correct format", Type = "error" };
+                }                          
             }
-            return RedirectToAction("UploadQuestinos");
-
-
+            return RedirectToAction("UploadQuestions");
         }
 
         protected override void Dispose(bool disposing)
