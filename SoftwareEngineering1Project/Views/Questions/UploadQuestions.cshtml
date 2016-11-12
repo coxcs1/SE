@@ -16,7 +16,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <hr />
+        <hr />        
 
         <div class="form-group">
             <label class="control-label col-md-2">Section</label>
@@ -28,7 +28,11 @@
         <div class="form-group">
             <label class="control-label col-md-2">Select a File to Upload</label>
             <div class="col-md-10">
-                <input class="btn btn-default form-control" type="file" id="file" name="file" />
+                <a href="http://team-loon.azurewebsites.net/Temp_Documents/ExampleQuestionDocument.pdf" target="_blank"
+                   class="btn btn-sm btn-primary" style="float: right;">
+                    <i class="fa fa-file-pdf-o"></i> View Example
+                </a>
+                <input class="btn btn-default form-control" type="file" id="file" name="file"/>               
             </div>
         </div>
 
