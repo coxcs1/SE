@@ -704,7 +704,7 @@ namespace SoftwareEngineering1Project.Controllers
 
                 //closes the document and app and then deletes the file from the server
                 doc.Close();
-                app.Quit();            
+                wordApp.Quit();            
                 System.IO.File.Delete(path);
                 
                 Models.Section selectedSection = questionDb.Sections.Find(sectionId);
