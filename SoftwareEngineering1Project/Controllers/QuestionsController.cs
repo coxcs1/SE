@@ -637,10 +637,12 @@ namespace SoftwareEngineering1Project.Controllers
             {                                              
                 //saves the file in the temp_documents folder and then opens it
                 path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                
-                file.SaveAs(path);                
+                file.SaveAs(path);
 
-                Application app = new Application();
-                Document doc = app.Documents.Open(path);
+                ApplicationClass wordApp = new ApplicationClass();
+                Document doc = wordApp.Documents.Open(path);
+                //Application app = new Application();
+                //Document doc = app.Documents.Open(path);               
 
                 Response.Write(doc.Characters.Count.ToString());
                 Response.End();
