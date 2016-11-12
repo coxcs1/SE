@@ -45,9 +45,9 @@ namespace SoftwareEngineering1Project
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
-                        "~/Content/site.css",
-                        "~/Content/font-awesome.css",
+                        "~/Content/site.css",                       
                         "~/Content/toastr.css",
+                        "~/Content/font-awesome.css",
                         "~/Content/DataTables/css/jquery.dataTables.css",
                         "~/Content/DataTables/images/details_close.png",
                         "~/Content/DataTables/images/details_open.png",
@@ -84,7 +84,7 @@ namespace SoftwareEngineering1Project
               ));
 			
 			bundles.Add(new StyleBundle("~/Content/select2").Include(
-              "~/Content/css/select2.css"));
+              "~/Content/select2Css/select2.css"));
         }
     }
 }
