@@ -141,6 +141,12 @@ function TestBuilderViewModel(model) {
     self.previousVisible = ko.observable(false);//hide the previous button
     self.nextVisible = ko.observable(true);//display the next button
 
+    //if it's the last slide then show the final submit
+    if (self.currentStep == self.steps().length - 1) {
+        self.nextVisible(false);
+        self.submitVisible(true);
+    }
+
     /**
      * This function goes to the next section of the test if there are any more.
      * @throws TestBuilderException
@@ -205,6 +211,7 @@ function TestBuilderViewModel(model) {
             toastr.error(exception.message);
         }
         console.log(ko.toJSON(this));
-        //TODO: Send this data to the back end for processing
+        //TODO: Send this data to the back end for processing - maybe have a module for selecting if the 
+        //student has passed the exam or not 
     };
 }

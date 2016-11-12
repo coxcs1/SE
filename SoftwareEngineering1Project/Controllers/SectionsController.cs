@@ -95,6 +95,12 @@ namespace SoftwareEngineering1Project.Controllers
                         text = "Delete",
                         url = "/sections/delete/{{id}}"
                     }
+                    ,
+                    new
+                    {
+                        text = "Students",
+                        url = "/sections/students/{{id}}"
+                    }
                 }).
                 setTableButtons(new List<object>()//add a link to create a section
                 {
@@ -244,6 +250,59 @@ namespace SoftwareEngineering1Project.Controllers
             db.SaveChanges();
             //add flash message for successful deletion
             TempData["Message"] = new { Message = "Successfully deleted section", Type = "success" };
+            return RedirectToAction("Index", new { id = section.CourseID });
+        }
+
+        /// <summary>
+        /// This function displays a form for adding/removing students from a section.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Students(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Section section = db.Sections.Find(id);
+            if (section == null)
+            {
+                return HttpNotFound();
+            }
+           
+            ViewBag.AllStudents = db.Students.ToList();//send a list of all students to the view for the select list
+            ViewBag.StudentsInSection = section.Students;//get the students in the section
+
+            return View(section);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [ActionName("Students")]
+        [HttpPost]
+        public ActionResult SaveStudents(FormCollection data)
+        {
+            var section = db.Sections.Find(Int32.Parse(data["ID"]));//fetch the section
+            section.Students.Clear();//clear out students in the section
+            db.SaveChanges();//save the changes
+            foreach (String element in data)
+            {
+                if (element.Contains("students"))
+                {
+                    var studentIDArray = data[element].Split(',');
+                    foreach (var studentID in studentIDArray)
+                    {
+                        var student = db.Students.Find(Int32.Parse(studentID));//find the student in the database
+                        student.Sections.Add(section);//add the section to that student
+                        db.SaveChanges();//save the changes
+                    }
+                }
+            }
+            //add flash message for successful deletion
+            TempData["Message"] = new { Message = "Successfully updated students", Type = "success" };
             return RedirectToAction("Index", new { id = section.CourseID });
         }
 

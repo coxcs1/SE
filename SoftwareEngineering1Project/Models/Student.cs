@@ -74,5 +74,10 @@ namespace SoftwareEngineering1Project.Models
         /// The tests they take. (Hopefully only one for their sake)
         /// </value>
         public virtual ICollection<Test> Tests { get; set; }
+
+        /// <summary>
+        /// The sections in which a student was enrolled.
+        /// </summary>
+        public virtual ICollection<Section> Sections { get; set; }
     }
 }
