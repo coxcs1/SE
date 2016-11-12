@@ -639,16 +639,14 @@ namespace SoftwareEngineering1Project.Controllers
             {                                              
                 //saves the file in the temp_documents folder and then opens it
                 path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                
-                file.SaveAs(path);
+                file.SaveAs(path);    
 
-                //Application app = new Application();
-                //Document doc = app.Documents.Open(path);     
-
+                //opens the word document
                 Package wordPackage = Package.Open(path, FileMode.Open, FileAccess.Read);
                 WordprocessingDocument doc = WordprocessingDocument.Open(wordPackage);
 
-                var body = doc.MainDocumentPart.Document.Body;
 
+                var body = doc.MainDocumentPart.Document.Body;
                 var paragraphs = body.ChildElements;
 
                 string currentQuestion = "";
@@ -659,6 +657,7 @@ namespace SoftwareEngineering1Project.Controllers
 
                 foreach (var paragraph in paragraphs)
                 {
+                    //grabs the text and check to see if the text belongs to a question or answer
                     string text = paragraph.InnerText;
 
                     string checkForQuestion = new string(text.Trim().Take(9).ToArray());
@@ -670,7 +669,7 @@ namespace SoftwareEngineering1Project.Controllers
                         currentQuestion = new string(text.Trim().Skip(9).ToArray());
                         currentQuestion = "<p>" + currentQuestion + "</p>";
 
-                        //if there was a previous question, adds the previous's question to the answer list
+                        //if there was a previous answer, adds the previous's answer to the answer list
                         if (currentAnswer != "")
                         {
                             answers.Add(currentAnswer);
@@ -689,7 +688,7 @@ namespace SoftwareEngineering1Project.Controllers
                     //blank line in the document - skip
                     else if (text.Trim() == "")
                         continue;
-                    //concatenates the answer if it appears in multiple paragraphs into a single string
+                    //concatenates the answer or question if it appears in multiple paragraphs into a single string
                     else
                     {
                         if (currentAnswer == "")
@@ -721,6 +720,10 @@ namespace SoftwareEngineering1Project.Controllers
                     }
                     TempData["Message"] = new { Message = "Successfully Uploaded Questions", Type = "success" };
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["Message"] = new { Message = "Document is not in the correct format", Type = "error" };
                 }                          
             }
             return RedirectToAction("UploadQuestions");
