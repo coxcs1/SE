@@ -636,8 +636,11 @@ namespace SoftwareEngineering1Project.Controllers
             if (file != null && file.ContentLength > 0)
             {                                              
                 //saves the file in the app_data folder and then opens it
-                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));                                       
-                file.SaveAs(path);
+                path = Path.Combine(Server.MapPath("~/Temp_Documents/"), Path.GetFileName(file.FileName));
+
+                Response.Write(path);
+                Response.End();
+                file.SaveAs(path);                
 
                 Application app = new Application();
                 Document doc = app.Documents.Open(path);
@@ -721,7 +724,7 @@ namespace SoftwareEngineering1Project.Controllers
                     return RedirectToAction("Index");
                 }                            
             }
-            return RedirectToAction("UploadQuestinos");
+            return RedirectToAction("UploadQuestions");
 
 
         }
