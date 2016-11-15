@@ -53,16 +53,14 @@
             <button data-bind="click: previousSection" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Previous Section</button>
         </div>
         <div data-bind="if: submitVisible" style="float: right;">
-            <button data-bind="click: finalSubmission" rel="modal:open" class="btn btn-primary">Final Submission <i class="fa fa-gavel" aria-hidden="true"></i></button>
+            <button data-bind="click: finalSubmission"  class="btn btn-primary">Final Submission <i class="fa fa-gavel" aria-hidden="true"></i></button>
         </div>
         <div data-bind="if: nextVisible" style="float: right;">
             <button data-bind="click: nextSection" class="btn btn-primary">Next Section <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
-<div id="ex1" style="display:none;">
-    <p>Thanks for clicking.  That felt good.  <a href="#" rel="modal:close">Close</a> or press ESC</p>
-</div>
+
 <script type="text/javascript">
     var viewModelData = @Html.Raw(ViewBag.ViewModel);
 </script>
@@ -70,5 +68,4 @@
 @section Scripts {
     @Scripts.Render("~/Scripts/Tests/TestBuilder.js")
     @Scripts.Render("~/Scripts/Tests/administer-test.js")
-    @Scripts.Render("~/Scripts/jquery*")
 }
