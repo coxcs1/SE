@@ -3,7 +3,10 @@
     ViewBag.Title = "Archive Question";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/questions/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Questions List
+    </a></h2>
 
 <h3>Are you sure you want to archive this question?</h3>
 <div>
@@ -14,7 +17,6 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Archive" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Archive" class="btn btn-default" />
         </div>
     }

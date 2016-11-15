@@ -207,9 +207,11 @@ function TestBuilderViewModel(model) {
                     throw new TestBuilderException(this.label() + ' has not been scored')
                 }
             });
+            
         } catch (exception) {
             toastr.error(exception.message);
         }
+
         console.log(ko.toJSON(this));
         //TODO: Send this data to the back end for processing - maybe have a module for selecting if the 
         //student has passed the exam or not 
