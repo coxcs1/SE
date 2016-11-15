@@ -273,6 +273,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\duck-silhouette-image.png" />
     <Content Include="Content\select2Css\select2.css" />
     <Content Include="Content\select2Css\select2.min.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
