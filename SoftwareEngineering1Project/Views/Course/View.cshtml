@@ -4,11 +4,12 @@
     ViewBag.Title = "View Course Information";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Courses List
+    </a>
+</h2>
 
 <div>
     @Html.Raw(Model)
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>

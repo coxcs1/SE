@@ -3,7 +3,11 @@
 @{
     ViewBag.Title = "Add a New Student";
 }
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/student/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Students List
+    </a>
+</h2>
 
 @using (Html.BeginForm())
 {
@@ -61,7 +65,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
