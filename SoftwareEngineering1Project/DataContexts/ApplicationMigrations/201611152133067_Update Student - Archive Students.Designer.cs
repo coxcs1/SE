@@ -7,13 +7,13 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ArchiveStudent : IMigrationMetadata
+    public sealed partial class UpdateStudentArchiveStudents : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ArchiveStudent));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateStudentArchiveStudents));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611082100287_Archive Student"; }
+            get { return "201611152133067_Update Student - Archive Students"; }
         }
         
         string IMigrationMetadata.Source
