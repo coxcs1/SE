@@ -33,7 +33,7 @@ namespace SoftwareEngineering1Project.Controllers
                         id = test.ID,
                         dateTaken = test.DateTaken.ToShortDateString(),
                         student = test.Student.FirstName + " " + test.Student.LastName,
-                        passed  = (test.Passed) ? "Yes" : "No"
+                        passed = (test.Passed) ? "Yes" : "No"
                     }
                 );
             }
@@ -203,6 +203,17 @@ namespace SoftwareEngineering1Project.Controllers
             db.Tests.Remove(test);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult ScoreQuestion(FormCollection data)
+        {
+            var Score = Int32.Parse(data["score"]);
+            var testQuestion = db.TestQuestions.Find(Int32.Parse(data["id"]));
+            testQuestion.QuestionScore = Score;
+            db.Entry(testQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { Success = "Successful" });
         }
 
         public ActionResult AdministerTest(int? id)

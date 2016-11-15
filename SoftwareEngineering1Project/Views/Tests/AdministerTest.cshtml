@@ -26,11 +26,11 @@
                                     <div class="form-group">
                                         <label class="col-sm-1 control-label required">Score</label>
                                         <div class="col-sm-3" data-bind="click: saveScore">
-                                            <div><input type="radio" value="1" data-bind="checked: score, attr: { name: id }" /> 1</div>
-                                            <div><input type="radio" value="2" data-bind="checked: score, attr: { name: id }" /> 2</div>
-                                            <div><input type="radio" value="3" data-bind="checked: score, attr: { name: id }" /> 3</div>
-                                            <div><input type="radio" value="4" data-bind="checked: score, attr: { name: id }" /> 4</div>
-                                            <div><input type="radio" value="5" data-bind="checked: score, attr: { name: id }" /> 5</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 1" /> 1</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 2" /> 2</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 3" /> 3</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 4" /> 4</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 5" /> 5</div>
                                         </div>
                                     </div>
                                 </div>
@@ -60,6 +60,29 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Did the student pass?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <div><input type="radio" data-bind="checkedValue : 1" /> Yes</div>
+                        <div><input type="radio" data-bind="checkedValue : 0" /> No</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bind="click: finalSubmitTest">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script type="text/javascript">
     var viewModelData = @Html.Raw(ViewBag.ViewModel);
