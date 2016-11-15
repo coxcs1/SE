@@ -247,6 +247,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201611151900156_Update Course Model - Core Boolean.Designer.cs">
       <DependentUpon>201611151900156_Update Course Model - Core Boolean.cs</DependentUpon>
     </Compile>
+	<Compile Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.Designer.cs">
+      <DependentUpon>201611082100287_Archive Student.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -1005,6 +1009,8 @@
     <Content Include="Views\Shared\_FlashMessengerPartial.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\Delete.cshtml" />
+	<Content Include="Views\Student\Archive.cshtml" />
+    <Content Include="Views\Student\ViewArchived.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Teacher\Update.cshtml" />
@@ -1082,6 +1088,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611151900156_Update Course Model - Core Boolean.resx">
       <DependentUpon>201611151900156_Update Course Model - Core Boolean.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="DataContexts\ApplicationMigrations\201611082100287_Archive Student.resx">
+      <DependentUpon>201611082100287_Archive Student.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
