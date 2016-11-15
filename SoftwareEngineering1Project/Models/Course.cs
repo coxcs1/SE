@@ -52,7 +52,13 @@ namespace SoftwareEngineering1Project.Models
         [RegularExpression(@"^\d{4}$", ErrorMessage = "Must enter a 4 digit course number Eg.(1100)")]
         [Display(Name ="Course Number")]
         public int CourseAttributeNumber { get; set; }
-
+        /// <summary>
+        /// Gets or sets the core course boolean indentifier.
+        /// </summary>
+        /// <value>
+        /// The core course boolean identifier.
+        /// </value>
+        public Boolean Core { get; set; }
         /// <summary>
         /// Gets or sets the profiles.
         /// </summary>

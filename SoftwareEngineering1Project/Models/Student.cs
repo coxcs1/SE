@@ -68,6 +68,14 @@ namespace SoftwareEngineering1Project.Models
         public string Notes { get; set; }
 
         /// <summary>
+        /// Archives students
+        /// </summary>
+        /// <value>
+        /// 
+        /// </value>
+        public bool Archived { get; set; }
+
+        /// <summary>
         /// Gets or sets the tests.
         /// </summary>
         /// <value>
