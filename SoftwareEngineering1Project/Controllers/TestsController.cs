@@ -216,7 +216,11 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 return HttpNotFound();
             }
-            
+            if(test.Student.Sections.Count == 0)
+            {
+                TempData["Message"] = new { Message = "There not enough questions in this section!", Type = "error" };
+                return RedirectToAction("Index");
+            }
             var stepCounter = 1;//step counter
             var totalQuestionCounter = 1;//keeps track of total questions (used in field names)
             var administrationModelData = new List<object>();//json model data
@@ -226,6 +230,24 @@ namespace SoftwareEngineering1Project.Controllers
                 var step = new { Step = stepCounter, Section = section.Course.CourseName, Questions = new List<object>() };//set up step object
                 foreach (var question in test.TestQuestions)//loop through each test question and add question data
                 {
+                    if(section.Course.Core == true)
+                    {
+                        if(section.Questions.Count < 5)
+                        {
+                            //insert error here
+                            TempData["Message"] = new { Message = "There not enough questions in this section!", Type = "error" };
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    else
+                    {
+                        if (section.Questions.Count < 3)
+                        {
+                            //insert error here
+                            TempData["Message"] = new { Message = "There not enough questions in this section!", Type = "error" };
+                            return RedirectToAction("index");
+                        }
+                    }
                     if (question.Question.Section.CourseID == section.CourseID)
                     {
                         step.Questions.Add(new

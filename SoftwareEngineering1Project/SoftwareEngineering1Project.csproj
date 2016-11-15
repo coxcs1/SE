@@ -243,6 +243,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201611032331247_Students to Sections.Designer.cs">
       <DependentUpon>201611032331247_Students to Sections.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201611151900156_Update Course Model - Core Boolean.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611151900156_Update Course Model - Core Boolean.Designer.cs">
+      <DependentUpon>201611151900156_Update Course Model - Core Boolean.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -1074,6 +1078,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611032331247_Students to Sections.resx">
       <DependentUpon>201611032331247_Students to Sections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611151900156_Update Course Model - Core Boolean.resx">
+      <DependentUpon>201611151900156_Update Course Model - Core Boolean.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
