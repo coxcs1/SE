@@ -94,5 +94,5 @@ $(document).ready(function () {
     console.log(viewModelData);
 
     //initialize view model
-    ko.applyBindings(new TestBuilderViewModel(viewModelData));
+    ko.applyBindings(new TestBuilderViewModel(viewModelData, testModelData));
 });

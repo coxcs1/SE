@@ -11,7 +11,14 @@
     <div class="panel-body">
         <!--Loop through each step in the testing process-->
         <div data-bind="foreach: steps">
-            <h4 data-bind="text: name, visible: hidden">Section names go here</h4>
+            <div class="row clearfix">
+                <div class="col-md-4"><h4 data-bind="text: name, visible: hidden">Section names go here</h4></div>
+                <div class="col-md-8 text-right">
+                    <button class="btn btn-primary" data-bind="click: showAllQuestions">
+                    <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> Show All Questions
+                    </button>
+                </div>
+            </div>
             <div class="form-horizontal">
                 <!--Loop through each question-->
                 <div data-bind="foreach: questions, visible: hidden">
@@ -26,11 +33,11 @@
                                     <div class="form-group">
                                         <label class="col-sm-1 control-label required">Score</label>
                                         <div class="col-sm-3" data-bind="click: saveScore">
-                                            <div><input type="radio" value="1" data-bind="checked: score, attr: { name: id }" /> 1</div>
-                                            <div><input type="radio" value="2" data-bind="checked: score, attr: { name: id }" /> 2</div>
-                                            <div><input type="radio" value="3" data-bind="checked: score, attr: { name: id }" /> 3</div>
-                                            <div><input type="radio" value="4" data-bind="checked: score, attr: { name: id }" /> 4</div>
-                                            <div><input type="radio" value="5" data-bind="checked: score, attr: { name: id }" /> 5</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 1" /> 1</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 2" /> 2</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 3" /> 3</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 4" /> 4</div>
+                                            <div><input type="radio" data-bind="checked: score, attr: { name: id }, checkedValue : 5" /> 5</div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,8 +68,35 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Final Submission</h4>
+            </div>
+            <div class="modal-body">
+                <div class="well well-sm">
+                    <p>Based off of the following administration, did the student pass the oral exam?</p>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <div><input type="radio" data-bind="checked: passFail, click: passFailSumbit, checkedValue : true, attr : { value : true }" /> Yes</div>
+                        <div><input type="radio" data-bind="checked: passFail, click: passFailSumbit, checkedValue : false, attr : { value : false }" /> No</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bind="click: finalSubmitTest">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript">
     var viewModelData = @Html.Raw(ViewBag.ViewModel);
+    var testModelData = @Html.Raw(ViewBag.TestModel);
 </script>
 
 @section Scripts {
