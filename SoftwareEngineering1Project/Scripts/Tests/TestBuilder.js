@@ -54,14 +54,27 @@ function Step(id, name, template, questions, hidden) {
     };
 
     /**
+    * This function shows all questions for a section at once.
+    */
+    self.showAllQuestions = function () {
+        $.each(self.questions(), function () {
+            this.hidden(true);
+            self.questionCount++;
+        });
+    };
+
+    /**
      * This function will grab a new question from the server and replace the data.
      * @param question
      */
     self.generateNewQuestion = function (question) {
-        question.text("New Question");
-        question.answer("New Answer");
-        question.score(0);
-        //TODO: Create an AJAX call to fetch a new question
+        $.get('/tests/newquestion/' + question.id, function (data) {
+            console.log(data);
+            question.id = data.ID;
+            question.text(data.Text);
+            question.answer(data.Answer);
+            question.score(0);
+        });
     };
 }
 
@@ -93,10 +106,8 @@ function Question(id, label, fieldName, text, answer, score, hidden) {
     self.saveScore = function (question) {
         var score = question.score();
         var id = question.id;
-        console.log(question);
-        //TODO: Create an AJAX post request to save the score in the database
-        $.post('/tests/scorequestion', { id: id, score: score }, function () {
-            toastr.success('Successfully scored question');
+        $.post('/tests/scorequestion', { id: id, score: score }, function (data) {
+            toastr.success(data.Success);
         });
         return true;
     };
@@ -136,10 +147,11 @@ function getSteps(model) {
  * @param model
  * @constructor
  */
-function TestBuilderViewModel(model) {
+function TestBuilderViewModel(model, testModel) {
     var self = this;//adjust the context
-
+    self.id = testModel.TestID;//set the id of the test
     self.currentStep = 0;//set initial step to the first one
+    self.passFail = ko.observable(testModel.PassFail);
     self.steps = getSteps(model);//fetch all steps from the json data
     self.submitVisible = ko.observable(false);//hide the final submit button
     self.previousVisible = ko.observable(false);//hide the previous button
@@ -217,7 +229,18 @@ function TestBuilderViewModel(model) {
         }
     };
 
+    self.passFailSumbit = function (element) {
+        return true;
+    };
+
     self.finalSubmitTest = function (element) {
-        console.log(element);
+        $.post('/tests/scoretest', { id: self.id, passFail: element.passFail() }, function (data) {
+            toastr.success(data.Success);
+            setTimeout(function () {
+                window.location = data.Redirect;
+            }, 3000);
+
+        });
+        return true;
     };
 }

@@ -213,7 +213,98 @@ namespace SoftwareEngineering1Project.Controllers
             testQuestion.QuestionScore = Score;
             db.Entry(testQuestion).State = EntityState.Modified;
             db.SaveChanges();
-            return Json(new { Success = "Successful" });
+            //add flash message for successful creation
+            return Json(new { Success = "Successfully scored test" });
+        }
+
+        public ActionResult NewQuestion(int? id)
+        {
+            TestQuestion oldTestQuestion = db.TestQuestions.Find(id);
+            Test test = db.Tests.Find(oldTestQuestion.TestID);
+            Section section = db.Sections.Find(oldTestQuestion.Question.SectionID);
+
+            List<Question> possibleQuestions = section.Questions.ToList(); // all questions eligible for this section
+            possibleQuestions = ShuffleQuestions(possibleQuestions);
+
+            if (true)
+            {
+                if (possibleQuestions.Count <= 5)
+                {
+                    return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                if (possibleQuestions.Count <= 3)
+                {
+                    return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            Boolean foundQuestion = false; // determines whether a new question has been found
+            Boolean match = false;  // determines whether the possible question matches an existing question on the test
+            int remainingQuestions = possibleQuestions.Count; // determines how many possible questions remain
+            int step = 0; // controls which possible question is being checked
+            Question possibleQuestion = new Question(); // placeholder for potential replacement question
+
+            while (!foundQuestion)
+            {
+                possibleQuestion = possibleQuestions[step];
+
+                foreach (TestQuestion tq in test.TestQuestions)
+                {
+                    if (possibleQuestion.ID == tq.QuestionID)
+                    {
+                        // indicates a match was found if the possible question is the same as one of the
+                        // existing questions
+                        match = true;
+                    }
+                }
+
+                if (!match)
+                {
+                    // indicates the possible question is qualified to be the replacement question
+                    foundQuestion = true;
+                }
+                else
+                {
+                    remainingQuestions--;
+                    step++;
+                    match = false;
+
+                    if (remainingQuestions <= 0)
+                    {
+                        // sends an error if all possible questions are already part of the test
+                        return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            //change out the question for that test question
+            oldTestQuestion.Question = possibleQuestion;
+            db.Entry(oldTestQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            // builds question as JSON
+            var jsonQuestion = new
+            {
+                ID = oldTestQuestion.ID,
+                Text = Regex.Replace(oldTestQuestion.Question.Text, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+                Answer = Regex.Replace(oldTestQuestion.Question.Answer, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+            };
+
+            return Json(jsonQuestion, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ScoreTest(FormCollection data)
+        {
+            var passFail = Boolean.Parse(data["passFail"]);
+            var test = db.Tests.Find(Int32.Parse(data["id"]));
+            test.Passed = passFail;
+            db.Entry(test).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { Success = "Successfully scored test", Redirect = "/tests/index" });
         }
 
         public ActionResult AdministerTest(int? id)
@@ -257,7 +348,9 @@ namespace SoftwareEngineering1Project.Controllers
             }
 
             var json = Json(administrationModelData);//build a JSONResult
+            var testJson = Json(new { TestID = test.ID, PassFail = test.Passed });
             ViewBag.ViewModel = new JavaScriptSerializer().Serialize(json.Data);//serialize the json data into a string
+            ViewBag.TestModel = new JavaScriptSerializer().Serialize(testJson.Data);//pass test data to the front end
             ViewBag.StudentName = test.Student.FirstName + " " + test.Student.LastName;//pass the student's name to the view
 
             return View();
