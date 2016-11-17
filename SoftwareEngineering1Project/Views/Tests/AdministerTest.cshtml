@@ -11,8 +11,8 @@
     <div class="panel-body">
         <!--Loop through each step in the testing process-->
         <div data-bind="foreach: steps">
-            <div class="row clearfix">
-                <div class="col-md-4"><h4 data-bind="text: name, visible: hidden">Section names go here</h4></div>
+            <div class="row clearfix" data-bind="visible: hidden">
+                <div class="col-md-4"><h4 data-bind="text: name">Section names go here</h4></div>
                 <div class="col-md-8 text-right">
                     <button class="btn btn-primary" data-bind="click: showAllQuestions">
                     <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> Show All Questions
