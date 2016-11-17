@@ -3,7 +3,12 @@
     ViewBag.Title = "Administer Test";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>
+    @ViewBag.Title
+    <a href="/tests/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Test List
+    </a>
+</h2>
 
 <div class="panel panel-default">
     <div class="panel-heading"><h3>Test for @ViewBag.StudentName</h3></div>
@@ -69,13 +74,27 @@
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document" style="width: 90%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Final Submission</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: auto">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Section</th>
+                        <th>Question</th>
+                        <th>Score</th>
+                    </tr>
+                    <tbody id="finalScoreTable">
+
+                    </tbody>
+                </table>
+                <div id="finalScore">
+
+                </div>
+                <br />
                 <div class="well well-sm">
                     <p>Based off of the following administration, did the student pass the oral exam?</p>
                 </div>

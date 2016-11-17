@@ -212,6 +212,36 @@ function TestBuilderViewModel(model, testModel) {
     };
 
     self.finalSubmission = function () {
+        $.get('/tests/gettestresults/' + self.id, function (data) {
+            var tableData = '';
+            var totalScore = 0;
+            var count = 0;
+            $.each(data, function () {
+                var self = this;
+                tableData += '<tr>';
+
+                tableData += '<td>';
+                tableData += self.Section;
+                tableData += '</td>';
+
+                tableData += '<td>';
+                tableData += self.Question;
+                tableData += '</td>';
+
+                tableData += '<td>';
+                tableData += self.Score;
+                tableData += '</td>';
+
+                tableData += '</tr>';
+
+                totalScore += self.Score;
+                count += 5;
+            });
+
+            $('#finalScoreTable').html(tableData);
+            $('#finalScore').html("Total Score: " + totalScore + "/" + count);
+        });
+
         var currentStep = self.steps()[self.currentStep];//set the current step
         //check to see if any questions haven't been administered
         try {

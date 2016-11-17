@@ -1,0 +1,52 @@
+﻿@model SoftwareEngineering1Project.Models.Test
+
+@{
+    ViewBag.Title = "Archive Test";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to archive this test?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Student.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Student.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Passed)
+        </dt>
+
+            @if (Model.Archived)
+            {
+                <dd>Yes</dd>
+            }
+            else
+            {
+                <dd>No</dd>
+            }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateTaken)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateTaken)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Archive" class="btn btn-default" /> |
+            @Html.ActionLink("Back to Tests", "Index")
+        </div>
+    }
+</div>
