@@ -26,16 +26,19 @@ namespace SoftwareEngineering1Project.Controllers
             var testsList = new List<object>();
             foreach (var test in tests)
             {
-                //adds new object to list - setup like key-value pairs
-                testsList.Add(
-                    new
-                    {
-                        id = test.ID,
-                        dateTaken = test.DateTaken.ToShortDateString(),
-                        student = test.Student.FirstName + " " + test.Student.LastName,
-                        passed = (test.Passed) ? "Yes" : "No"
-                    }
-                );
+                if (!test.Archived)
+                {
+                    //adds new object to list - setup like key-value pairs
+                    testsList.Add(
+                        new
+                        {
+                            id = test.ID,
+                            dateTaken = test.DateTaken.ToShortDateString(),
+                            student = test.Student.FirstName + " " + test.Student.LastName,
+                            passed = (test.Passed) ? "Yes" : "No"
+                        }
+                    );
+                }
             }
 
             //create the data table for the index page
@@ -72,13 +75,8 @@ namespace SoftwareEngineering1Project.Controllers
                     },
                     new
                     {
-                        text = "Edit",
-                        url = "/tests/edit/{{id}}"
-                    },
-                    new
-                    {
-                        text = "Delete",
-                        url = "/tests/delete/{{id}}"
+                        text = "Archive",
+                        url = "/tests/archive/{{id}}"
                     }
                 }).
                 setTableButtons(new List<object>()//add a link to create a teacher
@@ -87,9 +85,62 @@ namespace SoftwareEngineering1Project.Controllers
                     {
                         text = "Create Test",
                         url = "/tests/create"
+                    },
+                    new
+                    {
+                        text = "Archived Tests",
+                        url = "/tests/archivedindex"
                     }
                 });
 
+
+            return View(testsDataTableModel.Render());
+        }
+
+        public ActionResult ArchivedIndex()
+        {
+            var tests = db.Tests.Where(t => t.Archived == true).ToList();
+            //build a list of tests for the data table
+            var testsList = new List<object>();
+            foreach (var test in tests)
+            {
+                //adds new object to list - setup like key-value pairs
+                testsList.Add(
+                    new
+                    {
+                        id = test.ID,
+                        dateTaken = test.DateTaken.ToShortDateString(),
+                        student = test.Student.FirstName + " " + test.Student.LastName,
+                        passed = (test.Passed) ? "Yes" : "No"
+                    }
+                );
+            }
+
+            //create the data table for the index page
+            //I used the method chaining that I build into the DataTableModel
+            DataTableModel testsDataTableModel = new DataTableModel();
+            testsDataTableModel.
+                setTitle("Tests").//set the title
+                setData(testsList).//pass in the teacher list
+                setSearchSort(true).//initializes the jQuery data table library
+                setHeaders(new List<object>()//add the headers and map them to the teachersList data
+                {
+                    new
+                    {
+                        Name = "Student",
+                        Field = "student"
+                    },
+                    new
+                    {
+                        Name = "Date Taken",
+                        Field = "dateTaken"
+                    },
+                    new
+                    {
+                        Name = "Passed",
+                        Field = "passed"
+                    }
+                });
 
             return View(testsDataTableModel.Render());
         }
@@ -139,48 +190,8 @@ namespace SoftwareEngineering1Project.Controllers
             return View(test);
         }
 
-        // GET: Tests/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Test test = db.Tests.Find(id);
-            if (test == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName", test.StudentID);
-            return View(test);
-        }
-
-        // POST: Tests/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
-        {
-            if (ModelState.IsValid)
-            {
-                var testQuestions = db.TestQuestions.Where(tq => tq.TestID == test.ID);
-                foreach (var question in testQuestions)
-                {
-                    db.TestQuestions.Remove(question);
-                }
-                //save the test
-                db.Entry(test).State = EntityState.Modified;
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName", test.StudentID);
-            return View(test);
-        }
-
         // GET: Tests/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Archive(int? id)
         {
             if (id == null)
             {
@@ -195,14 +206,34 @@ namespace SoftwareEngineering1Project.Controllers
         }
 
         // POST: Tests/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult ArchiveConfirmed(int id)
         {
             Test test = db.Tests.Find(id);
-            db.Tests.Remove(test);
-            db.SaveChanges();
+            test.Archived = true;//make the test archived
+            db.Entry(test).State = EntityState.Modified;//let the ORM know object has been modified
+            db.SaveChanges();//save the changes
+            TempData["Message"] = new { Message = "Successfully archived test", Type = "success" };
             return RedirectToAction("Index");
+        }
+
+        public ActionResult GetTestResults(int? id)
+        {
+            Test test = db.Tests.Find(id);
+            List<object> questions = new List<object>();
+            foreach (var testQuestion in test.TestQuestions)
+            {
+                questions.Add(
+                    new {
+                        Section = testQuestion.Question.Section.Course.CourseName,
+                        Question = Regex.Replace(testQuestion.Question.Text, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+                        Score = testQuestion.QuestionScore
+                    }    
+                );
+            }
+
+            return Json(questions, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
