@@ -226,7 +226,7 @@ namespace SoftwareEngineering1Project.Controllers
             List<Question> possibleQuestions = section.Questions.ToList(); // all questions eligible for this section
             possibleQuestions = ShuffleQuestions(possibleQuestions);
 
-            if (true)
+            if (section.Course.Core)
             {
                 if (possibleQuestions.Count <= 5)
                 {
