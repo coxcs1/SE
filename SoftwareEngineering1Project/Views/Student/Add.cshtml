@@ -51,6 +51,18 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-md-2">Sections</label>
+            <div class="col-md-10">
+                <select class="form-control" multiple="multiple" name="sections">
+                    @foreach (var sectionCourse in ViewBag.AllSections)
+                    {
+                        <option value="@sectionCourse.ID">@sectionCourse.getCourseNameYearAndTeacher()</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.Notes, new { @class = "form-control ckeditor" })
@@ -64,4 +76,7 @@
             </div>
         </div>
     </div>
+}
+@section Scripts {
+    @Scripts.Render("~/Scripts/Tests/Students.js")
 }

@@ -82,6 +82,11 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         public virtual Course Course { get; set; }
 
+        public string getCourseNameYearAndTeacher()
+        {
+            return Course.CourseName + " (" + AcademicYear + ") - " + Teacher.FullName;
+        }
+
         /// <summary>
         /// Gets or sets the questions.
         /// </summary>

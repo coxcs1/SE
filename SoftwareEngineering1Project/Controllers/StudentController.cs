@@ -154,9 +154,8 @@ namespace SoftwareEngineering1Project.Controllers
         /// <returns></returns>
         public ActionResult Add()
         {
-            //uses a ViewModel to be able to store all needed information
-            Student newStudent = new Student();
-            return View(newStudent);
+            ViewBag.AllSections = _studentDb.Sections.Include(s => s.Course).ToList();
+            return View();
         }
 
         /// <summary>
@@ -166,11 +165,11 @@ namespace SoftwareEngineering1Project.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Add(Student newStudent)
+        public ActionResult Add(Student newStudent, FormCollection data)
         {
             //checks to make sure everything was filled out appropriately in accordance
             //to the tags in the ViewModel
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 //creates the student from the information entered
                 Student student = new Student();
@@ -183,10 +182,26 @@ namespace SoftwareEngineering1Project.Controllers
                 //saves both the profile and the user to the database                    
                 _studentDb.Students.Add(student);
                 _studentDb.SaveChanges();
+
+                foreach (String element in data)
+                {
+                    if (element.Contains("sections"))
+                    {
+                        var sectionIDArray = data[element].Split(',');
+                        foreach (var id in sectionIDArray)
+                        {
+                            var section = _studentDb.Sections.Find(Int32.Parse(id));
+                            section.Students.Add(student);
+                            _studentDb.SaveChanges();
+                        }
+                    }
+                }
+
                 //add flash message for successful adding
                 TempData["Message"] = new { Message = "Successfully added a student", Type = "success" };
                 return RedirectToAction("Index", "Student");
-            }           
+            }
+            ViewBag.AllSections = _studentDb.Sections.Include(s => s.Course).ToList();
             return View(newStudent);
         }
 
@@ -251,6 +266,9 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.AllSections = _studentDb.Sections.Include(s => s.Course).ToList();
+
             return View(student);
         }
 
@@ -260,17 +278,35 @@ namespace SoftwareEngineering1Project.Controllers
         /// <param name="student"></param>
         /// <returns>Mixed</returns>
         [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult Edit(Student student)
+        [ValidateInput(true)]
+        public ActionResult Edit(Student student, FormCollection data)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                student.Sections.Clear();
                 _studentDb.Entry(student).State = EntityState.Modified;//let the ORM know object has been modified
                 _studentDb.SaveChanges();//persist changes
+
+                foreach (String element in data)
+                {
+                    if (element.Contains("sections"))
+                    {
+                        var sectionIDArray = data[element].Split(',');
+                        foreach (var id in sectionIDArray)
+                        {
+                            var section = _studentDb.Sections.Find(Int32.Parse(id));
+                            section.Students.Add(student);
+                            _studentDb.SaveChanges();
+                        }
+                    }
+                }
+
                 //add flash message for successful udpate
                 TempData["Message"] = new { Message = "Successfully updated student", Type = "success" };
                 return RedirectToAction("Index");
             }
+
+            ViewBag.AllSections = _studentDb.Sections.Include(s => s.Course).ToList();
             return View(student);
         }
         /// <summary>
@@ -442,46 +478,13 @@ namespace SoftwareEngineering1Project.Controllers
 
             };
             studentTable.Data = allStudentProfiles;
-
-            //sets the actions that will display for every entry in the table
-            //uses a str replace to replace the {{id}} values with the actual id
-            //id matches to the key seen earlier
-            studentTable.Actions = new List<object>()
-            {
-                new
-                {
-                    text = "View",
-                    url = "/student/view/{{id}}"
-                },
-                new
-                {
-                    text = "Edit",
-                    url = "/student/edit/{{id}}"
-                },
-                new
-                {
-                    text = "Archive",
-                    url = "/student/archive/{{id}}"
-                }
-            };
             //allows the table to be searched and sorted
             studentTable.SearchSort = true;
-            //adds the table button for adding a student
-            studentTable.TableButtons = new List<object>()
-            {
-                new
-                {
-                    text = "Create Student",
-                    url = "/student/add"
-                }
-            };
 
             string modifiedTable = studentTable.Render().ToString();
 
             //render function returns an HtmlString to the view
             return View(new HtmlString(modifiedTable));
         }
-
-
     }
 }
