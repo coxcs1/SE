@@ -243,7 +243,7 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.TableButtons = new Dictionary<string, string>()
             {
                 {"/student/edit/" + studentInfo.ID, "Edit" },
-                {"/student/delete/" + studentInfo.ID, "Delete" },
+                {"/student/archive/" + studentInfo.ID, "Archive" },
             };
 
             //render function returns an HtmlString to the view
