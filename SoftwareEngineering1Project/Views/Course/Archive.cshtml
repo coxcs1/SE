@@ -1,12 +1,12 @@
 ﻿@model SoftwareEngineering1Project.Models.Course
 
 @{
-    ViewBag.Title = "Archive Test";
+    ViewBag.Title = "Archive Course";
 }
 
-<h2>ViewBag.Title
+<h2>@ViewBag.Title
     <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
-        <i class="fa fa-arrow-left"></i>Back to Course List
+        <i class="fa fa-arrow-left"></i> Back to Course List
     </a>
 </h2>
 
@@ -23,7 +23,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DeptAbbreviation)
+            Dept. Abbr.
         </dt>
 
         <dd>

@@ -105,8 +105,8 @@ namespace SoftwareEngineering1Project.Controllers
 
                 new
                 {
-                    text = "Delete",
-                    url = "/course/delete/{{id}}"
+                    text = "Archive",
+                    url = "/course/archive/{{id}}"
                 },
                 new
                 {
@@ -122,6 +122,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Add Course",
                     url = "/course/add"
+                },
+                new
+                {
+                    text = "View Archived Courses",
+                    url = "/course/archivedindex"
                 }
             };
 
@@ -214,7 +219,7 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.TableButtons = new Dictionary<string, string>()
             {
                 {"/course/edit/" + course.ID, "Edit" },
-                {"/course/delete/" + course.ID, "Delete" },
+                {"/course/archive/" + course.ID, "Archive" },
             };
 
             //render function returns an HtmlString to the view
@@ -333,7 +338,7 @@ namespace SoftwareEngineering1Project.Controllers
             course.Archived = true;
             _courseDb.Entry(course).State = EntityState.Modified;
             _courseDb.SaveChanges();
-            TempData["Message"] = new { Message = "Successfully archived test", Type = "success" };
+            TempData["Message"] = new { Message = "Successfully archived course", Type = "success" };
             return RedirectToAction("Index");
         }
 
@@ -414,14 +419,7 @@ namespace SoftwareEngineering1Project.Controllers
             };
 
             courseTable.SearchSort = true;
-            courseTable.TableButtons = new List<object>()
-            {
-                new
-                {
-                    text = "Add Course",
-                    url = "/course/add"
-                }
-            };
+
 
             string modifiedTable = courseTable.Render().ToString();
             return View(new HtmlString(modifiedTable));

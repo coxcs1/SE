@@ -161,6 +161,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Upload Questions",
                     url = "/Questions/UploadQuestions"
+                },
+                new
+                {
+                    text = "View Archived Questions",
+                    url = "/Questions/viewarchive"
                 }
             };
 
