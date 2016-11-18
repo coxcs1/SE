@@ -4,7 +4,11 @@
     ViewBag.Title = "Archive Test";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/tests/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Test List
+    </a>
+</h2>
 
 <h3>Are you sure you want to archive this test?</h3>
 <div>
@@ -45,8 +49,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Archive" class="btn btn-default" /> |
-            @Html.ActionLink("Back to Tests", "Index")
+            <input type="submit" value="Archive" class="btn btn-default" />
         </div>
     }
 </div>

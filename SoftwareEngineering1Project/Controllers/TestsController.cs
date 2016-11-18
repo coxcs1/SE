@@ -163,7 +163,7 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Tests/Create
         public ActionResult Create()
         {
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName");
+            ViewBag.StudentID = new SelectList(db.Students, "ID", "FullName");
             return View();
         }
 

@@ -615,7 +615,7 @@ namespace SoftwareEngineering1Project.Controllers
                 }
 
                 string input = "<input type='hidden' name='sectionId' id='sectionId' value='#val#'>" +
-                                     "<label class='control-label col-md-2'>"
+                                     "<label class='control-label'>"
                                      + sectionSelected.Course.CourseName + ", " + 
                                      sectionSelected.Semester + " " + sectionSelected.AcademicYear + ", " + 
                                      sectionSelected.Teacher.LastName + "</label>";

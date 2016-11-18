@@ -4,7 +4,11 @@
     ViewBag.Title = "Delete " + Model.GetFullName();
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/teacher/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Teachers List
+    </a>
+</h2>
 <hr />
 <div>
     @ViewBag.Table.Render()

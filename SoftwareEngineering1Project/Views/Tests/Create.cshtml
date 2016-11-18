@@ -1,5 +1,15 @@
 ﻿@model SoftwareEngineering1Project.Models.Test
 
+@{
+    ViewBag.Title = "Create Test";
+}
+
+<h2>@ViewBag.Title
+    <a href="/tests/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Test List
+    </a>
+</h2>
+
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
