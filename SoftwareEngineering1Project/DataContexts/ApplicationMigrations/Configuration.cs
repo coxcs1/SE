@@ -46,7 +46,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Software Systems Engineering",
                     CourseAttributeNumber = 5200,
-                    DeptAbbreviation = "CSCI"                   
+                    DeptAbbreviation = "CSCI" ,
+                    Core = true                  
                 };
                 context.Courses.Add(c1);
 
@@ -54,7 +55,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Software Design",
                     CourseAttributeNumber = 5300,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = true
                 };
                 context.Courses.Add(c2);
 
@@ -62,7 +64,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Software Project Management",
                     CourseAttributeNumber = 5230,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = true
                 };
                 context.Courses.Add(c3);
 
@@ -74,7 +77,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Distributed Systems",
                     CourseAttributeNumber = 5150,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c5);
 
@@ -82,7 +86,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Analysis of Algorithms",
                     CourseAttributeNumber = 5620,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c6);
 
@@ -90,7 +95,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Database Design",
                     CourseAttributeNumber = 5250,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c7);
 
@@ -98,7 +104,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Software Verification and Validation",
                     CourseAttributeNumber = 5220,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c8);
                 #endregion
@@ -108,7 +115,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Advanced Networking",
                     CourseAttributeNumber = 5410,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c9);
 
@@ -116,7 +124,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "E-Commerce Implementation",
                     CourseAttributeNumber = 5710,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c10);
 
@@ -124,7 +133,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Enterprise Information Systems",
                     CourseAttributeNumber = 5730,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c11);
 
@@ -132,7 +142,8 @@ namespace SoftwareEngineering1Project.DataContexts.ApplicationMigrations
                 {
                     CourseName = "Networking and Information Security",
                     CourseAttributeNumber = 5460,
-                    DeptAbbreviation = "CSCI"
+                    DeptAbbreviation = "CSCI",
+                    Core = false
                 };
                 context.Courses.Add(c12);
                 #endregion
