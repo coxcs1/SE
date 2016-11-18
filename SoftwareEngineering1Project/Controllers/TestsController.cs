@@ -428,7 +428,7 @@ namespace SoftwareEngineering1Project.Controllers
                 List<Question> unshuffledQuestions = sec.Questions.ToList();
                 List<Question> shuffledQuestions = ShuffleQuestions(unshuffledQuestions);
 
-                if (true)// course is a core course
+                if (sec.Course.Core == true)
                 {
 
                     for (int i = 0; i < 5; i++)
