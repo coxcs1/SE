@@ -1,0 +1,74 @@
+﻿@model SoftwareEngineering1Project.Models.Course
+
+@{
+    ViewBag.Title = "Archive Test";
+}
+
+<h2>ViewBag.Title
+    <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i>Back to Course List
+    </a>
+</h2>
+
+<h3>Are you sure you want to archive this course?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeptAbbreviation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeptAbbreviation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseAttributeNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseAttributeNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Core)
+        </dt>
+        @if (Model.Core)
+        {
+            <dd>Yes</dd>
+        }
+        else
+        {
+            <dd>No</dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Archived)
+        </dt>
+        @if (Model.Archived)
+        {
+            <dd>Yes</dd>
+        }
+        else
+        {
+            <dd>No</dd>
+        }
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Archive" class="btn btn-default" />
+        </div>
+    }
+</div>

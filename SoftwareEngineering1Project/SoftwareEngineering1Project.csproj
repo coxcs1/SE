@@ -1037,6 +1037,8 @@
     <Content Include="Views\Tests\AdministerTest.cshtml" />
     <Content Include="Views\Sections\Students.cshtml" />
     <Content Include="Views\Tests\ArchivedIndex.cshtml" />
+    <Content Include="Views\Course\Archive.cshtml" />
+    <Content Include="Views\Course\ArchivedIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

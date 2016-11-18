@@ -60,6 +60,13 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         public Boolean Core { get; set; }
         /// <summary>
+        /// Gets or sets the archived course boolean indentifier.
+        /// </summary>
+        /// <value>
+        /// The archived course boolean identifier.
+        /// </value>
+        public Boolean Archived { get; set; }
+        /// <summary>
         /// Gets or sets the profiles.
         /// </summary>
         /// <value>
