@@ -42,6 +42,10 @@ namespace SoftwareEngineering1Project.Models
         /// </value>
         [Required]
         public DateTime DateTaken { get; set; }
+        /// <summary>
+        /// Determines whether the test has been archived.
+        /// </summary>
+        public bool Archived { get; set; }
 
         /// <summary>
         /// Gets or sets the questions.

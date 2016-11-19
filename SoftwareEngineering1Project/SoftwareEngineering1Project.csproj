@@ -251,6 +251,14 @@
     <Compile Include="DataContexts\ApplicationMigrations\201611152133067_Update Student - Archive Students.Designer.cs">
       <DependentUpon>201611152133067_Update Student - Archive Students.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201611172052419_Update Test - Archive.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611172052419_Update Test - Archive.Designer.cs">
+      <DependentUpon>201611172052419_Update Test - Archive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.Designer.cs">
+      <DependentUpon>201611182337331_Update Course - Archive.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -1028,12 +1036,13 @@
     <Content Include="Views\Questions\ViewArchive.cshtml" />
     <Content Include="Views\Questions\UploadQuestions.cshtml" />
     <Content Include="Views\Tests\Create.cshtml" />
-    <Content Include="Views\Tests\Delete.cshtml" />
-    <Content Include="Views\Tests\Details.cshtml" />
-    <Content Include="Views\Tests\Edit.cshtml" />
+    <Content Include="Views\Tests\Archive.cshtml" />
     <Content Include="Views\Tests\Index.cshtml" />
     <Content Include="Views\Tests\AdministerTest.cshtml" />
     <Content Include="Views\Sections\Students.cshtml" />
+    <Content Include="Views\Tests\ArchivedIndex.cshtml" />
+    <Content Include="Views\Course\Archive.cshtml" />
+    <Content Include="Views\Course\ArchivedIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1091,6 +1100,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611152133067_Update Student - Archive Students.resx">
       <DependentUpon>201611152133067_Update Student - Archive Students.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611172052419_Update Test - Archive.resx">
+      <DependentUpon>201611172052419_Update Test - Archive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.resx">
+      <DependentUpon>201611182337331_Update Course - Archive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>

@@ -1,0 +1,13 @@
+﻿@model HtmlString
+@{
+    ViewBag.Title = "Test Management - Archived";
+}
+
+<h2>
+    @ViewBag.Title
+    <a href="/tests/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Test List
+    </a>
+</h2>
+<hr />
+@Html.Raw(Model)

@@ -160,6 +160,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Upload Questions",
                     url = "/Questions/UploadQuestions"
+                },
+                new
+                {
+                    text = "View Archived Questions",
+                    url = "/Questions/viewarchive"
                 }
             };
 
@@ -614,7 +619,7 @@ namespace SoftwareEngineering1Project.Controllers
                 }
 
                 string input = "<input type='hidden' name='sectionId' id='sectionId' value='#val#'>" +
-                                     "<label class='control-label col-md-2'>"
+                                     "<label class='control-label'>"
                                      + sectionSelected.Course.CourseName + ", " + 
                                      sectionSelected.Semester + " " + sectionSelected.AcademicYear + ", " + 
                                      sectionSelected.Teacher.LastName + "</label>";

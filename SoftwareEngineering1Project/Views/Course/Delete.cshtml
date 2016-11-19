@@ -4,7 +4,11 @@
     ViewBag.Title = "Delete Course : " + Model.CourseAttributeNumber + " - " + Model.CourseName;
 }
 
-<h3>Are you sure you want to delete this course?</h3>
+<h3>Are you sure you want to delete this course?
+    <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Courses List
+    </a>
+</h3>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -38,8 +42,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn btn-default" /> 
+      
         </div>
     }
 </div>

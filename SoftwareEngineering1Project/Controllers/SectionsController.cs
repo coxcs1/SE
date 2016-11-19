@@ -128,7 +128,7 @@ namespace SoftwareEngineering1Project.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ViewBag.TeacherID = new SelectList(db.Teachers, "ID", "FirstName");//build a list of teachers
+            ViewBag.TeacherID = new SelectList(db.Teachers, "ID", "FullName");//build a list of teachers
             ViewBag.CourseID = id;//pass the course id to be a hidden element
             ViewBag.Course = db.Courses.Find(id);//pass the course to the view for displaying information
             return View();
@@ -174,7 +174,7 @@ namespace SoftwareEngineering1Project.Controllers
                 return HttpNotFound();
             }
             ViewBag.CourseID = section.CourseID;//passes the course id to the invalid form
-            ViewBag.TeacherID = new SelectList(db.Teachers, "ID", "FirstName", section.TeacherID);//passes a list of teachers to the invalid form
+            ViewBag.TeacherID = new SelectList(db.Teachers, "ID", "FullName", section.TeacherID);//passes a list of teachers to the invalid form
             ViewBag.Course = db.Courses.Find(section.CourseID);
             return View(section);
         }

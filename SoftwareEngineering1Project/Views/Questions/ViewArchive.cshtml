@@ -3,10 +3,10 @@
     ViewBag.Title = "Archived Questions";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/questions/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Questions List
+    </a>
+</h2>
 <hr />
 @Html.Raw(Model)
-
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>

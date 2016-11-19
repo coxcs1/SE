@@ -5,13 +5,10 @@
 <h2>
     @ViewBag.Title
     <a href="/questions" class="btn btn-primary btn-sm" style="float: right;">
-        <i class="fa fa-arrow-left"></i> Return to List
+        <i class="fa fa-arrow-left"></i> Return to Question List
     </a>
 </h2>
 <br />
 <div>
     @Html.Raw(Model)
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>

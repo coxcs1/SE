@@ -24,6 +24,7 @@ using System.Data.Entity;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.AspNet.Identity.Owin;
 using System.Diagnostics;
+using System.Net;
 
 namespace SoftwareEngineering1Project.Controllers
 {
@@ -49,7 +50,9 @@ namespace SoftwareEngineering1Project.Controllers
 
             foreach (var course in courses)
             {
-                allCourses.Add(
+                if(!course.Archived)
+                {
+                    allCourses.Add(
                     new
                     {
                         id = course.ID,
@@ -57,6 +60,7 @@ namespace SoftwareEngineering1Project.Controllers
                         abbr = course.DeptAbbreviation,
                         attributeNum = course.CourseAttributeNumber
                     });
+                }                
             }
 
             DataTableModel courseTable = new DataTableModel();
@@ -101,8 +105,8 @@ namespace SoftwareEngineering1Project.Controllers
 
                 new
                 {
-                    text = "Delete",
-                    url = "/course/delete/{{id}}"
+                    text = "Archive",
+                    url = "/course/archive/{{id}}"
                 },
                 new
                 {
@@ -118,6 +122,11 @@ namespace SoftwareEngineering1Project.Controllers
                 {
                     text = "Add Course",
                     url = "/course/add"
+                },
+                new
+                {
+                    text = "View Archived Courses",
+                    url = "/course/archivedindex"
                 }
             };
 
@@ -210,7 +219,7 @@ namespace SoftwareEngineering1Project.Controllers
             viewTable.TableButtons = new Dictionary<string, string>()
             {
                 {"/course/edit/" + course.ID, "Edit" },
-                {"/course/delete/" + course.ID, "Delete" },
+                {"/course/archive/" + course.ID, "Archive" },
             };
 
             //render function returns an HtmlString to the view
@@ -295,6 +304,125 @@ namespace SoftwareEngineering1Project.Controllers
             //add flash message for successful creation
             TempData["Message"] = new { Message = "Successfully deleted coruse", Type = "success" };
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Get Archive Action - makes sure there is a course to archive before returning
+        /// to the view
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Archive(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = _courseDb.Courses.Find(id);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            return View(course);
+        }
+
+        /// <summary>
+        /// Post Archive Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost, ActionName("Archive"), ValidateAntiForgeryToken]
+        public ActionResult ArchiveConfirmed(int id)
+        {
+            Course course = _courseDb.Courses.Find(id);
+            course.Archived = true;
+            _courseDb.Entry(course).State = EntityState.Modified;
+            _courseDb.SaveChanges();
+            TempData["Message"] = new { Message = "Successfully archived course", Type = "success" };
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Archive Index Action - displays a list of all archived courses using a DataTable view helper
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ArchivedIndex()
+        {
+            List<object> allCourses = new List<object>();
+            var courses = _courseDb.Courses.ToList();
+
+            foreach (var course in courses)
+            {
+                if (course.Archived)
+                {
+                    allCourses.Add(
+                    new
+                    {
+                        id = course.ID,
+                        name = course.CourseName,
+                        abbr = course.DeptAbbreviation,
+                        attributeNum = course.CourseAttributeNumber
+                    });
+                }
+            }
+
+            DataTableModel courseTable = new DataTableModel();
+            courseTable.Title = "Courses";
+
+            courseTable.Headers = new List<object>()
+            {
+                new
+                {
+                    Name = "Course Name",
+                    Field = "name"
+                },
+
+                new
+                {
+                    Name = "Dept. Abbreviation",
+                    Field = "abbr"
+                },
+
+                new
+                {
+                    Name = "Course Number",
+                    Field = "attributeNum"
+                }
+            };
+            courseTable.Data = allCourses;
+
+
+            courseTable.Actions = new List<object>()
+            {
+                new
+                {
+                    text = "View",
+                    url = "/course/view/{{id}}"
+                },
+
+                new
+                {
+                    text = "Edit",
+                    url = "/course/edit/{{id}}"
+                },
+
+                new
+                {
+                    text = "Delete",
+                    url = "/course/delete/{{id}}"
+                },
+                new
+                {
+                    text = "Sections",
+                    url = "/sections/index/{{id}}"
+                }
+            };
+
+            courseTable.SearchSort = true;
+
+
+            string modifiedTable = courseTable.Render().ToString();
+            return View(new HtmlString(modifiedTable));
         }
     }
 }

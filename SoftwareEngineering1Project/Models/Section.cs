@@ -47,6 +47,7 @@ namespace SoftwareEngineering1Project.Models
         /// <value>
         /// The academic year.
         /// </value>
+        [Display(Name = "Academic Year")]
         public int AcademicYear { get; set; }
         /// <summary>
         /// Gets or sets the course identifier.
@@ -64,6 +65,7 @@ namespace SoftwareEngineering1Project.Models
         /// The teacher identifier.
         /// </value>
         [ForeignKey("Teacher")]
+        [Display(Name = "Teacher")]
         public int TeacherID { get; set; }
 
         /// <summary>
@@ -81,6 +83,11 @@ namespace SoftwareEngineering1Project.Models
         /// The course.
         /// </value>
         public virtual Course Course { get; set; }
+
+        public string getCourseNameYearAndTeacher()
+        {
+            return Course.CourseName + " (" + AcademicYear + ") - " + Teacher.FullName;
+        }
 
         /// <summary>
         /// Gets or sets the questions.

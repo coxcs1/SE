@@ -26,16 +26,19 @@ namespace SoftwareEngineering1Project.Controllers
             var testsList = new List<object>();
             foreach (var test in tests)
             {
-                //adds new object to list - setup like key-value pairs
-                testsList.Add(
-                    new
-                    {
-                        id = test.ID,
-                        dateTaken = test.DateTaken.ToShortDateString(),
-                        student = test.Student.FirstName + " " + test.Student.LastName,
-                        passed  = (test.Passed) ? "Yes" : "No"
-                    }
-                );
+                if (!test.Archived)
+                {
+                    //adds new object to list - setup like key-value pairs
+                    testsList.Add(
+                        new
+                        {
+                            id = test.ID,
+                            dateTaken = test.DateTaken.ToShortDateString(),
+                            student = test.Student.FirstName + " " + test.Student.LastName,
+                            passed = (test.Passed) ? "Yes" : "No"
+                        }
+                    );
+                }
             }
 
             //create the data table for the index page
@@ -72,13 +75,8 @@ namespace SoftwareEngineering1Project.Controllers
                     },
                     new
                     {
-                        text = "Edit",
-                        url = "/tests/edit/{{id}}"
-                    },
-                    new
-                    {
-                        text = "Delete",
-                        url = "/tests/delete/{{id}}"
+                        text = "Archive",
+                        url = "/tests/archive/{{id}}"
                     }
                 }).
                 setTableButtons(new List<object>()//add a link to create a teacher
@@ -87,9 +85,62 @@ namespace SoftwareEngineering1Project.Controllers
                     {
                         text = "Create Test",
                         url = "/tests/create"
+                    },
+                    new
+                    {
+                        text = "Archived Tests",
+                        url = "/tests/archivedindex"
                     }
                 });
 
+
+            return View(testsDataTableModel.Render());
+        }
+
+        public ActionResult ArchivedIndex()
+        {
+            var tests = db.Tests.Where(t => t.Archived == true).ToList();
+            //build a list of tests for the data table
+            var testsList = new List<object>();
+            foreach (var test in tests)
+            {
+                //adds new object to list - setup like key-value pairs
+                testsList.Add(
+                    new
+                    {
+                        id = test.ID,
+                        dateTaken = test.DateTaken.ToShortDateString(),
+                        student = test.Student.FirstName + " " + test.Student.LastName,
+                        passed = (test.Passed) ? "Yes" : "No"
+                    }
+                );
+            }
+
+            //create the data table for the index page
+            //I used the method chaining that I build into the DataTableModel
+            DataTableModel testsDataTableModel = new DataTableModel();
+            testsDataTableModel.
+                setTitle("Tests").//set the title
+                setData(testsList).//pass in the teacher list
+                setSearchSort(true).//initializes the jQuery data table library
+                setHeaders(new List<object>()//add the headers and map them to the teachersList data
+                {
+                    new
+                    {
+                        Name = "Student",
+                        Field = "student"
+                    },
+                    new
+                    {
+                        Name = "Date Taken",
+                        Field = "dateTaken"
+                    },
+                    new
+                    {
+                        Name = "Passed",
+                        Field = "passed"
+                    }
+                });
 
             return View(testsDataTableModel.Render());
         }
@@ -112,7 +163,7 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Tests/Create
         public ActionResult Create()
         {
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName");
+            ViewBag.StudentID = new SelectList(db.Students, "ID", "FullName");
             return View();
         }
 
@@ -139,48 +190,8 @@ namespace SoftwareEngineering1Project.Controllers
             return View(test);
         }
 
-        // GET: Tests/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Test test = db.Tests.Find(id);
-            if (test == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName", test.StudentID);
-            return View(test);
-        }
-
-        // POST: Tests/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,StudentID,Passed,DateTaken")] Test test)
-        {
-            if (ModelState.IsValid)
-            {
-                var testQuestions = db.TestQuestions.Where(tq => tq.TestID == test.ID);
-                foreach (var question in testQuestions)
-                {
-                    db.TestQuestions.Remove(question);
-                }
-                //save the test
-                db.Entry(test).State = EntityState.Modified;
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-            ViewBag.StudentID = new SelectList(db.Students, "ID", "FirstName", test.StudentID);
-            return View(test);
-        }
-
         // GET: Tests/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Archive(int? id)
         {
             if (id == null)
             {
@@ -195,14 +206,136 @@ namespace SoftwareEngineering1Project.Controllers
         }
 
         // POST: Tests/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult ArchiveConfirmed(int id)
         {
             Test test = db.Tests.Find(id);
-            db.Tests.Remove(test);
-            db.SaveChanges();
+            test.Archived = true;//make the test archived
+            db.Entry(test).State = EntityState.Modified;//let the ORM know object has been modified
+            db.SaveChanges();//save the changes
+            TempData["Message"] = new { Message = "Successfully archived test", Type = "success" };
             return RedirectToAction("Index");
+        }
+
+        public ActionResult GetTestResults(int? id)
+        {
+            Test test = db.Tests.Find(id);
+            List<object> questions = new List<object>();
+            foreach (var testQuestion in test.TestQuestions)
+            {
+                questions.Add(
+                    new {
+                        Section = testQuestion.Question.Section.Course.CourseName,
+                        Question = Regex.Replace(testQuestion.Question.Text, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+                        Score = testQuestion.QuestionScore
+                    }    
+                );
+            }
+
+            return Json(questions, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ScoreQuestion(FormCollection data)
+        {
+            var Score = Int32.Parse(data["score"]);
+            var testQuestion = db.TestQuestions.Find(Int32.Parse(data["id"]));
+            testQuestion.QuestionScore = Score;
+            db.Entry(testQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+            //add flash message for successful creation
+            return Json(new { Success = "Successfully scored test" });
+        }
+
+        public ActionResult NewQuestion(int? id)
+        {
+            TestQuestion oldTestQuestion = db.TestQuestions.Find(id);
+            Test test = db.Tests.Find(oldTestQuestion.TestID);
+            Section section = db.Sections.Find(oldTestQuestion.Question.SectionID);
+
+            List<Question> possibleQuestions = section.Questions.ToList(); // all questions eligible for this section
+            possibleQuestions = ShuffleQuestions(possibleQuestions);
+
+            if (section.Course.Core)
+            {
+                if (possibleQuestions.Count <= 5)
+                {
+                    return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                if (possibleQuestions.Count <= 3)
+                {
+                    return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            Boolean foundQuestion = false; // determines whether a new question has been found
+            Boolean match = false;  // determines whether the possible question matches an existing question on the test
+            int remainingQuestions = possibleQuestions.Count; // determines how many possible questions remain
+            int step = 0; // controls which possible question is being checked
+            Question possibleQuestion = new Question(); // placeholder for potential replacement question
+
+            while (!foundQuestion)
+            {
+                possibleQuestion = possibleQuestions[step];
+
+                foreach (TestQuestion tq in test.TestQuestions)
+                {
+                    if (possibleQuestion.ID == tq.QuestionID)
+                    {
+                        // indicates a match was found if the possible question is the same as one of the
+                        // existing questions
+                        match = true;
+                    }
+                }
+
+                if (!match)
+                {
+                    // indicates the possible question is qualified to be the replacement question
+                    foundQuestion = true;
+                }
+                else
+                {
+                    remainingQuestions--;
+                    step++;
+                    match = false;
+
+                    if (remainingQuestions <= 0)
+                    {
+                        // sends an error if all possible questions are already part of the test
+                        return Json(new { Message = "No replacement question was found!" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            //change out the question for that test question
+            oldTestQuestion.Question = possibleQuestion;
+            db.Entry(oldTestQuestion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            // builds question as JSON
+            var jsonQuestion = new
+            {
+                ID = oldTestQuestion.ID,
+                Text = Regex.Replace(oldTestQuestion.Question.Text, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+                Answer = Regex.Replace(oldTestQuestion.Question.Answer, "<.*?>", String.Empty).Replace("&nbsp;", " "),
+            };
+
+            return Json(jsonQuestion, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ScoreTest(FormCollection data)
+        {
+            var passFail = Boolean.Parse(data["passFail"]);
+            var test = db.Tests.Find(Int32.Parse(data["id"]));
+            test.Passed = passFail;
+            db.Entry(test).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(new { Success = "Successfully scored test", Redirect = "/tests/index" });
         }
 
         public ActionResult AdministerTest(int? id)
@@ -268,7 +401,9 @@ namespace SoftwareEngineering1Project.Controllers
             }
 
             var json = Json(administrationModelData);//build a JSONResult
+            var testJson = Json(new { TestID = test.ID, PassFail = test.Passed });
             ViewBag.ViewModel = new JavaScriptSerializer().Serialize(json.Data);//serialize the json data into a string
+            ViewBag.TestModel = new JavaScriptSerializer().Serialize(testJson.Data);//pass test data to the front end
             ViewBag.StudentName = test.Student.FirstName + " " + test.Student.LastName;//pass the student's name to the view
 
             return View();
@@ -293,7 +428,7 @@ namespace SoftwareEngineering1Project.Controllers
                 List<Question> unshuffledQuestions = sec.Questions.ToList();
                 List<Question> shuffledQuestions = ShuffleQuestions(unshuffledQuestions);
 
-                if (true)// course is a core course
+                if (sec.Course.Core == true)
                 {
 
                     for (int i = 0; i < 5; i++)

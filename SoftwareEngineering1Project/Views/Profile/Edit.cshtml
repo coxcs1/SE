@@ -4,7 +4,11 @@
     ViewBag.Title = "Edit User Information - " + Model.FirstName + " " + Model.LastName;
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/profile/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Users List
+    </a>
+</h2>
 
 @using (Html.BeginForm())
 {
@@ -39,7 +43,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

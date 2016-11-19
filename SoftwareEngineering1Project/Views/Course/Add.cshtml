@@ -4,7 +4,11 @@
     ViewBag.Title = "Add New Course";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title
+    <a href="/course/index" class="btn btn-primary btn-sm" style="float: right;">
+        <i class="fa fa-arrow-left"></i> Back to Courses List
+    </a>
+</h2>
 
 
 @using (Html.BeginForm()) 
@@ -47,9 +51,6 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
