@@ -21,11 +21,16 @@ namespace SoftwareEngineering1Project.Controllers
         // GET: Tests
         public ActionResult Index()
         {
-            var tests = db.Tests.Include(t => t.Student);
+            var tests = db.Tests.Include(t => t.Student).ToList();
             //build a list of tests for the data table
             var testsList = new List<object>();
             foreach (var test in tests)
             {
+                int total = 0;
+                foreach (var testQuestion in test.TestQuestions.ToList())
+                {
+                    total += testQuestion.QuestionScore;
+                }
                 if (!test.Archived)
                 {
                     //adds new object to list - setup like key-value pairs
@@ -35,6 +40,7 @@ namespace SoftwareEngineering1Project.Controllers
                             id = test.ID,
                             dateTaken = test.DateTaken.ToShortDateString(),
                             student = test.Student.FirstName + " " + test.Student.LastName,
+                            score = total + "/" + test.TestQuestions.Count * 5,
                             passed = (test.Passed) ? "Yes" : "No"
                         }
                     );
@@ -59,6 +65,11 @@ namespace SoftwareEngineering1Project.Controllers
                     {
                         Name = "Date Taken",
                         Field = "dateTaken"
+                    },
+                    new
+                    {
+                        Name = "Score",
+                        Field = "score"
                     },
                     new
                     {
@@ -359,8 +370,13 @@ namespace SoftwareEngineering1Project.Controllers
             var administrationModelData = new List<object>();//json model data
             foreach (var section in test.Student.Sections)//loop through each section building stages for the administration process
             {
+                string sec = section.Course.CourseName;
+                if (section.Course.Core)
+                    sec += " - Core";
+                else
+                    sec += " - Elective";
                 var questionCount = 1;//question counter
-                var step = new { Step = stepCounter, Section = section.Course.CourseName, Questions = new List<object>() };//set up step object
+                var step = new { Step = stepCounter, Section = sec, Questions = new List<object>() };//set up step object
                 foreach (var question in test.TestQuestions)//loop through each test question and add question data
                 {
                     if(section.Course.Core == true)
