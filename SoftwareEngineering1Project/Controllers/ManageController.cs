@@ -238,7 +238,7 @@ namespace SoftwareEngineering1Project.Controllers
                 }
                 //add successful toastr message before redirect
                 TempData["Message"] = new { Message = "Successfully changed password", Type = "success" };
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             AddErrors(result);
             return View(model);
