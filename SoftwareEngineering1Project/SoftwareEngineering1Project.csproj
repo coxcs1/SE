@@ -255,6 +255,10 @@
     <Compile Include="DataContexts\ApplicationMigrations\201611172052419_Update Test - Archive.Designer.cs">
       <DependentUpon>201611172052419_Update Test - Archive.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.cs" />
+    <Compile Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.Designer.cs">
+      <DependentUpon>201611182337331_Update Course - Archive.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataContexts\ApplicationMigrations\Configuration.cs" />
     <Compile Include="DataContexts\IdentityDb.cs" />
     <Compile Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.cs" />
@@ -1099,6 +1103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611172052419_Update Test - Archive.resx">
       <DependentUpon>201611172052419_Update Test - Archive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataContexts\ApplicationMigrations\201611182337331_Update Course - Archive.resx">
+      <DependentUpon>201611182337331_Update Course - Archive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataContexts\IdentityMigrations\201609032122185_Initial Create.resx">
       <DependentUpon>201609032122185_Initial Create.cs</DependentUpon>
