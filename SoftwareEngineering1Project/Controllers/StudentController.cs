@@ -169,18 +169,10 @@ namespace SoftwareEngineering1Project.Controllers
         {
             //checks to make sure everything was filled out appropriately in accordance
             //to the tags in the ViewModel
-            if (!ModelState.IsValid)
+            if (newStudent.FirstName != null && newStudent.LastName != null && newStudent.Concentration != null && newStudent.EnterDate != null)
             {
-                //creates the student from the information entered
-                Student student = new Student();
-                student.FirstName = newStudent.FirstName;
-                student.LastName = newStudent.LastName;
-                student.Concentration = newStudent.Concentration;
-                student.EnterDate = newStudent.EnterDate;
-                student.Notes = newStudent.Notes;
-
                 //saves both the profile and the user to the database                    
-                _studentDb.Students.Add(student);
+                _studentDb.Students.Add(newStudent);
                 _studentDb.SaveChanges();
 
                 foreach (String element in data)
@@ -191,7 +183,7 @@ namespace SoftwareEngineering1Project.Controllers
                         foreach (var id in sectionIDArray)
                         {
                             var section = _studentDb.Sections.Find(Int32.Parse(id));
-                            section.Students.Add(student);
+                            section.Students.Add(newStudent);
                             _studentDb.SaveChanges();
                         }
                     }
@@ -281,9 +273,11 @@ namespace SoftwareEngineering1Project.Controllers
         [ValidateInput(true)]
         public ActionResult Edit(Student student, FormCollection data)
         {
-            if (!ModelState.IsValid)
+            if (student.FirstName != null && student.LastName != null && student.Concentration != null && student.EnterDate != null)
             {
-                student.Sections.Clear();
+                if(student.Sections != null)
+                    student.Sections.Clear();
+
                 _studentDb.Entry(student).State = EntityState.Modified;//let the ORM know object has been modified
                 _studentDb.SaveChanges();//persist changes
 
